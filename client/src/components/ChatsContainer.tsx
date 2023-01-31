@@ -9,10 +9,10 @@ export default function ChatsContainer(){
       justifyContent="center"
       alignItems="center"
       height='100%'>
-        <Grid xs={2} item style={{height: '100%'}}>
+        <Grid xs={2.5} item style={{height: '100%'}}>
           <ChatList/>
         </Grid>
-        <Grid xs={10} item style={{height: '100%'}}>
+        <Grid xs={9.5} item style={{height: '100%'}}>
           <CurrentChat/>
         </Grid>
       </Grid>

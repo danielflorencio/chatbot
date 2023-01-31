@@ -7,7 +7,7 @@ export default function CurrentChat(){
         direction="column"
         justifyContent="center"
         alignItems="center"
-        height='100%'>
+        height='90%'>
     
         <Grid item xs={1} width='100%'>
           <Paper variant="outlined" square sx={{height: '100%', width: '100%'}}>
