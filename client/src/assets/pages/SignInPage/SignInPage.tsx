@@ -32,27 +32,25 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      email: formData.get('email'),
+      password: formData.get('password'),
     });
-    async () => {
-        const response = await fetch('http://localhost:3002/api/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email,
-            password
-          })
-        })
-        const data = await response.json() 
-        console.log('data: ', data)
-    }
+    const response = await fetch('http://localhost:3000/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    })
+    const data = await response.json() 
+    console.log('data: ', data)
   };
 
   return (
