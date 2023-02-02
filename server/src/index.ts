@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect('mongodb://localhost:2701')
+mongoose.connect('mongodb://localhost:27017')
 
 app.post('/api/register', (req: Request, res: Response) => {
     console.log("request body: ", req.body)
