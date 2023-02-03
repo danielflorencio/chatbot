@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,9 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { UserData } from '../../../types/userData';
 
 function Copyright(props: any) {
-  return (
+    return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
@@ -28,15 +30,33 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+    const [userData, setUserData] = useState<UserData>({firstName: '', lastName: '', email: '', password: ''})
 
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    console.log({
+      email: formData.get('email'),
+      password: formData.get('password'),
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName')
+    });
+    const response = await fetch('http://localhost:3000/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: userData.email,
+        password: userData.password,
+        firstName: userData.firstName,
+        lastName: userData.lastName
+      })
+    })
+    const data = await response.json() 
+    console.log('data: ', data)
+  };
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -66,6 +86,8 @@ export default function SignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={userData.firstName}
+                  onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -76,6 +98,8 @@ export default function SignUp() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={userData.lastName}
+                  onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -86,6 +110,8 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={userData.email}
+                  onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -97,6 +123,8 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={userData.password}
+                  onChange={(e) => setUserData({ ...userData, password: e.target.value })}
                 />
               </Grid>
               <Grid item xs={12}>
