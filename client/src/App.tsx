@@ -4,8 +4,9 @@ import UserPage from './assets/pages/UserPage/UserPage';
 import {Container} from '@mui/material';
 import SignUp from './assets/pages/SingUpPage/SignUpPage';
 import { Routes, Route } from 'react-router-dom';
-
 export default function App() {
+
+  
   return (
     <>
       <CssBaseline enableColorScheme/>
