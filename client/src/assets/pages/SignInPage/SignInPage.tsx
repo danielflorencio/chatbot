@@ -52,6 +52,8 @@ export default function SignIn() {
     const data = await response.json() 
     
     if(data.user){
+      console.log('data.user: ', data.user)
+      localStorage.setItem('token', data.user)
       alert('Login Successful')
       window.location.href = '/user-page'
     } else{

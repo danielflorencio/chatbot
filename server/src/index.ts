@@ -11,6 +11,17 @@ app.use(express.json())
 
 mongoose.connect('mongodb://localhost:27017/chatbot-application')
 
+app.post('/api/verifyStatus', async (req: Request, res: Response) => {
+    console.log("verifyStatus request body: ", req.body)
+    try{
+        const decodedToken = await jwt.decode(req.body.token)
+        res.json({status: 'ok', token: decodedToken})
+    }catch(error){
+        res.json({status: 'error', error: 'Could not decode the token.'})
+    }    
+})
+
+
 app.post('/api/register', async (req: Request, res: Response) => {
     console.log("register request body: ", req.body)
     try{
@@ -42,7 +53,7 @@ app.post('/api/login', async (req: Request, res: Response) => {
             email: user.email
         },'secretPass')
 
-        return res.json({status: 'ok', user: true})
+        return res.json({status: 'ok', user: token})
     } else{
         return res.json({status: 'error', user: false})
     }
