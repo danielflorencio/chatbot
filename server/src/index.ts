@@ -4,7 +4,8 @@ const port = 3000
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
- 
+const jwt = require('jsonwebtoken') 
+
 app.use(cors())
 app.use(express.json())
 
@@ -19,6 +20,8 @@ app.post('/api/register', async (req: Request, res: Response) => {
             email: req.body.email,
             password: req.body.password
         })
+        console.log("Try Create one being called.")
+        console.log("User created: ", User)
         res.json({status: 'ok'})
     }catch(error){
         res.json({status: 'error', error: 'Duplicate email'})
@@ -34,6 +37,11 @@ app.post('/api/login', async (req: Request, res: Response) => {
     })
     
     if (user) {
+        const token = jwt.sign({
+            name: user.firstName,
+            email: user.email
+        },'secretPass')
+
         return res.json({status: 'ok', user: true})
     } else{
         return res.json({status: 'error', user: false})
