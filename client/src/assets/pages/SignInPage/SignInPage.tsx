@@ -37,7 +37,7 @@ export default function SignIn() {
     const formData = new FormData(e.currentTarget);
     console.log({
       email: formData.get('email'),
-      password: formData.get('passwo rd'),
+      password: formData.get('password'),
     });
     const response = await fetch('http://localhost:3000/api/login', {
       method: 'POST',
@@ -54,7 +54,6 @@ export default function SignIn() {
     if(data.user){
       console.log('data.user: ', data.user)
       localStorage.setItem('token', data.user)
-      alert('Login Successful')
       window.location.href = '/user-page'
     } else{
       alert('Please check your username and password!')

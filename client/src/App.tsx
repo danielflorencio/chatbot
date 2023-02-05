@@ -4,15 +4,13 @@ import UserPage from './assets/pages/UserPage/UserPage';
 import {Container} from '@mui/material';
 import SignUp from './assets/pages/SingUpPage/SignUpPage';
 import { Routes, Route } from 'react-router-dom';
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
+import Sidebar from './components/Sidebar';
 export default function App() {
   useEffect(() => {
     const token = localStorage.getItem('token')
-    console.log('App.tsx useEffect being called.')
     if(token){
-      console.log('if(token) being called.');
       (async () => {
-        console.log("async function running.")
         const response = await fetch('http://localhost:3000/api/verifyStatus', {
           method: 'POST',
           headers: {
@@ -23,7 +21,6 @@ export default function App() {
           })
         })
         const data = await response.json()
-        console.log('data being received from the backend verifyStatus: ', data)
         if (data.status !== 'ok'){
           window.location.href = '/sign-in'
         }
@@ -39,7 +36,7 @@ export default function App() {
           <Route path="/sign-in" element={<SignIn/>}/>
           <Route path="/sign-up" element={<SignUp/>}/>
           <Route path="/user-page" element={<UserPage/>}/>
-        </Routes>
+        </Routes>  
       </Container>
     </>
   )
