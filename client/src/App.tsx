@@ -1,8 +1,8 @@
 import CssBaseline from '@mui/material/CssBaseline';
-import SignIn from './assets/pages/SignInPage/SignInPage';
-import UserPage from './assets/pages/UserPage/UserPage';
+import SignIn from './pages/SignInPage/SignInPage';
+import UserPage from './pages/UserPage/UserPage';
 import {Container} from '@mui/material';
-import SignUp from './assets/pages/SingUpPage/SignUpPage';
+import SignUp from './pages/SingUpPage/SignUpPage';
 import { Routes, Route } from 'react-router-dom';
 import {useEffect} from 'react'
 import Sidebar from './components/Sidebar';
@@ -33,7 +33,7 @@ export default function App() {
       <CssBaseline enableColorScheme/>
       <Container sx={{ height: '100vh', width: 1}}>
         <Routes>
-          <Route path="/sign-in" element={<SignIn/>}/>
+          <Route path="/" element={<SignIn/>}/>
           <Route path="/sign-up" element={<SignUp/>}/>
           <Route path="/user-page" element={<UserPage/>}/>
         </Routes>  
