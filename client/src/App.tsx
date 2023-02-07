@@ -1,11 +1,18 @@
+import {useEffect, lazy} from 'react'
 import CssBaseline from '@mui/material/CssBaseline';
-import SignIn from './pages/SignInPage/SignInPage';
-import UserPage from './pages/UserPage/UserPage';
 import {Container} from '@mui/material';
-import SignUp from './pages/SingUpPage/SignUpPage';
 import { Routes, Route } from 'react-router-dom';
-import {useEffect} from 'react'
-import Sidebar from './components/Sidebar';
+
+
+const SignIn = lazy(() => import('./pages/SignInPage/SignInPage'));
+const UserPage = lazy(() => import('./pages/UserPage/UserPage'));
+const SignUp = lazy(() => import('./pages/SingUpPage/SignUpPage'));
+
+// import SignIn from './pages/SignInPage/SignInPage';
+// import UserPage from './pages/UserPage/UserPage';
+// import SignUp from './pages/SingUpPage/SignUpPage';
+
+
 export default function App() {
   useEffect(() => {
     const token = localStorage.getItem('token')

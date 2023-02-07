@@ -81,7 +81,7 @@ export default function CurrentChat(){
                     <Grid item xs={11}>
                         <TextField id="outlined-basic-email" label="Type Something" fullWidth />
                     </Grid>
-                    <Grid xs={1} sx={{textAlign: "right"}}>
+                    <Grid item xs={1} sx={{textAlign: "right"}}>
                         <Fab color="primary" aria-label="add"><SendIcon /></Fab>
                     </Grid>
                 </Grid>
