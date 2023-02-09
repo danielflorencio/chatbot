@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, Suspense } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { loginUser, logUserIn } from '../../features/sessionControl/sessionSlice';
+import { logUserIn } from '../../features/sessionControl/sessionSlice';
 
 function Copyright(props: any) {
   return (
@@ -38,7 +38,10 @@ export default function SignIn() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
     console.log('handle submit being called.');
-    // dispatch(loginUser(email, password))};
+    console.log('Data being sent by SignInPage - email: ', email, ' password: ', password);
+    dispatch(logUserIn({email: email, password: password}));
+  };
+  
     // console.log({
     //   email: formData.get('email'),
     //   password: formData.get('password'),
@@ -64,7 +67,7 @@ export default function SignIn() {
     // }
     // console.log('data: ', data)
     
-  };
+
 
   return (
     <Suspense>

@@ -15,12 +15,14 @@ app.post('/api/verifyStatus', async (req: Request, res: Response) => {
     console.log("verifyStatus request body: ", req.body)
     try{
         const decodedToken = await jwt.decode(req.body.token)
-        res.json({status: 'ok', token: decodedToken})
+        const user = await User.findOne({
+            token: decodedToken
+        })
+        res.json({status: 'ok', token: decodedToken, userEmail: user.email})
     }catch(error){
         res.json({status: 'error', error: 'Could not decode the token.'})
     }    
 })
-
 
 app.post('/api/register', async (req: Request, res: Response) => {
     console.log("register request body: ", req.body)
@@ -52,14 +54,11 @@ app.post('/api/login', async (req: Request, res: Response) => {
             name: user.firstName,
             email: user.email
         },'secretPass')
-
+    
         return res.json({status: 'ok', user: token})
     } else{
         return res.json({status: 'error', user: false})
     }
-    
-    
-    
 })
 
 app.listen(port, () => {

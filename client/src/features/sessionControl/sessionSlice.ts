@@ -27,58 +27,58 @@ let initialState: SessionState = {
 
 
 
-const logUserInSuccess = (user: string): PayloadAction<string> => ({
-  type: 'session/logUserInSuccess',
-  payload: user,
-});
+// const logUserInSuccess = (user: string): PayloadAction<string> => ({
+//   type: 'session/logUserInSuccess',
+//   payload: user,
+// });
 
 
-export const loginUserThunk = createAsyncThunk(
-  'users/fetchById',
-  // Declare the type your function argument here:
-  async (email: string, password: string) => {
-    const response = await fetch(`http://localhost:3000/api/login`),{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        email,
-        password
-      })
-    }
-    return (await response.json()) as Partial<UserData>)
-    // Inferred return type: Promise<MyData>
+// export const loginUserThunk = createAsyncThunk(
+//   'users/fetchById',
+//   // Declare the type your function argument here:
+//   async (email: string, password: string) => {
+//     const response = await fetch(`http://localhost:3000/api/login`),{
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ 
+//         email,
+//         password
+//       })
+//     }
+//     return (await response.json()) as Partial<UserData>)
+//     // Inferred return type: Promise<MyData>
     
-  }
-)
+//   }
+// )
 
 
 
-export const loginUser = (email: string, password: string): ThunkAction<void, SessionState, unknown, Action<string>> => async dispatch => {
-  try {
-    const response = await fetch('http://localhost:3000/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        email,
-        password
-      })
-    });
-    const data = await response.json();
-    if (data.user) {
-      localStorage.setItem('token', data.user);
-      // dispatch(logUserInSuccess(data.user));
-      window.location.href = '/user-page';
-    } else {
-      alert('Please check your username and password!');
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
+// export const loginUser = (email: string, password: string): ThunkAction<void, SessionState, unknown, Action<string>> => async dispatch => {
+//   try {
+//     const response = await fetch('http://localhost:3000/api/login', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ 
+//         email,
+//         password
+//       })
+//     });
+//     const data = await response.json();
+//     if (data.user) {
+//       localStorage.setItem('token', data.user);
+//       // dispatch(logUserInSuccess(data.user));
+//       window.location.href = '/user-page';
+//     } else {
+//       alert('Please check your username and password!');
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 
 
@@ -94,7 +94,8 @@ export const sessionSlice = createSlice({
   initialState,
   reducers: {
     logUserIn: (state, action: PayloadAction<Partial<UserData>>) => {
-      console.log('logUserIn being called');
+      console.log('logUserIn reducer being called');
+      console.log('data being received by logUserIn reducer: ', action.payload);
       (async () => {
         console.log('async function being called.')
         const response = await fetch('http://localhost:3000/api/login', {
@@ -107,16 +108,18 @@ export const sessionSlice = createSlice({
             password: action.payload.password
           })
         })
-        console.log('async function being called.')
         const data = await response.json() 
+        console.log('Data being received by the login api endpoint: ', data)
         if(data.user){
           localStorage.setItem('token', data.user)              
           window.location.href = '/user-page'
+          state.userData.email = action.payload.email
+          state.connectionError = false
+          state.userIsLogged = true
         } else{
           alert('Please check your username and password!')
         }
-      });
-      state.userData.email = action.payload.email
+      })();
     },
     login: (state, action: PayloadAction<Partial<UserData>>) => {
       // try{
@@ -141,6 +144,6 @@ export const { logUserIn, login, logout } = sessionSlice.actions;
 
 export const sessionActions = {
   ...sessionSlice.actions,
-  loginUser
+  // loginUser
 }
 export default sessionSlice.reducer
