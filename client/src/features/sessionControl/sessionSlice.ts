@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { Action, createAsyncThunk, createSlice, ThunkAction } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import fetchUserLoginStatus from '../../helpers/loginHelpers'
+import {  fetchUserLoginStatus } from '../../helpers/loginHelpers'
 import { UserData } from '../../types/userData';
 export interface SessionState {
-  loggedInUser: UserData | null,
+  userData: Partial<UserData>
   userIsLogged: boolean,
   token: string | null,
   connectionError: boolean, 
@@ -11,7 +11,7 @@ export interface SessionState {
 }
 
 let initialState: SessionState = {
-  loggedInUser: null,
+  userData: {email: '', password: '', firstName: '', lastName: ''},
   userIsLogged: false,
   token: null,
   connectionError: false,
@@ -22,25 +22,125 @@ let initialState: SessionState = {
   initialState = await fetchUserLoginStatus();
 })
 
+
+
+
+
+
+const logUserInSuccess = (user: string): PayloadAction<string> => ({
+  type: 'session/logUserInSuccess',
+  payload: user,
+});
+
+
+export const loginUserThunk = createAsyncThunk(
+  'users/fetchById',
+  // Declare the type your function argument here:
+  async (email: string, password: string) => {
+    const response = await fetch(`http://localhost:3000/api/login`),{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        email,
+        password
+      })
+    }
+    return (await response.json()) as Partial<UserData>)
+    // Inferred return type: Promise<MyData>
+    
+  }
+)
+
+
+
+export const loginUser = (email: string, password: string): ThunkAction<void, SessionState, unknown, Action<string>> => async dispatch => {
+  try {
+    const response = await fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        email,
+        password
+      })
+    });
+    const data = await response.json();
+    if (data.user) {
+      localStorage.setItem('token', data.user);
+      // dispatch(logUserInSuccess(data.user));
+      window.location.href = '/user-page';
+    } else {
+      alert('Please check your username and password!');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+
+
+
+
+
+
+
 export const sessionSlice = createSlice({
-  name: 'counter',
+  name: 'session',
   initialState,
   reducers: {
+    logUserIn: (state, action: PayloadAction<Partial<UserData>>) => {
+      console.log('logUserIn being called');
+      (async () => {
+        console.log('async function being called.')
+        const response = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            email: action.payload.email,
+            password: action.payload.password
+          })
+        })
+        console.log('async function being called.')
+        const data = await response.json() 
+        if(data.user){
+          localStorage.setItem('token', data.user)              
+          window.location.href = '/user-page'
+        } else{
+          alert('Please check your username and password!')
+        }
+      });
+      state.userData.email = action.payload.email
+    },
     login: (state, action: PayloadAction<Partial<UserData>>) => {
-      localStorage.setItem
+      // try{
+      //   state.connectionError = logUserIn(action.payload.email, action.payload.password)
+      // }catch(error){
+      //   console.log(error)
+      // }
+
     },
     logout: (state) => {
       localStorage.setItem('token', '')
       state.userIsLogged = false;
       state.connectionError = false;
       state.isLoading = false;
-      state.loggedInUser = null;
       window.location.href = '/sign-in'
     },
   },
 })
 
-// Action creators are generated for each case reducer function
-export const { login, logout } = sessionSlice.actions
+// export const selectUserData = (state: RootState) => state.expenses.totalBalance
+export const { logUserIn, login, logout } = sessionSlice.actions;
 
+export const sessionActions = {
+  ...sessionSlice.actions,
+  loginUser
+}
 export default sessionSlice.reducer

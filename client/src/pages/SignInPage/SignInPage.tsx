@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, Suspense } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { loginUser, logUserIn } from '../../features/sessionControl/sessionSlice';
 
 function Copyright(props: any) {
   return (
@@ -31,36 +33,37 @@ const theme = createTheme();
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useAppDispatch()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    console.log({
-      email: formData.get('email'),
-      password: formData.get('password'),
-    });
-    const response = await fetch('http://localhost:3000/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password
-      })
-    })
-    const data = await response.json() 
+    console.log('handle submit being called.');
+    // dispatch(loginUser(email, password))};
+    // console.log({
+    //   email: formData.get('email'),
+    //   password: formData.get('password'),
+    // });
+    // const response = await fetch('http://localhost:3000/api/login', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     email,
+    //     password
+    //   })
+    // })
+    // const data = await response.json() 
     
-    if(data.user){
-      console.log('data.user: ', data.user)
-      localStorage.setItem('token', data.user)
-      window.location.href = '/user-page'
-    } else{
-      alert('Please check your username and password!')
-    }
+    // if(data.user){
+    //   console.log('data.user: ', data.user)
+    //   localStorage.setItem('token', data.user)
+    //   window.location.href = '/user-page'
+    // } else{
+    //   alert('Please check your username and password!')
+    // }
+    // console.log('data: ', data)
     
-    
-    console.log('data: ', data)
   };
 
   return (

@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
+import sessionSlice, { loginUser, logUserIn } from './features/sessionControl/sessionSlice'
 // ... import the reducers
 
 export const store = configureStore({
   reducer: {
+    logUserIn: sessionSlice,
+    loginUser: sessionSlice
     // add the reducers to the store
     // sessionControl: login, logout
   },
