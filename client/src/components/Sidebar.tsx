@@ -19,6 +19,11 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { useState } from 'react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
+import { Avatar, Button } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { logout, selectUserEmail } from '../features/sessionControl/sessionSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 const drawerWidth = 240;
 
@@ -71,9 +76,19 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
+
+
 export default function Sidebar({children}: {children: ReactJSXElement}) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  // const email = useAppSelector(selectUserEmail);
+  const email = useAppSelector(state => state.session.userData.email);
+  // const email = useSelector((state: RootState) => state.session.userData.email)
+  // const email = useSelector(selectUserEmail)
+  // const email = selectUserEmail;
+  // const email = selectUserEmail(state => state.session.userData.email/);
+  console.log('User Email: ', email)
+  const dispatch = useAppDispatch()
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -88,6 +103,9 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
+          <IconButton onClick={handleDrawerClose} sx={{color: 'white', ...(!open && {display: 'none'})}}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -97,9 +115,10 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" >
             Persistent drawer
           </Typography>
+          <Button onClick={() => {dispatch(logout())}} variant='text'>Logout</Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -115,10 +134,9 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
+        <DrawerHeader sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <Avatar alt="Agnes Walker" src="https://material-ui.com/static/images/avatar/4.jpg" />
+          <Typography variant='subtitle1' sx={{color: 'black'}} noWrap>Hey {email}</Typography>
         </DrawerHeader>
         <Divider />
         <List>

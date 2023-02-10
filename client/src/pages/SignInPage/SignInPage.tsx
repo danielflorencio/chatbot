@@ -13,7 +13,10 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, Suspense } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { logUserIn } from '../../features/sessionControl/sessionSlice';
+import { logUserIn, registerLoggedUserState } from '../../features/sessionControl/sessionSlice';
+import { redirectToUserPage } from '../../helpers/loginHelpers';
+
+redirectToUserPage();
 
 function Copyright(props: any) {
   return (
@@ -39,36 +42,64 @@ export default function SignIn() {
     e.preventDefault();
     console.log('handle submit being called.');
     console.log('Data being sent by SignInPage - email: ', email, ' password: ', password);
-    dispatch(logUserIn({email: email, password: password}));
+    (async () => {
+      console.log('async function being called.')
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          email: email,
+          password: password
+        })
+      })
+      const data = await response.json() 
+      console.log('Data being received by the login api endpoint: ', data)
+      if(data.user){
+        console.log('if data.user being called.')
+        console.log('local email state in SignIn: ', email)
+        dispatch(registerLoggedUserState(email))
+        localStorage.setItem('token', data.user);   
+        window.location.href='/user-page'           
+      } else{
+        
+      }
+  })();
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   };
   
-    // console.log({
-    //   email: formData.get('email'),
-    //   password: formData.get('password'),
-    // });
-    // const response = await fetch('http://localhost:3000/api/login', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     email,
-    //     password
-    //   })
-    // })
-    // const data = await response.json() 
-    
-    // if(data.user){
-    //   console.log('data.user: ', data.user)
-    //   localStorage.setItem('token', data.user)
-    //   window.location.href = '/user-page'
-    // } else{
-    //   alert('Please check your username and password!')
-    // }
-    // console.log('data: ', data)
-    
-
-
   return (
     <Suspense>
     <ThemeProvider theme={theme}>

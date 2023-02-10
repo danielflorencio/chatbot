@@ -17,6 +17,9 @@ export default function App() {
   useEffect(() => {
     const token = localStorage.getItem('token')
     if(token){
+      if(token === ''){
+        window.location.href = '/'
+      }
       (async () => {
         const response = await fetch('http://localhost:3000/api/verifyStatus', {
           method: 'POST',
@@ -29,7 +32,7 @@ export default function App() {
         })
         const data = await response.json()
         if (data.status !== 'ok'){
-          window.location.href = '/sign-in'
+          window.location.href = '/'
         }
       })();
     }
