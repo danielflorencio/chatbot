@@ -1,9 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import {  fetchUserLoginStatus } from '../../helpers/loginHelpers'
 import { UserData } from '../../types/userData';
 import { RootState } from '../../store';
 import produce from 'immer'
+// import UserPage from '../../pages/UserPage/UserPage';
+// import UserPage from '../../pages/UserPage/UserPage';
 export interface SessionState {
   userData: Partial<UserData>
   userIsLogged: boolean,
@@ -29,64 +31,53 @@ export const sessionSlice = createSlice({
   initialState,
   reducers: {
     logUserIn: (state, action: PayloadAction<Partial<UserData>>) => {
+      
+      
+      
+      const newState:SessionState = {
+        ...state,
+        userData: {
+          email: action.payload.email
+        }
+      }
       // let newUserData: UserData = {
       //   ...state.userData,
       //   email: action.payload.email;
       // }
-      state.userData.email = action.payload.email
-      state.userIsLogged = true
-      window.location.href = '/user-page'
+
+      return newState
+      // state.userData.email = action.payload.email
+      // state.userIsLogged = true
+      // window.location.href = '/user-page'
     },
     registerLoggedUserState: (state, action: PayloadAction<string>) => {
-      console.log('registerLoggedUserState Payload: ', action.payload)
-      console.log('state registerLoggedUserState: ', state.userData)
+      // delete state.userData.email
       
-      let newState: SessionState = {
+      // let newState: SessionState = {
+      //   ...state,
+      //     userData: {
+      //       ...state.userData,
+      //       email: action.payload
+      //   }
+      // }
+
+      // Object.assign(state, newState)
+      return {
         ...state,
         userData: {
           ...state.userData,
           email: action.payload
         }
       }
-      // let newUserData: Partial<UserData> = {
-      //   ...state.userData,
-      //   email: action.payload
-      // }
-
-      // state.userData.email = action.payload.email
-      // state.userData = newUserData
-      // Object.assign(state.userData, newUserData)
-      
-      // state = {
+      // console.log('registerLoggedUserState Payload: ', action.payload)
+      // console.log('state registerLoggedUserState: ', state.userData)
+      // console.log('state.userData.email after change: ', state.userData.email)
+      // return {
       //   ...state,
       //   userData:{
-      //     ...newUserData,
+      //     email: action.payload
       //   }
       // }
-      // state = newState
-      // Object.assign(state, newState)
-
-      // state = {
-      //   ...state,
-      //   userData: {
-      //     ...state.userData,
-      //     email: action.payload
-      //   }
-      // };
-
-      // let newState: SessionState = {
-      //   ...state,
-      //   userData: {
-      //     ...state.userData,
-      //     email: action.payload
-      //   }
-      // };
-
-
-      state = Object.assign({}, newState)
-
-      state.userIsLogged = true
-      console.log('state.userData.email after change: ', state.userData.email)
     },
     logout: (state) => {
       localStorage.clear()
