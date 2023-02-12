@@ -19,12 +19,12 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { useState } from 'react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, Menu, MenuItem } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { logout, selectUserEmail } from '../features/sessionControl/sessionSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -87,8 +87,20 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
   // const email = useSelector(selectUserEmail)
   // const email = selectUserEmail;
   // const email = selectUserEmail(state => state.session.userData.email/);
-  console.log('User Email: ', email)
   const dispatch = useAppDispatch()
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+  
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  console.log('User Email: ', email)
+  
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -97,6 +109,7 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -134,9 +147,30 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <DrawerHeader sx={{display: 'flex', alignItems: 'center', justifyContent:'left'}}>
           <Avatar alt="Agnes Walker" src="https://material-ui.com/static/images/avatar/4.jpg" />
-          <Typography variant='subtitle1' sx={{color: 'black'}} noWrap>Hey {email}</Typography>
+          <Typography variant='subtitle1' sx={{color: 'black'}} noWrap> test {email}</Typography>
+          <Button
+            id="basic-button"
+            aria-controls={openMenu ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openMenu ? 'true' : undefined}
+            onClick={handleClick}>
+              <ArrowDownwardIcon fontSize='small' sx={{paddingX: '0px', margin: '0px'}}/>
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>Logout</MenuItem>
+            </Menu>
         </DrawerHeader>
         <Divider />
         <List>
