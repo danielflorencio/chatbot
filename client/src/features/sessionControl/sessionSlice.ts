@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import {  fetchUserLoginStatus } from '../../helpers/loginHelpers'
 import { UserData } from '../../types/userData';
 import { RootState } from '../../store';
+import produce from 'immer';
 export interface SessionState {
   userData: Partial<UserData>
   userIsLogged: boolean,
@@ -30,13 +31,35 @@ export const sessionSlice = createSlice({
     logUserIn: (state, action: PayloadAction<Partial<UserData>>) => {
     },
     registerLoggedUserState: (state, action: PayloadAction<string>) => {
-      return {
-        ...state,
-        userData: {
+      console.log('reducer being called.')
+      
+      const newUserData = produce(state.userData, secondDraft => {
+        secondDraft = {
           ...state.userData,
           email: action.payload
         }
-      }
+      })
+      const newState = produce(state, draft => {
+        draft = {
+          ...state, 
+          userData: newUserData
+        }
+      })
+
+      state.userData = {...newUserData}
+
+      // const newUserData = produce(state.userData, draft => {
+      //   draft = {
+      //     ...state.userData,
+      //     email: action.payload
+      //   }
+      // })
+
+
+      // state.userData = newUserData
+
+      console.log('New state: ', state.userData.email)
+      return newState
     },
     logout: (state) => {
       localStorage.clear()
