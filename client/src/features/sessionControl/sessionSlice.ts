@@ -32,34 +32,34 @@ export const sessionSlice = createSlice({
     },
     registerLoggedUserState: (state, action: PayloadAction<string>) => {
       console.log('reducer being called.')
+  
+      console.log('state.userData.email before change: ', state.userData.email)
       
-      const newUserData = produce(state.userData, secondDraft => {
-        secondDraft = {
-          ...state.userData,
-          email: action.payload
-        }
-      })
-      const newState = produce(state, draft => {
-        draft = {
-          ...state, 
-          userData: newUserData
-        }
-      })
 
-      state.userData = {...newUserData}
+      // state.userData.email = action.payload // Value changed, but redux didn't detect it, so the reference didn't change.
 
-      // const newUserData = produce(state.userData, draft => {
-      //   draft = {
-      //     ...state.userData,
+
+      // Value changed, but the reference didn't.
+      // state = {
+      //   ...state,
+      //   userData: {
       //     email: action.payload
       //   }
-      // })
+      // }
+
+      // Value changed, but the reference didn't.
+      const newState = {
+        ...state, 
+        userData: {
+          email: action.payload
+        }
+      }
+      state = newState;
 
 
-      // state.userData = newUserData
+      console.log('state.userData.email after change: ', state.userData.email)
 
-      console.log('New state: ', state.userData.email)
-      return newState
+      return state
     },
     logout: (state) => {
       localStorage.clear()
@@ -73,8 +73,8 @@ export const sessionSlice = createSlice({
 })
 
 
-
-export const selectUserEmail = (state: RootState) => state.session.userData.email;
+export const selectUserIsLogged = (state: RootState) =>{return state.session.userIsLogged};
+export const selectUserEmail = (state: RootState) =>{return state.session.userData.email};
 export const { logUserIn, logout, registerLoggedUserState } = sessionSlice.actions;
 export const sessionActions = {
   ...sessionSlice.actions,

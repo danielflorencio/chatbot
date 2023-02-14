@@ -20,11 +20,12 @@ import MailIcon from '@mui/icons-material/Mail';
 import { useState } from 'react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import { Avatar, Button, Menu, MenuItem } from '@mui/material';
-import { useAppDispatch, useAppSelector, useUserEmail } from '../hooks';
+import { useAppDispatch, useAppSelector, useLoginStatus, useUserEmail } from '../hooks';
 import { logout, selectUserEmail } from '../features/sessionControl/sessionSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { decrement, increment } from '../features/sessionControl/counterSlice';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -89,8 +90,14 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     // const email = selectUserEmail();
     // const email = useAppSelector(state => state.registerLoggedUserState.userData.email)
     // const email = selectUserEmail(state => state.session.userData.email/);
-    // const email = useUserEmail();
-    const userData = useAppSelector((state) => state.session.userData)
+    const email = useUserEmail();
+    // const userData = useAppSelector((state) => state.session.userData)
+    
+    const [emailState] = useState(useUserEmail()) 
+    const count = useSelector((state: RootState) => state.counter.count) 
+
+    const userIsLogged = useLoginStatus();
+
     const dispatch = useAppDispatch()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -103,9 +110,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
       setAnchorEl(null);
     };
 
-    console.log('User Data: ', userData)
+    console.log('User email selector: ', email)
+    console.log('User email state: ', emailState)
     
-
+    console.log('login status: ', userIsLogged)
+    console.log('count: ', count)
     const handleDrawerOpen = () => {
       setOpen(true);
     };
@@ -115,7 +124,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     };
 
 
+
     return (
+    
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="fixed" open={open}>
@@ -133,6 +144,14 @@ const DrawerHeader = styled('div')(({ theme }) => ({
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div" >
+            <Box>
+          <Typography variant='subtitle2'>Here is the count: {count}</Typography>
+          <div>
+            <button onClick={() => dispatch(increment())}>+</button>
+            <button onClick={() => dispatch(decrement())}>-</button>
+          </div>
+        </Box>
+              
               Persistent drawer
             </Typography>
             <Button onClick={() => {dispatch(logout())}} variant='text'>Logout</Button>
@@ -153,7 +172,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         >
           <DrawerHeader sx={{display: 'flex', alignItems: 'center', justifyContent:'left'}}>
             <Avatar alt="Agnes Walker" src="https://material-ui.com/static/images/avatar/4.jpg" sx={{marginRight: '1vh'}} />
-            <Typography variant='subtitle1' sx={{color: 'black'}} noWrap> test </Typography>
+            <Typography variant='subtitle1' sx={{color: 'black'}} noWrap> test {email} {emailState}</Typography>
             <Button
               id="basic-button"
               aria-controls={openMenu ? 'basic-menu' : undefined}

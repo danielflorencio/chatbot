@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import sessionSlice, { registerLoggedUserState } from './features/sessionControl/sessionSlice'
 // import registerLoggedUserState from './features/sessionControl/sessionSlice'
 import logout from './features/sessionControl/sessionSlice'
-
+import counterSlice from './features/sessionControl/counterSlice'
 
 // export const store = configureStore({
 //   reducer: {
@@ -18,7 +18,8 @@ import logout from './features/sessionControl/sessionSlice'
 
 export const store = configureStore({
   reducer: {
-    session: sessionSlice
+    session: sessionSlice,
+    counter: counterSlice
   }
 })
 
@@ -26,3 +27,4 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>
 // export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+
