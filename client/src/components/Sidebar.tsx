@@ -83,18 +83,19 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     // const email = useAppSelector(selectUserEmail);
-    // const email = useAppSelector(state => state.session.userData.email);
+    const email = useAppSelector(state => state.session.userData.email);
     // const email = useSelector((state: RootState) => state.session.userData.email)
     // const email = useSelector((state: RootState) => state.session.userData.email)
     // const email = useSelector(selectUserEmail)
     // const email = selectUserEmail();
     // const email = useAppSelector(state => state.registerLoggedUserState.userData.email)
     // const email = selectUserEmail(state => state.session.userData.email/);
-    const email = useUserEmail();
+    // const email = useUserEmail();
     // const userData = useAppSelector((state) => state.session.userData)
     
-    const [emailState] = useState(useUserEmail()) 
+    // const [emailState] = useState(useUserEmail()) 
     const count = useSelector((state: RootState) => state.counter.count) 
+    // const email = useSelector((state: RootState) => state.session.userData.email)
 
     const userIsLogged = useLoginStatus();
 
@@ -111,7 +112,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     };
 
     console.log('User email selector: ', email)
-    console.log('User email state: ', emailState)
+    // console.log('User email state: ', emailState)
     
     console.log('login status: ', userIsLogged)
     console.log('count: ', count)
@@ -172,7 +173,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         >
           <DrawerHeader sx={{display: 'flex', alignItems: 'center', justifyContent:'left'}}>
             <Avatar alt="Agnes Walker" src="https://material-ui.com/static/images/avatar/4.jpg" sx={{marginRight: '1vh'}} />
-            <Typography variant='subtitle1' sx={{color: 'black'}} noWrap> test {email} {emailState}</Typography>
+            <Typography variant='subtitle1' sx={{color: 'black'}} noWrap> test {email} </Typography>
             <Button
               id="basic-button"
               aria-controls={openMenu ? 'basic-menu' : undefined}

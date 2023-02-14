@@ -15,7 +15,7 @@ import { useState, Suspense } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { logUserIn, registerLoggedUserState } from '../../features/sessionControl/sessionSlice';
 import { redirectToUserPage } from '../../helpers/loginHelpers';
-
+import  {Navigate, useNavigate}  from 'react-router-dom';
 redirectToUserPage();
 
 function Copyright(props: any) {
@@ -34,9 +34,10 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
@@ -61,7 +62,7 @@ export default function SignIn() {
         console.log('local email state in SignIn: ', email)
         dispatch(registerLoggedUserState(email))
         localStorage.setItem('token', data.user);   
-        window.location.href='/user-page'           
+        await navigate('/user-page') 
       } else{
         
       }

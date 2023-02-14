@@ -18,6 +18,7 @@ export default function App() {
   // const [userData, setUserData] = useState<UserData>()
 
   useEffect(() => {
+    // console.log('main useffect called.')
     const token = localStorage.getItem('token')
     if(token){
       if(token === ''){
