@@ -5,9 +5,34 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
 const jwt = require('jsonwebtoken') 
+const { Server } = require('socket.io')
+const http = require('http')
 
 app.use(cors())
 app.use(express.json())
+
+const server = http.createServer(app)
+
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:5173',
+        method: ["GET", "POST"]
+    }
+})
+
+io.on("connection", (socket) => {
+    console.log(socket.id);
+
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected. Id: ", socket.id)
+    })
+
+})
+
+
+
+
 
 mongoose.connect('mongodb://localhost:27017/chatbot-application')
 
