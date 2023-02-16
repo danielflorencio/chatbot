@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import ChatList from "./ChatList";
-import CurrentChat from "./CurrentChat";
+import ChatList from "./components/ChatList";
+import CurrentChat from "./components/CurrentChat";
 export default function ChatsContainer(){
   return(
     <Container sx={{width: 1, height: 1}}>    

@@ -1,43 +1,48 @@
 import express, {Request, Response} from 'express';
-const app = express();
+import { Server, Socket } from 'socket.io'
+import { createServer } from 'http'
+
 const port = 3000
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
 const jwt = require('jsonwebtoken') 
-const { Server } = require('socket.io')
-const http = require('http')
+// const { Server} = require('socket.io')
+
+const app = express();
+const socketIoHttpServer = createServer(app)
 
 app.use(cors())
 app.use(express.json())
 
-const server = http.createServer(app)
+const server = createServer(app)
 
-const io = new Server(server, {
+const io = new Server(socketIoHttpServer, {
     cors: {
         origin: 'http://localhost:5173',
-        method: ["GET", "POST"]
+        methods: ["GET", "POST"]
     }
 })
 
-io.on("connection", (socket) => {
-    console.log(socket.id);
-
-
+io.on("connection", (socket: Socket) => {
+    console.log('connection made: ', socket.id);
+    
     socket.on("disconnect", () => {
         console.log("User disconnected. Id: ", socket.id)
     })
 
+    socket.on("join_room", (data) => {
+        socket.join(data);
+        console.log('Socket.id sending data: ', socket.id   )
+        console.log('Data received on join_room event: ', data)
+    })
+
 })
-
-
-
-
 
 mongoose.connect('mongodb://localhost:27017/chatbot-application')
 
 app.post('/api/verifyStatus', async (req: Request, res: Response) => {
-    console.log("verifyStatus request body: ", req.body)
+    // console.log("verifyStatus request body: ", req.body)
     try{
         const decodedToken = await jwt.decode(req.body.token)
         const user = await User.findOne({
@@ -50,7 +55,7 @@ app.post('/api/verifyStatus', async (req: Request, res: Response) => {
 })
 
 app.post('/api/register', async (req: Request, res: Response) => {
-    console.log("register request body: ", req.body)
+    // console.log("register request body: ", req.body)
     try{
         await User.create({
             firstName: req.body.firstName,
@@ -89,3 +94,4 @@ app.post('/api/login', async (req: Request, res: Response) => {
 app.listen(port, () => {
     console.log(`Listening on port ${port}`)
 })
+socketIoHttpServer.listen(3001)

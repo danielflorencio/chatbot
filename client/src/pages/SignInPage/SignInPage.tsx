@@ -13,9 +13,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, Suspense } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { logUserIn, registerLoggedUserState } from '../../features/sessionControl/sessionSlice';
+import { registerLoggedUserState } from '../../features/sessionControl/sessionSlice';
 import { redirectToUserPage } from '../../helpers/loginHelpers';
-import  {Navigate, useNavigate}  from 'react-router-dom';
+import  { useNavigate}  from 'react-router-dom';
 redirectToUserPage();
 
 function Copyright(props: any) {
@@ -61,7 +61,8 @@ export default function SignIn() {
         console.log('if data.user being called.')
         console.log('local email state in SignIn: ', email)
         dispatch(registerLoggedUserState(email))
-        localStorage.setItem('token', data.user);   
+        localStorage.setItem('token', data.user);
+        localStorage.setItem('userEmail', email)
         await navigate('/user-page') 
       } else{
         

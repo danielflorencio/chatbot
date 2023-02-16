@@ -1,24 +1,15 @@
-import {useEffect, lazy, useState} from 'react'
+import {useEffect, lazy} from 'react'
 import CssBaseline from '@mui/material/CssBaseline';
 import {Container} from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
-import { UserData } from './types/userData';
-
 
 const SignIn = lazy(() => import('./pages/SignInPage/SignInPage'));
 const UserPage = lazy(() => import('./pages/UserPage/UserPage'));
 const SignUp = lazy(() => import('./pages/SingUpPage/SignUpPage'));
 
-// import SignIn from './pages/SignInPage/SignInPage';
-// import UserPage from './pages/UserPage/UserPage';
-// import SignUp from './pages/SingUpPage/SignUpPage';
-
-
 export default function App() {
-  // const [userData, setUserData] = useState<UserData>()
 
   useEffect(() => {
-    // console.log('main useffect called.')
     const token = localStorage.getItem('token')
     if(token){
       if(token === ''){

@@ -1,7 +1,8 @@
 import { SessionState } from "../features/sessionControl/sessionSlice";
-import { redirect } from "react-router-dom";
+
 export function verifyPageAccessPermission(){
   const token = localStorage.getItem('token');
+  
   if (!token){
     alert('You cannot access this page. Log in first.')
     window.location.href = '/'
@@ -10,10 +11,8 @@ export function verifyPageAccessPermission(){
 
 export function redirectToUserPage(){
   const token = localStorage.getItem('token');
-  console.log('redirectToUserPage function called.')
-  if (token){
-     redirect("/user-page");
-    // window.location.href = '/user-page'
+  if (token && token !== ''){
+     window.location.href = '/user-page'
   }
 }
 

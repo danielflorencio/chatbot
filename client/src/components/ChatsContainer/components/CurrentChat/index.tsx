@@ -1,10 +1,47 @@
-import { ListItemText, Avatar, Fab, Paper, Grid, Box, Divider, TextField, Typography, List, ListItem } from "@mui/material";
-// import {SendIcon, ListItemIcon} from '@mui/icons-material'
-import { ListItemIcon} from '@mui/material'
+import { ListItemText, ListItemIcon, Avatar, Fab, Paper, Grid, Box, Divider, TextField, Typography, List, ListItem } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import {io} from "socket.io-client";
+import { useState } from "react";
+import { Message } from "../../../../types/message";
 
+const socket = io("http://localhost:3001");
 
 export default function CurrentChat(){
+
+    const [messageInput, setMessageInput] = useState<string>('');
+
+    const [chatMessages, setChatMessages] = useState<Promise<Message[]>>(
+        // (async () => {
+        //     const response = await fetch('http://localhost:3001/getMessages', {
+        //         method: 'GET',
+        //         headers: {
+        //           'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({ 
+        //         //   email: email,
+        //         //   password: password
+        //         })
+        //     })
+        //     const data = await response.json();
+        //     return data;
+        // })();
+    );
+            
+            // doSomething();
+            
+
+    const joinRoom = () => {
+        socket.emit("join_room",)
+    }
+
+    const handleSubmit = (e: React.FormEvent<HTMLDivElement>) =>{
+        e.preventDefault();
+        (async () => {
+            // Send data to the server
+        })();
+        setMessageInput('');
+    }
+
     return(
         <Grid container component={Paper} sx={{width: 1, height: '100%'}}>
             <Grid item xs={3} sx={{borderRight: '1px solid #e0e0e0'}}>
@@ -79,7 +116,7 @@ export default function CurrentChat(){
                 <Divider />
                 <Grid container style={{padding: '20px'}}>
                     <Grid item xs={11}>
-                        <TextField id="outlined-basic-email" label="Type Something" fullWidth />
+                        <TextField id="outlined-basic-email" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onSubmit={(e) => handleSubmit(e)}/>
                     </Grid>
                     <Grid item xs={1} sx={{textAlign: "right"}}>
                         <Fab color="primary" aria-label="add"><SendIcon /></Fab>
@@ -90,5 +127,5 @@ export default function CurrentChat(){
     )
 }
 
-// Credits for this UI's component:
+// Credits for this component's UI:
 // https://medium.com/@awaisshaikh94/chat-component-built-with-react-and-material-ui-c2b0d9ccc491
