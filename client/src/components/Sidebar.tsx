@@ -21,7 +21,7 @@ import { useState } from 'react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import { Avatar, Button, Menu, MenuItem } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { logout } from '../features/sessionControl/sessionSlice';
+import { logout, registerLoggedUserState } from '../features/sessionControl/sessionSlice';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 const drawerWidth = 240;
 
@@ -81,9 +81,17 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
   const [open, setOpen] = useState(false);
   // const email = useAppSelector(state => state.session.userData.email);
 
-  const email = localStorage.getItem('userEmail');
-
   const dispatch = useAppDispatch()
+
+  let email: string | null = ''
+
+  try{
+    email = localStorage.getItem('userEmail')
+    dispatch(registerLoggedUserState(email))
+  } catch(error){
+    console.log('The error was: ', error)
+  };
+  // const email = localStorage.getItem('userEmail');
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
@@ -165,7 +173,7 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          {['Chats'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -178,7 +186,7 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          {['My Bots'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
