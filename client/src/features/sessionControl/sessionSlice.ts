@@ -27,7 +27,7 @@ export const sessionSlice = createSlice({
   name: 'session',
   initialState,
   reducers: {
-    registerLoggedUserState: (state, action: PayloadAction<string>) => {
+    registerLoggedUserState: (state, action: PayloadAction<string | null>) => {
       const newState = {
         ...state, 
         userData: {

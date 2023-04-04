@@ -3,29 +3,42 @@ import SendIcon from '@mui/icons-material/Send';
 import {io} from "socket.io-client";
 import { useState } from "react";
 import { Message } from "../../../../types/message";
+import MessageComponent from "./components/Message";
 
 const socket = io("http://localhost:3001");
+
+const initialMessagesData: Message = {
+    content: 'Hey, this is my first message.',
+    senderReference: '1',
+    recipientReference: '1',
+    senderType: 'admin',
+    date: new Date()
+} 
 
 export default function CurrentChat(){
 
     const [messageInput, setMessageInput] = useState<string>('');
 
-    const [chatMessages, setChatMessages] = useState<Promise<Message[]>>(
-        // (async () => {
-        //     const response = await fetch('http://localhost:3001/getMessages', {
-        //         method: 'GET',
-        //         headers: {
-        //           'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({ 
-        //         //   email: email,
-        //         //   password: password
-        //         })
-        //     })
-        //     const data = await response.json();
-        //     return data;
-        // })();
-    );
+    const [chatMessages, setChatMessages] = useState<Message[]>([initialMessagesData]);
+
+    // const [chatMessages, setChatMessages] = useState<Promise<Message[]>>(<Promise>)
+
+    // const [chatMessages, setChatMessages] = useState<Promise<Message[]>>(
+    //     // (async () => {
+    //     //     const response = await fetch('http://localhost:3001/getMessages', {
+    //     //         method: 'GET',
+    //     //         headers: {
+    //     //           'Content-Type': 'application/json',
+    //     //         },
+    //     //         body: JSON.stringify({ 
+    //     //         //   email: email,
+    //     //         //   password: password
+    //     //         })
+    //     //     })
+    //     //     const data = await response.json();
+    //     //     return data;
+    //     // })();
+    // );
             
             // doSomething();
             
@@ -82,6 +95,13 @@ export default function CurrentChat(){
             </Grid>
             <Grid item xs={9}>
                 <List sx={{height: '70vh', overflowY: 'auto'}}>
+
+                    {chatMessages ? (chatMessages.map((message, index) => (
+                        <div key={index}>
+                            <MessageComponent index={index} content={message.content} senderType={message.senderType} date={message.date}/>
+                        </div>
+                    ))) : (<div>empty</div>)}
+                
                     <ListItem key="1">
                         <Grid container>
                             <Grid item xs={12}>
