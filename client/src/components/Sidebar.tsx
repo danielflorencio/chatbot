@@ -166,8 +166,6 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={handleClose}>Logout</MenuItem>
             </Menu>
         </DrawerHeader>
@@ -186,7 +184,7 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
         </List>
         <Divider />
         <List>
-          {['My Bots'].map((text, index) => (
+          {['Bots'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>

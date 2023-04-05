@@ -1,4 +1,4 @@
-import { ListItemText, ListItemIcon, Avatar, Fab, Paper, Grid, Box, Divider, TextField, Typography, List, ListItem } from "@mui/material";
+import { Fab, Grid, Divider, TextField, List } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import {io} from "socket.io-client";
 import { useState } from "react";
@@ -7,19 +7,37 @@ import MessageComponent from "./components/Message";
 
 const socket = io("http://localhost:3001");
 
-const initialMessagesData: Message = {
-    content: 'Hey, this is my first message.',
-    senderReference: '1',
-    recipientReference: '1',
-    senderType: 'admin',
-    date: new Date()
-} 
+const initialMessagesData: Message[] = [
+    {
+      content: 'Hey, this is my first message, and I am an admin.',
+      senderReference: '1',
+      recipientReference: '1',
+      senderType: 'admin',
+      date: new Date()
+    },
+    {
+      content: "This is my first message, and I'm a customer.",
+      senderReference: '1',
+      recipientReference: '1',
+      senderType: 'customer',
+      date: new Date()
+    },
+    {
+      content: 'And this is just another message.',
+      senderReference: '1',
+      recipientReference: '1',
+      senderType: 'admin',
+      date: new Date()
+    }
+]; 
+
+const sortedMessages = [...initialMessagesData].sort((a, b) => a.date.getTime() - b.date.getTime());
 
 export default function CurrentChat(){
 
     const [messageInput, setMessageInput] = useState<string>('');
 
-    const [chatMessages, setChatMessages] = useState<Message[]>([initialMessagesData]);
+    const [chatMessages, setChatMessages] = useState<Message[]>(sortedMessages);
 
     // const [chatMessages, setChatMessages] = useState<Promise<Message[]>>(<Promise>)
 
@@ -40,112 +58,41 @@ export default function CurrentChat(){
     //     // })();
     // );
             
-            // doSomething();
+    // doSomething();
             
 
     const joinRoom = () => {
         socket.emit("join_room",)
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLDivElement>) =>{
-        e.preventDefault();
-        (async () => {
-            // Send data to the server
-        })();
+    const handleSubmit = () =>{
+        // (async () => {
+        //     // Send data to the server
+        // })();
+        let message: Message = {content: messageInput, senderType: "admin", date: new Date, senderReference: '1', recipientReference: '1'}
+        setChatMessages([...chatMessages, message])
         setMessageInput('');
     }
-
     return(
-        <Grid container component={Paper} sx={{width: 1, height: '100%'}}>
-            <Grid item xs={3} sx={{borderRight: '1px solid #e0e0e0'}}>
-                <List>
-                    <ListItem button key="RemySharp">
-                        <ListItemIcon>
-                        <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="John Wick"></ListItemText>
-                    </ListItem>
-                </List>
-                <Divider />
-                <Grid item xs={12} style={{padding: '10px'}}>
-                    <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
+        <Grid item xs={9}>
+            <List sx={{height: '70vh', overflowY: 'auto'}}>
+                {chatMessages ? (chatMessages.map((message, index) => (
+                    <div key={index}>
+                        <MessageComponent index={index} content={message.content} senderType={message.senderType} date={message.date}/>
+                    </div>
+                ))) : (<div>empty</div>)}
+            </List>
+            <Divider />
+            <Grid container style={{padding: '20px'}}>
+                <Grid item xs={11}>
+                    <TextField id="outlined-basic-email" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
-                <Divider />
-                <List>
-                    <ListItem button key="RemySharp">
-                        <ListItemIcon>
-                            <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-                        <ListItemText secondary="online" sx={{ textAlign: "right"}}></ListItemText>
-                    </ListItem>
-                    <ListItem button key="Alice">
-                        <ListItemIcon>
-                            <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="Alice">Alice</ListItemText>
-                    </ListItem>
-                    <ListItem button key="CindyBaker">
-                        <ListItemIcon>
-                            <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-                    </ListItem>
-                </List>
-            </Grid>
-            <Grid item xs={9}>
-                <List sx={{height: '70vh', overflowY: 'auto'}}>
-
-                    {chatMessages ? (chatMessages.map((message, index) => (
-                        <div key={index}>
-                            <MessageComponent index={index} content={message.content} senderType={message.senderType} date={message.date}/>
-                        </div>
-                    ))) : (<div>empty</div>)}
-                
-                    <ListItem key="1">
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText sx={{textAlign:"right"}} primary="Hey man, What's up ?"></ListItemText>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <ListItemText sx={{textAlign:"right"}} secondary="09:30"></ListItemText>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                    <ListItem key="2">
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText sx={{textAlign:"left"}} primary="Hey, Iam Good! What about you ?"></ListItemText>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <ListItemText sx={{textAlign:"left"}} secondary="09:31"></ListItemText>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                    <ListItem key="3">
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText sx={{ textAlign:"right"}} primary="Cool. i am good, let's catch up!"></ListItemText>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <ListItemText sx={{textAlign:"right"}} secondary="10:30"></ListItemText>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                </List>
-                <Divider />
-                <Grid container style={{padding: '20px'}}>
-                    <Grid item xs={11}>
-                        <TextField id="outlined-basic-email" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onSubmit={(e) => handleSubmit(e)}/>
-                    </Grid>
-                    <Grid item xs={1} sx={{textAlign: "right"}}>
-                        <Fab color="primary" aria-label="add"><SendIcon /></Fab>
-                    </Grid>
+                <Grid item xs={1} sx={{textAlign: "right"}}>
+                    <Fab color="primary" aria-label="add"><SendIcon onClick={() => handleSubmit()} /></Fab>
                 </Grid>
             </Grid>
         </Grid>
     )
 }
-
 // Credits for this component's UI:
 // https://medium.com/@awaisshaikh94/chat-component-built-with-react-and-material-ui-c2b0d9ccc491

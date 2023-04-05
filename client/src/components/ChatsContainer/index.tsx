@@ -1,23 +1,30 @@
-import { Container } from "@mui/material";
+import { Avatar, Divider, List, ListItem, Paper, ListItemIcon, ListItemText } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
+import {useState} from 'react'
 export default function ChatsContainer(){
+  
+  const [currentChatId, setCurrentChatId] = useState('')
+
   return(
-    <Container sx={{width: 1, height: 1}}>    
-      <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
-      sx={{width: 1, height: 1}}>
-        {/* <Grid xs={2.5} item sx={{width: 1, height: 1}}>
-          <ChatList/>
-        </Grid> */}
-        <Grid xs={12} item sx={{width: 1, height: 1}}>
-          <CurrentChat/>
-        </Grid>
-      </Grid>
-    </Container>
-  )
+  <Grid container component={Paper} sx={{width: 1, height: '100%'}}>
+  <Grid item xs={3} sx={{borderRight: '1px solid #e0e0e0'}}>
+      <List>
+          <ListItem button key="RemySharp">
+              <ListItemIcon>
+              <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
+              </ListItemIcon>
+              <ListItemText primary="John Wick"></ListItemText>
+          </ListItem>
+      </List>
+      <Divider />
+      <ChatList
+          currentChatId={currentChatId}
+          setCurrentChatId={setCurrentChatId}
+        />
+  </Grid>
+  <CurrentChat/>
+</Grid>
+)
 }
