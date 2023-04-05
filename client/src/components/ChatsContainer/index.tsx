@@ -3,9 +3,15 @@ import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
 import {useState} from 'react'
+import { Conversations } from "../../data/conversations";
 export default function ChatsContainer(){
   
-  const [currentChatId, setCurrentChatId] = useState('')
+
+  
+  const [currentChatId, setCurrentChatId] = useState(() => { 
+    const firstConversationToLoad = Conversations.filter(conversation => conversation.adminId === "test@gmail.com");
+    return firstConversationToLoad[0].customerId;
+  })  
 
   return(
   <Grid container component={Paper} sx={{width: 1, height: '100%'}}>
@@ -24,7 +30,7 @@ export default function ChatsContainer(){
           setCurrentChatId={setCurrentChatId}
         />
   </Grid>
-  <CurrentChat/>
+  <CurrentChat currentChatId={currentChatId}/>
 </Grid>
 )
 }

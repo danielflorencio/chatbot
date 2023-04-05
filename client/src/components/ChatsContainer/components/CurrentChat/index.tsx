@@ -4,6 +4,7 @@ import {io} from "socket.io-client";
 import { useState } from "react";
 import { Message } from "../../../../types/message";
 import MessageComponent from "./components/Message";
+import { Conversations } from "../../../../data/conversations";
 
 const socket = io("http://localhost:3001");
 
@@ -31,13 +32,49 @@ const initialMessagesData: Message[] = [
     }
 ]; 
 
-const sortedMessages = [...initialMessagesData].sort((a, b) => a.date.getTime() - b.date.getTime());
+// const sortedMessages = [...initialMessagesData].sort((a, b) => a.date.getTime() - b.date.getTime());
 
-export default function CurrentChat(){
 
+
+export default function CurrentChat({currentChatId}: {currentChatId: string}){
+    // Conversations.filter(conversation => conversation.adminId === 'test@gmail.com' && currentChatId ==);
+
+    const conversationToLoad = Conversations.find(conversation => conversation.adminId === 'test@gmail.com' && currentChatId === conversation.customerId);
+
+    // let messagesToLoad: Message[];
+
+    // if(conversationToLoad !== null){
+    //     messagesToLoad = 
+    // }
+
+    let messagesToLoad = conversationToLoad?.messages; 
+    // This solution is subjective to bugs and is not the best solution, since there can be more than one conversation.
+    // The optimal solution should get only one conversation in the variable conversationToLoad
+
+    // const messagesToLoad: Message[] = conversationToLoad.map((conversation) => {
+    //     return conversation.messages[];
+    // })
+
+
+    if(messagesToLoad !== undefined){
+        messagesToLoad = [...messagesToLoad].sort((a, b) => a.date.getTime() - b.date.getTime());
+    }    
+    // sortedMessages = [...messagesToLoad?].sort((a, b) => a.date.getTime() - b.date.getTime());
+    
+    
     const [messageInput, setMessageInput] = useState<string>('');
 
-    const [chatMessages, setChatMessages] = useState<Message[]>(sortedMessages);
+    // const [sortedMessages, setSortedMessages] = useState(
+    //     () => {const sortedMessages = [...initialMessagesData].sort((a, b) => a.date.getTime() - b.date.getTime());}
+    // )
+
+    const [chatMessages, setChatMessages] = useState<Message[] | undefined>(
+        messagesToLoad
+        // () => {
+        //     const sortedMessages = [...messagesToLoad?].sort((a, b) => a.date.getTime() - b.date.getTime());
+        //     return sortedMessages;
+        // }
+    );
 
     // const [chatMessages, setChatMessages] = useState<Promise<Message[]>>(<Promise>)
 
@@ -70,7 +107,7 @@ export default function CurrentChat(){
         //     // Send data to the server
         // })();
         let message: Message = {content: messageInput, senderType: "admin", date: new Date, senderReference: '1', recipientReference: '1'}
-        setChatMessages([...chatMessages, message])
+        // setChatMessages([...chatMessages, message])
         setMessageInput('');
     }
     return(
@@ -80,7 +117,7 @@ export default function CurrentChat(){
                     <div key={index}>
                         <MessageComponent index={index} content={message.content} senderType={message.senderType} date={message.date}/>
                     </div>
-                ))) : (<div>empty</div>)}
+                ))) : (<div></div>)}
             </List>
             <Divider />
             <Grid container style={{padding: '20px'}}>
