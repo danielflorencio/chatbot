@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Message } from "../../../../types/message";
 import MessageComponent from "./components/Message";
 import { Conversations } from "../../../../data/conversations";
+import { Conversation } from "../../../../types/conversation";
 
 const socket = io("http://localhost:3001");
 
@@ -36,10 +37,17 @@ const initialMessagesData: Message[] = [
 
 
 
-export default function CurrentChat({currentChatId}: {currentChatId: string}){
+export default function CurrentChat({currentChatId, conversationToLoad, messagesToLoad, setMessagesToLoad}: {currentChatId: string; messagesToLoad: Message[]; conversationToLoad: Conversation; setMessagesToLoad: (messages: Message[]) => void}){
+
+    // const [messagesToLoad, setMessagesToLoad] = useState<Message[]>(
+    //     () => {
+    //         const sortedMessagesToLoad = conversationToLoad.messages.sort((a, b) => a.date.getTime() - b.date.getTime());
+    //         return sortedMessagesToLoad;
+    //     }
+    // );
     // Conversations.filter(conversation => conversation.adminId === 'test@gmail.com' && currentChatId ==);
 
-    const conversationToLoad = Conversations.find(conversation => conversation.adminId === 'test@gmail.com' && currentChatId === conversation.customerId);
+    // const conversationToLoad = Conversations.find(conversation => conversation.adminId === 'test@gmail.com' && currentChatId === conversation.customerId);
 
     // let messagesToLoad: Message[];
 
@@ -47,7 +55,7 @@ export default function CurrentChat({currentChatId}: {currentChatId: string}){
     //     messagesToLoad = 
     // }
 
-    let messagesToLoad = conversationToLoad?.messages; 
+    // let messagesToLoad = conversationToLoad?.messages; 
     // This solution is subjective to bugs and is not the best solution, since there can be more than one conversation.
     // The optimal solution should get only one conversation in the variable conversationToLoad
 
@@ -55,10 +63,10 @@ export default function CurrentChat({currentChatId}: {currentChatId: string}){
     //     return conversation.messages[];
     // })
 
-
-    if(messagesToLoad !== undefined){
-        messagesToLoad = [...messagesToLoad].sort((a, b) => a.date.getTime() - b.date.getTime());
-    }    
+    // if(messagesToLoad !== undefined){
+    //     const sortedMessagesToLoad = [...messagesToLoad].sort((a, b) => a.date.getTime() - b.date.getTime());
+    //     setMessagesToLoad(sortedMessagesToLoad)
+    // }    
     // sortedMessages = [...messagesToLoad?].sort((a, b) => a.date.getTime() - b.date.getTime());
     
     
@@ -106,14 +114,15 @@ export default function CurrentChat({currentChatId}: {currentChatId: string}){
         // (async () => {
         //     // Send data to the server
         // })();
-        let message: Message = {content: messageInput, senderType: "admin", date: new Date, senderReference: '1', recipientReference: '1'}
+        let message: Message = {content: messageInput, senderType: "admin", date: new Date, senderReference: '1', recipientReference: currentChatId}
         // setChatMessages([...chatMessages, message])
+        setMessagesToLoad([...messagesToLoad, message]);
         setMessageInput('');
     }
     return(
         <Grid item xs={9}>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
-                {chatMessages ? (chatMessages.map((message, index) => (
+                {messagesToLoad ? (messagesToLoad.map((message, index) => (
                     <div key={index}>
                         <MessageComponent index={index} content={message.content} senderType={message.senderType} date={message.date}/>
                     </div>
