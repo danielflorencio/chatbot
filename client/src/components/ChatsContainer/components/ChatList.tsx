@@ -2,16 +2,14 @@ import { Avatar, List, ListItem, ListItemIcon, ListItemText} from "@mui/material
 import { Conversations } from "../../../data/conversations";
 import { Conversation } from "../../../types/conversation";
 import { Customers } from "../../../data/customers";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { setNewCurrentChatId } from "../../../features/sessionControl/chatSlice";
 interface ChatListProps {
     currentChatId: string;
-    setCurrentChatId: (chatId: string) => void;
+    // setCurrentChatId: (chatId: string) => void;
 }
 
-
-
-
-export default function ChatList({ currentChatId, setCurrentChatId }: ChatListProps){
-
+export default function ChatList({ currentChatId }: ChatListProps){
 
     // Create an email useAppSelector here to use in the line below.
 
@@ -20,6 +18,11 @@ export default function ChatList({ currentChatId, setCurrentChatId }: ChatListPr
 
     let customers = Customers.filter(customer => customer.recipientId === 'test@gmail.com')
 
+    const conversations = useAppSelector(state => state.chat.conversationsInMemory);
+
+    const dispatch = useAppDispatch();
+
+
     // if(Conversations.filter(conversation => conversation.adminId === 'test@gmail.com') !== null){
     //     conversationsToLoad = Conversations.filter(conversation => conversation.adminId === 'test@gmail.com');
     // }
@@ -27,12 +30,16 @@ export default function ChatList({ currentChatId, setCurrentChatId }: ChatListPr
     // = Conversations.filter(conversation => conversation.adminId === 'test@gmail.com');
 
     const handleSelectConversation = (index: number) => {
-        setCurrentChatId(customers[index].senderReference);
+        // setCurrentChatId(customers[index].senderReference);
+        console.log('customers[index].senderReference: ', customers[index].senderReference)
+        console.log('index: ', index)
+        console.log('customers: ', customers)
+        // console.log('currentChatId', )
+        dispatch(setNewCurrentChatId(customers[index].senderReference));
     }
     
     return(
         <List>
-        
         {
             customers ? (
             customers.map((customer, index) => (

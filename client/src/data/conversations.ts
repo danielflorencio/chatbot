@@ -7,21 +7,21 @@ export const Conversations: Conversation[] = [
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
             {
             content: '',
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
             {
             content: '',
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
         ],
         adminId: 'test@gmail.com',
@@ -35,21 +35,21 @@ export const Conversations: Conversation[] = [
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
             {
             content: '',
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
             {
             content: '',
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
         ],
         adminId: 'test@gmail.com',
@@ -63,21 +63,21 @@ export const Conversations: Conversation[] = [
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
             {
             content: '',
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
             {
             content: '',
             senderReference: '',
             recipientReference: '',
             senderType: 'customer',
-            date: new Date
+            date: new Date().toISOString()
             },
         ],
         adminId: 'test@gmail.com',

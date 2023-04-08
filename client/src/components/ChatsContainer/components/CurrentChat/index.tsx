@@ -6,6 +6,9 @@ import { Message } from "../../../../types/message";
 import MessageComponent from "./components/Message";
 import { Conversations } from "../../../../data/conversations";
 import { Conversation } from "../../../../types/conversation";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { selectConversationsOnScreen, sendMessage } from "../../../../features/sessionControl/chatSlice";
+import { current } from "@reduxjs/toolkit";
 
 const socket = io("http://localhost:3001");
 
@@ -15,66 +18,51 @@ const initialMessagesData: Message[] = [
       senderReference: '1',
       recipientReference: '1',
       senderType: 'admin',
-      date: new Date()
+      date: new Date().toISOString()
     },
     {
       content: "This is my first message, and I'm a customer.",
       senderReference: '1',
       recipientReference: '1',
       senderType: 'customer',
-      date: new Date()
+      date: new Date().toISOString()
     },
     {
       content: 'And this is just another message.',
       senderReference: '1',
       recipientReference: '1',
       senderType: 'admin',
-      date: new Date()
+      date: new Date().toISOString()
     }
 ]; 
 
-// const sortedMessages = [...initialMessagesData].sort((a, b) => a.date.getTime() - b.date.getTime());
+type CurrentChatProps = {
+    currentChatId: string,
+    conversationToLoad: Conversation,
+    messagesToLoad: Message[],
+    conversationsOnMemory: Conversation[],
+    setMessagesToLoad: (messages: Message[]) => void,
+    setConversationToLoad: (Conversation: Conversation) => void,
+    setConversationsOnMemory: (Conversations: Conversation[]) => void,
 
-
-
-export default function CurrentChat({currentChatId, conversationToLoad, messagesToLoad, setMessagesToLoad}: {currentChatId: string; messagesToLoad: Message[]; conversationToLoad: Conversation; setMessagesToLoad: (messages: Message[]) => void}){
-
-    // const [messagesToLoad, setMessagesToLoad] = useState<Message[]>(
-    //     () => {
-    //         const sortedMessagesToLoad = conversationToLoad.messages.sort((a, b) => a.date.getTime() - b.date.getTime());
-    //         return sortedMessagesToLoad;
-    //     }
-    // );
-    // Conversations.filter(conversation => conversation.adminId === 'test@gmail.com' && currentChatId ==);
-
-    // const conversationToLoad = Conversations.find(conversation => conversation.adminId === 'test@gmail.com' && currentChatId === conversation.customerId);
-
-    // let messagesToLoad: Message[];
-
-    // if(conversationToLoad !== null){
-    //     messagesToLoad = 
-    // }
-
-    // let messagesToLoad = conversationToLoad?.messages; 
-    // This solution is subjective to bugs and is not the best solution, since there can be more than one conversation.
-    // The optimal solution should get only one conversation in the variable conversationToLoad
-
-    // const messagesToLoad: Message[] = conversationToLoad.map((conversation) => {
-    //     return conversation.messages[];
-    // })
-
-    // if(messagesToLoad !== undefined){
-    //     const sortedMessagesToLoad = [...messagesToLoad].sort((a, b) => a.date.getTime() - b.date.getTime());
-    //     setMessagesToLoad(sortedMessagesToLoad)
-    // }    
-    // sortedMessages = [...messagesToLoad?].sort((a, b) => a.date.getTime() - b.date.getTime());
-    
+}
+export default function CurrentChat({currentChatId, conversationToLoad, messagesToLoad, setMessagesToLoad, setConversationToLoad, setConversationsOnMemory, conversationsOnMemory}: CurrentChatProps){
     
     const [messageInput, setMessageInput] = useState<string>('');
 
     // const [sortedMessages, setSortedMessages] = useState(
     //     () => {const sortedMessages = [...initialMessagesData].sort((a, b) => a.date.getTime() - b.date.getTime());}
     // )
+
+    const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);
+    
+    // currentChatId = useAppSelector(state => state.chat.currentChatId);
+
+    // useEffect(() => {
+
+    // }, [])
+    const dispatch = useAppDispatch();
+
 
     const [chatMessages, setChatMessages] = useState<Message[] | undefined>(
         messagesToLoad
@@ -84,45 +72,33 @@ export default function CurrentChat({currentChatId, conversationToLoad, messages
         // }
     );
 
-    // const [chatMessages, setChatMessages] = useState<Promise<Message[]>>(<Promise>)
-
-    // const [chatMessages, setChatMessages] = useState<Promise<Message[]>>(
-    //     // (async () => {
-    //     //     const response = await fetch('http://localhost:3001/getMessages', {
-    //     //         method: 'GET',
-    //     //         headers: {
-    //     //           'Content-Type': 'application/json',
-    //     //         },
-    //     //         body: JSON.stringify({ 
-    //     //         //   email: email,
-    //     //         //   password: password
-    //     //         })
-    //     //     })
-    //     //     const data = await response.json();
-    //     //     return data;
-    //     // })();
-    // );
-            
-    // doSomething();
-            
-
     const joinRoom = () => {
         socket.emit("join_room",)
     }
 
     const handleSubmit = () =>{
-        // (async () => {
-        //     // Send data to the server
-        // })();
-        let message: Message = {content: messageInput, senderType: "admin", date: new Date, senderReference: '1', recipientReference: currentChatId}
-        // setChatMessages([...chatMessages, message])
-        setMessagesToLoad([...messagesToLoad, message]);
+        let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), senderReference: '1', recipientReference: currentChatId}
+        let newConversationToLoad: Conversation = {
+            ...conversationToLoad,
+            messages: [...conversationToLoad.messages, message]
+        }
+
+        // let conversationToChangeIndex = conversationsOnMemory.findIndex(conversation => currentChatId === conversationToLoad.customerId);
+
+        // let newConversationsOnMemory: Conversation[] = {...conversationsOnMemory}
+        // newConversationsOnMemory[conversationToChangeIndex] = newConversationToLoad;
+        setConversationToLoad(newConversationToLoad)
+        dispatch(sendMessage(message.content));
+        // setConversationsOnMemory(newConversationsOnMemory)
+        // setMessagesToLoad([...messagesToLoad, message]);
         setMessageInput('');
     }
+
+
     return(
         <Grid item xs={9}>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
-                {messagesToLoad ? (messagesToLoad.map((message, index) => (
+                {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message, index) => (
                     <div key={index}>
                         <MessageComponent index={index} content={message.content} senderType={message.senderType} date={message.date}/>
                     </div>

@@ -7,5 +7,5 @@ export type Message = {
     senderReference: string;
     recipientReference: string;
     senderType: 'admin' | 'customer';
-    date: Date;
+    date: string;
 }
