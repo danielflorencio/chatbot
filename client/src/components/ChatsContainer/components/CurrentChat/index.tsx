@@ -37,40 +37,17 @@ const initialMessagesData: Message[] = [
 ]; 
 
 type CurrentChatProps = {
-    currentChatId: string,
-    conversationToLoad: Conversation,
-    messagesToLoad: Message[],
-    conversationsOnMemory: Conversation[],
-    setMessagesToLoad: (messages: Message[]) => void,
-    setConversationToLoad: (Conversation: Conversation) => void,
-    setConversationsOnMemory: (Conversations: Conversation[]) => void,
-
+    currentChatId: string
 }
-export default function CurrentChat({currentChatId, conversationToLoad, messagesToLoad, setMessagesToLoad, setConversationToLoad, setConversationsOnMemory, conversationsOnMemory}: CurrentChatProps){
+export default function CurrentChat({currentChatId}: CurrentChatProps){
     
     const [messageInput, setMessageInput] = useState<string>('');
+    const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);    
+    const dispatch = useAppDispatch();
 
     // const [sortedMessages, setSortedMessages] = useState(
     //     () => {const sortedMessages = [...initialMessagesData].sort((a, b) => a.date.getTime() - b.date.getTime());}
     // )
-
-    const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);
-    
-    // currentChatId = useAppSelector(state => state.chat.currentChatId);
-
-    // useEffect(() => {
-
-    // }, [])
-    const dispatch = useAppDispatch();
-
-
-    const [chatMessages, setChatMessages] = useState<Message[] | undefined>(
-        messagesToLoad
-        // () => {
-        //     const sortedMessages = [...messagesToLoad?].sort((a, b) => a.date.getTime() - b.date.getTime());
-        //     return sortedMessages;
-        // }
-    );
 
     const joinRoom = () => {
         socket.emit("join_room",)
@@ -78,19 +55,7 @@ export default function CurrentChat({currentChatId, conversationToLoad, messages
 
     const handleSubmit = () =>{
         let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), senderReference: '1', recipientReference: currentChatId}
-        let newConversationToLoad: Conversation = {
-            ...conversationToLoad,
-            messages: [...conversationToLoad.messages, message]
-        }
-
-        // let conversationToChangeIndex = conversationsOnMemory.findIndex(conversation => currentChatId === conversationToLoad.customerId);
-
-        // let newConversationsOnMemory: Conversation[] = {...conversationsOnMemory}
-        // newConversationsOnMemory[conversationToChangeIndex] = newConversationToLoad;
-        setConversationToLoad(newConversationToLoad)
         dispatch(sendMessage(message.content));
-        // setConversationsOnMemory(newConversationsOnMemory)
-        // setMessagesToLoad([...messagesToLoad, message]);
         setMessageInput('');
     }
 

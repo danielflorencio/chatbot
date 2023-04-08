@@ -4,37 +4,12 @@ import { Conversation } from "../../../types/conversation";
 import { Customers } from "../../../data/customers";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { setNewCurrentChatId } from "../../../features/sessionControl/chatSlice";
-interface ChatListProps {
-    currentChatId: string;
-    // setCurrentChatId: (chatId: string) => void;
-}
-
-export default function ChatList({ currentChatId }: ChatListProps){
-
-    // Create an email useAppSelector here to use in the line below.
-
-    // let conversationsToLoad = Conversations.filter(conversation => conversation.adminId === 'test@gmail.com');
-    let conversationsToLoad: Conversation | undefined = Conversations.find(conversation => conversation.adminId === 'test@gmail.com' && currentChatId === conversation.customerId);
+export default function ChatList(){
 
     let customers = Customers.filter(customer => customer.recipientId === 'test@gmail.com')
-
-    const conversations = useAppSelector(state => state.chat.conversationsInMemory);
-
     const dispatch = useAppDispatch();
 
-
-    // if(Conversations.filter(conversation => conversation.adminId === 'test@gmail.com') !== null){
-    //     conversationsToLoad = Conversations.filter(conversation => conversation.adminId === 'test@gmail.com');
-    // }
-
-    // = Conversations.filter(conversation => conversation.adminId === 'test@gmail.com');
-
     const handleSelectConversation = (index: number) => {
-        // setCurrentChatId(customers[index].senderReference);
-        console.log('customers[index].senderReference: ', customers[index].senderReference)
-        console.log('index: ', index)
-        console.log('customers: ', customers)
-        // console.log('currentChatId', )
         dispatch(setNewCurrentChatId(customers[index].senderReference));
     }
     

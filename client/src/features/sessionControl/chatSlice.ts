@@ -46,12 +46,6 @@ export const chatSlice = createSlice({
       state.conversationOnScreen = state.conversationsInMemory[conversationIndex]
     }, 
     setNewCurrentChatId: (state, action: PayloadAction<string>) => {
-      console.log('setNewCurrentChatId called.')
-      // const newState = {
-      //   ...state,
-      //   currentChatId: action.payload
-      // }
-      // state = newState;
       state.currentChatId = action.payload
     }
   },
