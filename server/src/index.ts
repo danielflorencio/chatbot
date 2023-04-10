@@ -176,7 +176,7 @@ app.post('/api/getOneChatMessages', async (req, res) => { // This API Endpoint m
             // }))
 
             const response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
-                messages: await Message.find({ adminReference: req.body.email, customerReference: customerIds[index] }),
+                messages: await Message.find({ adminReference: user._id, customerReference: customerIds[index] }),
                 adminId: req.body.email,
                 customerId: customerIds[index]
               })))
