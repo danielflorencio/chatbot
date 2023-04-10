@@ -1,11 +1,11 @@
 import { Fab, Grid, Divider, TextField, List } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import {io} from "socket.io-client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Message } from "../../../../types/message";
 import MessageComponent from "./components/Message";
-import { useAppDispatch, useAppSelector } from "../../../../hooks";
-import { sendMessage } from "../../../../features/sessionControl/chatSlice";
+import { useAppDispatch, useAppSelector, useConversationsInMemory, useCurrentChatId } from "../../../../hooks";
+import { sendMessage, setConversationOnScreen, setConversationOnScreenValues } from "../../../../features/sessionControl/chatSlice";
 import { useUserEmail } from "../../../../hooks";
 
 const socket = io("http://localhost:3001");
@@ -17,6 +17,9 @@ export default function CurrentChat({currentChatId}: CurrentChatProps){
     
     const [messageInput, setMessageInput] = useState<string>('');
     const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);
+    const conversationsInMemory = useConversationsInMemory();
+    // const dispatch = useAppDispatch();
+    // const currentChatId = useCurrentChatId();
 
     const loggedUser = useUserEmail();    
     // const conversationOnScreen = useAppSelector(state => {
@@ -27,12 +30,19 @@ export default function CurrentChat({currentChatId}: CurrentChatProps){
 
     const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        const conversationIndex = conversationsInMemory.findIndex(
+            conversation => conversation.customerId === currentChatId && conversation.adminId === loggedUser
+          );
+        dispatch(setConversationOnScreenValues(conversationsInMemory[conversationIndex]));
+    }, [conversationsInMemory])
+
     const joinRoom = () => {
         socket.emit("join_room",)
     }
 
     const handleSubmit = () =>{
-        let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), senderReference: loggedUser, recipientReference: currentChatId}
+        let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), adminReference: loggedUser, customerReference: currentChatId}
         dispatch(sendMessage(message.content));
         setMessageInput('');
     }

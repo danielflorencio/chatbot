@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
 import {useEffect} from 'react'
-import { useAppDispatch, useCurrentChatId, useUserEmail } from "../../hooks";
+import { useAppDispatch, useConversationsInMemory, useCurrentChatId, useUserEmail } from "../../hooks";
 import { setConversationOnScreen, setConversationsInMemory } from "../../features/sessionControl/chatSlice";
 import { Conversation } from "../../types/conversation";
 export default function ChatsContainer(){
@@ -11,6 +11,8 @@ export default function ChatsContainer(){
   const currentChatId = useCurrentChatId();
 
   const email = useUserEmail();
+  const conversationsInMemory = useConversationsInMemory();
+
   const dispatch = useAppDispatch();
   useEffect(() => {    
     console.log('useEffect being called.');

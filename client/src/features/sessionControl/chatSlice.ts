@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../store';
 import { Conversation } from '../../types/conversation';
@@ -37,10 +37,14 @@ export const chatSlice = createSlice({
     },
     setConversationsInMemory: (state, action: PayloadAction<Conversation[]>) => {
       // const newConversationsInMemory: Conversation[] = action.payload
+      console.log('setConversationsInMemory being called.')
+      console.log('conversationsInMemory Format: ', state.conversationsInMemory)
+      console.log('action.payload format: ', action.payload)
       const newState = {
         ...state,
         conversationsInMemory: action.payload
       }
+
       state = newState;
     },
     setConversationOnScreen: (state, action: PayloadAction<String>) => {
@@ -56,6 +60,16 @@ export const chatSlice = createSlice({
         conversation => conversation.customerId === action.payload && conversation.adminId === "test@gmail.com"
       );
       state.conversationOnScreen = state.conversationsInMemory[conversationIndex]
+    },
+    setConversationOnScreenValues: (state, action: PayloadAction<Conversation>) => {
+      console.log('format expected by the dispatcher: ', state.conversationOnScreen)
+      const newState = {
+        ...state,
+        conversationOnScreen: {
+          ...action.payload
+        }
+      }
+      state = newState;
     }
   },
 })
@@ -64,7 +78,7 @@ export const selectConversationsInMemory = (state: RootState) => {return state.c
 export const selectCurrentChatId = (state: RootState) => {return state.chat.currentChatId};
 export const selectConversationsOnScreen = (state: RootState) => {return state.chat.conversationOnScreen};
 
-export const {sendMessage, setNewCurrentChatId, setConversationOnScreen, setConversationsInMemory} = chatSlice.actions;
+export const {sendMessage, setNewCurrentChatId, setConversationOnScreen, setConversationsInMemory, setConversationOnScreenValues} = chatSlice.actions;
 export const chatActions = {
   ...chatSlice.actions,
 }
