@@ -4,37 +4,11 @@ import {io} from "socket.io-client";
 import { useState } from "react";
 import { Message } from "../../../../types/message";
 import MessageComponent from "./components/Message";
-import { Conversations } from "../../../../data/conversations";
-import { Conversation } from "../../../../types/conversation";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
-import { selectConversationsOnScreen, sendMessage } from "../../../../features/sessionControl/chatSlice";
-import { current } from "@reduxjs/toolkit";
+import { sendMessage } from "../../../../features/sessionControl/chatSlice";
+import { useUserEmail } from "../../../../hooks";
 
 const socket = io("http://localhost:3001");
-
-const initialMessagesData: Message[] = [
-    {
-      content: 'Hey, this is my first message, and I am an admin.',
-      senderReference: '1',
-      recipientReference: '1',
-      senderType: 'admin',
-      date: new Date().toISOString()
-    },
-    {
-      content: "This is my first message, and I'm a customer.",
-      senderReference: '1',
-      recipientReference: '1',
-      senderType: 'customer',
-      date: new Date().toISOString()
-    },
-    {
-      content: 'And this is just another message.',
-      senderReference: '1',
-      recipientReference: '1',
-      senderType: 'admin',
-      date: new Date().toISOString()
-    }
-]; 
 
 type CurrentChatProps = {
     currentChatId: string
@@ -42,23 +16,26 @@ type CurrentChatProps = {
 export default function CurrentChat({currentChatId}: CurrentChatProps){
     
     const [messageInput, setMessageInput] = useState<string>('');
-    const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);    
-    const dispatch = useAppDispatch();
+    const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);
 
-    // const [sortedMessages, setSortedMessages] = useState(
-    //     () => {const sortedMessages = [...initialMessagesData].sort((a, b) => a.date.getTime() - b.date.getTime());}
-    // )
+    const loggedUser = useUserEmail();    
+    // const conversationOnScreen = useAppSelector(state => {
+    //     const newConversationOnScreenIndex = state.chat.conversationsInMemory.findIndex(conversation => conversation.customerId === currentChatId && conversation.adminId === loggedUser)
+    //     const getConversationOnScreen = useConversationsInMemory()
+    //     return getConversationOnScreen[newConversationOnScreenIndex];
+    // });
+
+    const dispatch = useAppDispatch();
 
     const joinRoom = () => {
         socket.emit("join_room",)
     }
 
     const handleSubmit = () =>{
-        let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), senderReference: '1', recipientReference: currentChatId}
+        let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), senderReference: loggedUser, recipientReference: currentChatId}
         dispatch(sendMessage(message.content));
         setMessageInput('');
     }
-
 
     return(
         <Grid item xs={9}>

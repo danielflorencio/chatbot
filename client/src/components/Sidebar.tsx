@@ -20,7 +20,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { useState } from 'react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import { Avatar, Button, Menu, MenuItem } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch } from '../hooks';
 import { logout, registerLoggedUserState } from '../features/sessionControl/sessionSlice';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 const drawerWidth = 240;
@@ -29,7 +29,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  padding: theme.spacing(2),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,

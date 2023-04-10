@@ -1,8 +1,6 @@
 import { Avatar, List, ListItem, ListItemIcon, ListItemText} from "@mui/material";
-import { Conversations } from "../../../data/conversations";
-import { Conversation } from "../../../types/conversation";
 import { Customers } from "../../../data/customers";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useAppDispatch} from "../../../hooks";
 import { setNewCurrentChatId } from "../../../features/sessionControl/chatSlice";
 export default function ChatList(){
 

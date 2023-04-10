@@ -8,8 +8,6 @@ const UserPage = lazy(() => import('./pages/UserPage/UserPage'));
 const SignUp = lazy(() => import('./pages/SingUpPage/SignUpPage'));
 
 export default function App() {
-  console.log('testing the rerender of the app.')
-
   useEffect(() => {
     const token = localStorage.getItem('token')
     if(token){

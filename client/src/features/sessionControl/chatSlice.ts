@@ -36,7 +36,6 @@ export const chatSlice = createSlice({
       state.conversationOnScreen.messages.push(newMessage);
     },
     setConversationsInMemory: (state, action: PayloadAction<Conversation[]>) => {
-
     },
     setConversationOnScreen: (state, action: PayloadAction<String>) => {
       console.log('setConversationOnScreen being called.')
@@ -47,10 +46,13 @@ export const chatSlice = createSlice({
     }, 
     setNewCurrentChatId: (state, action: PayloadAction<string>) => {
       state.currentChatId = action.payload
+      const conversationIndex = state.conversationsInMemory.findIndex(
+        conversation => conversation.customerId === action.payload && conversation.adminId === "test@gmail.com"
+      );
+      state.conversationOnScreen = state.conversationsInMemory[conversationIndex]
     }
   },
 })
-
 
 export const selectConversationsInMemory = (state: RootState) => {return state.chat.conversationsInMemory};
 export const selectCurrentChatId = (state: RootState) => {return state.chat.currentChatId};
