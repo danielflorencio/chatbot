@@ -156,75 +156,45 @@ app.listen(port, () => {
 
 socketIoHttpServer.listen(3001)
 
+
+
+const { Conversation: ConversationModel, Message: MessageModel } = models;
+
+
 async function createConversationAndMessage() {
+    try {
+      for (let i = 0; i < Conversations.length; i++) {
+        const user = await User.findOne({ email: Conversations[i].adminId });
+        const customer = await Customer.create({ phoneNumber: Conversations[i].customerId });
   
-    try{
-        for(let i = 0; i < Conversations.length; i++){
+        
 
-            const user = await User.findOne({
-                email: Conversations[i].adminId
-            })
-
-            // let messages = Conversations[i].messages;
-
-            let messagesData;
-            // let messagesSchema;
-            let messagesIds: Types.ObjectId[] = [];
-
-            if(user){
-                const customer = await Customer.create({
-                    phoneNumber: Conversations[i].customerId
-                })
-
-                if(customer){
-                    for(let n = 0; n < Conversations[i].messages.length; n++){
-                        // messagesData[n] = Conversations[i].messages[n]
-                        if (Conversations[i].messages[n].senderType === 'admin'){
-                            let messagesSchema = await Message.create({
-                                content: Conversations[i].messages[n].content,
-                                senderReference: user._id,
-                                recipientReference: customer._id,
-                                senderType: Conversations[i].messages[n].senderType,
-                                date: Conversations[i].messages[n].date,
-                            })
-                            if(messagesSchema){
-                                messagesIds.push(messagesSchema._id)
-                            }
-
-                        } else if(Conversations[i].messages[n].senderType === 'customer'){
-                            let messagesSchema = await Message.create({
-                                content: Conversations[i].messages[n].content,
-                                senderReference: customer._id,
-                                recipientReference: user._id,
-                                senderType: Conversations[i].messages[n].senderType,
-                                date: Conversations[i].messages[n].date,
-                            })
-                            if(messagesSchema){
-                                messagesIds.push(messagesSchema._id)
-                            }
-                        } else{
-                            console.log('error: messagesData[n].senderType !== admin or customer.')
-                        }
-                    }
-                    const conversation = await Conversation.create({
-                        messages: messagesIds,
-                        adminId: user.id,
-                        customerId: customer.id
-                    })
-                    await conversation.save();
-                } else{
-                    console.log('customer does not exist.')
-                }
-            } else {
-                console.log('user not found.')
-            }
-
-
-        //    await conversation.save();
+        if(user){
+            const messagesData = Conversations[i].messages.map((message) => ({
+                content: message.content,
+                senderReference: message.senderType === 'admin' ? user._id : customer._id,
+                recipientReference: message.senderType === 'admin' ? customer._id : user._id,
+                senderType: message.senderType,
+                date: message.date,
+              }));
+        
+              const messages = await MessageModel.insertMany(messagesData);
+        
+              const conversationData = {
+                messages: messages.map((message) => message._id),
+                adminId: user._id,
+                customerId: customer._id,
+              };
+              await ConversationModel.create(conversationData);
         }
-    }catch(error){
-        console.log('Error: ', error)
+
+
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      mongoose.disconnect();
     }
   }
   
-// createConversationAndMessage();
+  createConversationAndMessage();
