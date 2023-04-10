@@ -139,13 +139,65 @@ app.get('/api/getAllMessages', async (req, res) => { // This API Endpoint must b
     }
 });
 
-app.get('api/getOneChatMessages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
+app.post('/api/getOneChatMessages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
+    console.log('request being received in getOneChatMessages: ', req.body)
+
+    // export type Conversation = {
+    //     messages: Message[],
+    //     adminId: string,
+    //     customerId: string,
+    // }
+
     try{
+        const user = await User.findOne({email: req.body.email})
+
+        if(user){
+            const conversationsIndexes = await Conversation.find({adminId: user._id})
+            
+            // const conversationMessages = await Message.find({ $or: [{ senderReference: req.body.email }, { recipientReference: req.body.email }]})
+            
+            const customerIds = conversationsIndexes.map((conversationIndex) => conversationIndex.customerId)
 
 
-        res.status(200).json({status: 'ok'});
+
+            // const conversationCustomer = await Customer.find({ $or: [{senderReference: {$in: customerIds} }, {recipientReference: {$in: customerIds}}]})
+
+            // let response;
+
+
+            // const response = conversationsIndexes.map(async (conversation, index) => ({
+            //     messages: await Message.find({  
+            //         adminReference: req.body.email 
+            //     }, {
+            //         customerReference: customerIds[index]
+            //     }),
+            //     adminId: req.body.email,
+            //     customerId: await Customer.findOne({ customerReference: customerIds[index]}) 
+            // }))
+
+            const response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
+                messages: await Message.find({ adminReference: req.body.email, customerReference: customerIds[index] }),
+                adminId: req.body.email,
+                customerId: customerIds[index]
+              })))
+
+
+            // for(let i = 0; i < conversationsIndexes.length; i++){
+            //     response[0] = {
+            //         messages: await Message.find({  
+            //             adminReference: req.body.email 
+            //         }, {
+            //             customerReference: customerIds[i]
+            //         }),
+            //         adminId: req.body.email,
+            //         customerId: await Customer.findOne({ customerReference: customerIds[i]})
+            //     }
+            // }
+
+            console.log('API Response: ', response)
+            res.status(200).json({status: 'ok', conversations: response});
+        }
     }catch(error){
-
         res.status(500).json({status: 'error'})
     }
 })
@@ -167,13 +219,14 @@ async function createConversationAndMessage() {
         const user = await User.findOne({ email: Conversations[i].adminId });
         const customer = await Customer.create({ phoneNumber: Conversations[i].customerId });
   
-        
+        console.log('for loop being executed once.')
 
         if(user){
             const messagesData = Conversations[i].messages.map((message) => ({
                 content: message.content,
-                senderReference: message.senderType === 'admin' ? user._id : customer._id,
-                recipientReference: message.senderType === 'admin' ? customer._id : user._id,
+                // senderReference: message.senderType === 'admin' ? user._id : customer._id,
+                customerReference: customer._id,
+                adminReference: user._id,
                 senderType: message.senderType,
                 date: message.date,
               }));
@@ -188,7 +241,6 @@ async function createConversationAndMessage() {
               await ConversationModel.create(conversationData);
         }
 
-
       }
     } catch (err) {
       console.error(err);
@@ -197,4 +249,4 @@ async function createConversationAndMessage() {
     }
   }
   
-  createConversationAndMessage();
+// createConversationAndMessage();

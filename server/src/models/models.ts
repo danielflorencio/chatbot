@@ -10,8 +10,8 @@ const UserSchema = new mongoose.Schema({
 
 const messageSchema = new mongoose.Schema({
   content: { type: String, required: true },
-  senderReference: { type: Schema.Types.ObjectId, ref: 'User' }, // There might be an error in here.
-  recipientReference: { type: Schema.Types.ObjectId, ref: 'User' }, // There might be an error in here.
+  customerReference: { type: Schema.Types.ObjectId, ref: 'User' }, // There might be an error in here.
+  adminReference: { type: Schema.Types.ObjectId, ref: 'Customer' }, // There might be an error in here.
   senderType: { type: String, required: true },
   date: { type: Date, default: Date.now }
 }, {collection: 'text-messages'});
