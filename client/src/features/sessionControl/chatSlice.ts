@@ -24,8 +24,8 @@ export const chatSlice = createSlice({
     sendMessage: (state, action: PayloadAction<string>) => {
       const newMessage: Message = {
         content: action.payload,
-        senderReference: state.currentChatId,
-        recipientReference: state.conversationOnScreen.adminId,
+        adminReference: state.currentChatId,
+        customerReference: state.conversationOnScreen.adminId,
         senderType: 'admin',
         date: new Date().toISOString() // convert the date to string
       }
@@ -36,6 +36,12 @@ export const chatSlice = createSlice({
       state.conversationOnScreen.messages.push(newMessage);
     },
     setConversationsInMemory: (state, action: PayloadAction<Conversation[]>) => {
+      // const newConversationsInMemory: Conversation[] = action.payload
+      const newState = {
+        ...state,
+        conversationsInMemory: action.payload
+      }
+      state = newState;
     },
     setConversationOnScreen: (state, action: PayloadAction<String>) => {
       console.log('setConversationOnScreen being called.')
@@ -58,7 +64,7 @@ export const selectConversationsInMemory = (state: RootState) => {return state.c
 export const selectCurrentChatId = (state: RootState) => {return state.chat.currentChatId};
 export const selectConversationsOnScreen = (state: RootState) => {return state.chat.conversationOnScreen};
 
-export const {sendMessage, setNewCurrentChatId, setConversationOnScreen } = chatSlice.actions;
+export const {sendMessage, setNewCurrentChatId, setConversationOnScreen, setConversationsInMemory} = chatSlice.actions;
 export const chatActions = {
   ...chatSlice.actions,
 }
