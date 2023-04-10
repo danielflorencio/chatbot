@@ -3,6 +3,7 @@ import { Server, Socket } from 'socket.io'
 import { createServer } from 'http'
 import { Conversations } from './data/Conversations';
 import models from './models/models';
+import { Types } from 'mongoose';
 
 const port = 3000
 const cors = require('cors')
@@ -167,33 +168,40 @@ async function createConversationAndMessage() {
             // let messages = Conversations[i].messages;
 
             let messagesData;
-            let messagesSchema;
-            let messagesIds;
+            // let messagesSchema;
+            let messagesIds: Types.ObjectId[] = [];
 
             if(user){
-                const customer = await Customer.findOne({
+                const customer = await Customer.create({
                     phoneNumber: Conversations[i].customerId
                 })
+
                 if(customer){
                     for(let n = 0; n < Conversations[i].messages.length; n++){
-                        messagesData[n] = Conversations[i].messages[n]
-                        if (messagesData[n].senderType === 'admin'){
-                            messagesSchema = await Message.create({
-                                content: messagesData[n].content,
-                                senderReference: user.id,
-                                recipientReference: messagesData[n].customer.Id,
-                                senderType: messagesData[n].senderType,
-                                date: messagesData[n].date,
+                        // messagesData[n] = Conversations[i].messages[n]
+                        if (Conversations[i].messages[n].senderType === 'admin'){
+                            let messagesSchema = await Message.create({
+                                content: Conversations[i].messages[n].content,
+                                senderReference: user._id,
+                                recipientReference: customer._id,
+                                senderType: Conversations[i].messages[n].senderType,
+                                date: Conversations[i].messages[n].date,
                             })
-                        } else if(messagesData[n].senderType === 'customer'){
-                            messagesSchema = await Message.create({
-                                content: messagesData[n].content,
-                                senderReference: messagesData[n].customer.id,
-                                recipientReference: user.id,
-                                senderType: messagesData[n].senderType,
-                                date: messagesData[n].date,
+                            if(messagesSchema){
+                                messagesIds.push(messagesSchema._id)
+                            }
+
+                        } else if(Conversations[i].messages[n].senderType === 'customer'){
+                            let messagesSchema = await Message.create({
+                                content: Conversations[i].messages[n].content,
+                                senderReference: customer._id,
+                                recipientReference: user._id,
+                                senderType: Conversations[i].messages[n].senderType,
+                                date: Conversations[i].messages[n].date,
                             })
-                            messagesIds[n] = messagesSchema.id
+                            if(messagesSchema){
+                                messagesIds.push(messagesSchema._id)
+                            }
                         } else{
                             console.log('error: messagesData[n].senderType !== admin or customer.')
                         }
