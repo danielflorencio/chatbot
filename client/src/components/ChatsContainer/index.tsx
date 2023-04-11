@@ -4,7 +4,7 @@ import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
 import {useEffect} from 'react'
 import { useAppDispatch, useConversationsInMemory, useCurrentChatId, useUserEmail } from "../../hooks";
-import { setConversationOnScreen, setConversationsInMemory } from "../../features/sessionControl/chatSlice";
+import { setConversationOnScreen, setConversationOnScreenValues, setConversationsInMemory } from "../../features/sessionControl/chatSlice";
 import { Conversation } from "../../types/conversation";
 export default function ChatsContainer(){
 
@@ -39,7 +39,7 @@ export default function ChatsContainer(){
             messages: conversation.messages.map((message: any) => {
               return {
                 content: message.content,
-                senderReference: message.senderReference,
+                adminReference: message.adminReference,
                 customerReference: conversation.customerId.phoneNumber,
                 senderType: message.senderType,
                 date: message.date
@@ -51,11 +51,29 @@ export default function ChatsContainer(){
         });
         console.log('New conversations Data formatted: ', conversations)
         dispatch(setConversationsInMemory(conversations));
+        // dispatch(setConversationOnScreenValues(conversations));
       }
       dispatch(setConversationOnScreen(currentChatId));
     })();
 
   }, [currentChatId])
+
+  useEffect(() => {
+    console.log('second useEffect being called.')
+    const conversationIndex = conversationsInMemory.findIndex(
+      conversation => conversation.customerId === currentChatId 
+    );
+    const newConversation: Conversation = conversationsInMemory[conversationIndex]
+    // try{
+      dispatch(setConversationOnScreenValues(newConversation))
+    // }catch(error){
+    //   console.log('ERROR: ', error)
+    // }
+  }, [conversationsInMemory])
+
+  // useEffect(() => {
+
+  // })
 
   return(
   <Grid container component={Paper} sx={{width: 1, height: '100%'}}>

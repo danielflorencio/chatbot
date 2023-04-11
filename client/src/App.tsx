@@ -2,12 +2,14 @@ import {useEffect, lazy} from 'react'
 import CssBaseline from '@mui/material/CssBaseline';
 import {Container} from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
+// import { useConversationsInMemory } from './hooks';
 
 const SignIn = lazy(() => import('./pages/SignInPage/SignInPage'));
 const UserPage = lazy(() => import('./pages/UserPage/UserPage'));
 const SignUp = lazy(() => import('./pages/SingUpPage/SignUpPage'));
 
 export default function App() {
+
   useEffect(() => {
     const token = localStorage.getItem('token')
     if(token){

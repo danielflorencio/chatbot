@@ -14,10 +14,14 @@ type CurrentChatProps = {
     currentChatId: string
 }
 export default function CurrentChat({currentChatId}: CurrentChatProps){
+
+
     
     const [messageInput, setMessageInput] = useState<string>('');
     const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);
     const conversationsInMemory = useConversationsInMemory();
+    console.log('conversations in memory on startup: ----------------------------------', conversationsInMemory)
+    console.log('conversations on Screen on startup: ----------------------------------', conversationOnScreen)
     // const dispatch = useAppDispatch();
     // const currentChatId = useCurrentChatId();
 
@@ -30,12 +34,12 @@ export default function CurrentChat({currentChatId}: CurrentChatProps){
 
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        const conversationIndex = conversationsInMemory.findIndex(
-            conversation => conversation.customerId === currentChatId && conversation.adminId === loggedUser
-          );
-        dispatch(setConversationOnScreenValues(conversationsInMemory[conversationIndex]));
-    }, [conversationsInMemory])
+    // useEffect(() => {
+    //     const conversationIndex = conversationsInMemory.findIndex(
+    //         conversation => conversation.customerId === currentChatId && conversation.adminId === loggedUser
+    //       );
+    //     dispatch(setConversationOnScreenValues(conversationsInMemory[conversationIndex]));
+    // }, [conversationsInMemory])
 
     const joinRoom = () => {
         socket.emit("join_room",)

@@ -155,16 +155,10 @@ app.post('/api/getOneChatMessages', async (req, res) => { // This API Endpoint m
             const conversationsIndexes = await Conversation.find({adminId: user._id})
             
             // const conversationMessages = await Message.find({ $or: [{ senderReference: req.body.email }, { recipientReference: req.body.email }]})
-            
+
             const customerIds = conversationsIndexes.map((conversationIndex) => conversationIndex.customerId)
-
-
-
             // const conversationCustomer = await Customer.find({ $or: [{senderReference: {$in: customerIds} }, {recipientReference: {$in: customerIds}}]})
-
             // let response;
-
-
             // const response = conversationsIndexes.map(async (conversation, index) => ({
             //     messages: await Message.find({  
             //         adminReference: req.body.email 
@@ -175,14 +169,21 @@ app.post('/api/getOneChatMessages', async (req, res) => { // This API Endpoint m
             //     customerId: await Customer.findOne({ customerReference: customerIds[index]}) 
             // }))
 
-            const response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
-                messages: await Message.find({ adminReference: user._id, customerReference: customerIds[index] }),
+            let response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
+                messages: await Message.find({ adminReference: user._id, customerReference: customerIds[index] }).populate('adminReference', req.body.email).lean(),
                 adminId: req.body.email,
                 // customerId: customerIds[index]
-                customerId: await Customer.findOne({customerReference: customerIds[index]})
-              })))
+                customerId: await Customer.findOne({customerReference: customerIds[index]}).select({phoneNumber: 1, _id: 0})
+            })))
 
-
+            response = response.map(conversation => ({
+                ...conversation,
+                messages: conversation.messages.map(message => ({
+                    ...message,
+                    adminReference: req.body.email
+                }))
+            }))
+            
             // for(let i = 0; i < conversationsIndexes.length; i++){
             //     response[0] = {
             //         messages: await Message.find({  
