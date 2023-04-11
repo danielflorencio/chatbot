@@ -4,8 +4,9 @@ import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
 import {useEffect} from 'react'
 import { useAppDispatch, useConversationsInMemory, useCurrentChatId, useUserEmail } from "../../hooks";
-import { setConversationOnScreen, setConversationOnScreenValues, setConversationsInMemory } from "../../features/sessionControl/chatSlice";
+import { fetchMessages, setConversationOnScreen, setConversationOnScreenValues, setConversationsInMemory } from "../../features/sessionControl/chatSlice";
 import { Conversation } from "../../types/conversation";
+import { store } from "../../store";
 export default function ChatsContainer(){
 
   const currentChatId = useCurrentChatId();
@@ -14,48 +15,55 @@ export default function ChatsContainer(){
   const conversationsInMemory = useConversationsInMemory();
 
   const dispatch = useAppDispatch();
-  useEffect(() => {    
-    console.log('useEffect being called.');
-    (async () => {
-      console.log('async function being called.')
-      const response = await fetch('http://localhost:3000/api/getOneChatMessages', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email
-        })
-      })
-      const data = await response.json()
-      console.log('data being received by the useEffect: ', data)
-      if (data.status !== 'ok'){
-        // window.location.href = '/'
-      } else if(data.status === 'ok'){
-        console.log('data: ', data);
-        console.log('data.conversations: ', data.conversations);
-        const conversations: Conversation[] = data.conversations.map((conversation: any) => {
-          return {
-            messages: conversation.messages.map((message: any) => {
-              return {
-                content: message.content,
-                adminReference: message.adminReference,
-                customerReference: conversation.customerId.phoneNumber,
-                senderType: message.senderType,
-                date: message.date
-              }
-            }),
-            adminId: conversation.adminId,
-            customerId: conversation.customerId.phoneNumber
-          }
-        });
-        console.log('New conversations Data formatted: ', conversations)
-        dispatch(setConversationsInMemory(conversations));
-        // dispatch(setConversationOnScreenValues(conversations));
-      }
-      dispatch(setConversationOnScreen(currentChatId));
-    })();
+  // fetchUserMessages(email);
 
+  useEffect(() => {
+    // if
+    store.dispatch(fetchMessages(email));
+  }, [email]);
+
+  useEffect(() => {    
+    // console.log('useEffect being called.');
+    // (async () => {
+    //   console.log('async function being called.')
+    //   const response = await fetch('http://localhost:3000/api/getOneChatMessages', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       email: email
+    //     })
+    //   })
+    //   const data = await response.json()
+    //   console.log('data being received by the useEffect: ', data)
+    //   if (data.status !== 'ok'){
+    //     // window.location.href = '/'
+    //   } else if(data.status === 'ok'){
+    //     console.log('data: ', data);
+    //     console.log('data.conversations: ', data.conversations);
+    //     const conversations: Conversation[] = data.conversations.map((conversation: any) => {
+    //       return {
+    //         messages: conversation.messages.map((message: any) => {
+    //           return {
+    //             content: message.content,
+    //             adminReference: message.adminReference,
+    //             customerReference: conversation.customerId.phoneNumber,
+    //             senderType: message.senderType,
+    //             date: message.date
+    //           }
+    //         }),
+    //         adminId: conversation.adminId,
+    //         customerId: conversation.customerId.phoneNumber
+    //       }
+    //     });
+    //     console.log('New conversations Data formatted: ', conversations)
+    //     dispatch(setConversationsInMemory(conversations));
+    //     // dispatch(setConversationOnScreenValues(conversations));
+    //   }
+    //   dispatch(setConversationOnScreen(currentChatId));
+    // })();
+    // fetchUserMessages(email);
   }, [currentChatId])
 
   useEffect(() => {
