@@ -153,10 +153,11 @@ app.post('/api/getOneChatMessages', async (req, res) => { // This API Endpoint m
 
         if(user){
             const conversationsIndexes = await Conversation.find({adminId: user._id})
-            
+            console.log('conversationIndexes: ', conversationsIndexes)            
             // const conversationMessages = await Message.find({ $or: [{ senderReference: req.body.email }, { recipientReference: req.body.email }]})
 
             const customerIds = conversationsIndexes.map((conversationIndex) => conversationIndex.customerId)
+            console.log('customerIds: ', customerIds)
             // const conversationCustomer = await Customer.find({ $or: [{senderReference: {$in: customerIds} }, {recipientReference: {$in: customerIds}}]})
             // let response;
             // const response = conversationsIndexes.map(async (conversation, index) => ({
@@ -169,21 +170,82 @@ app.post('/api/getOneChatMessages', async (req, res) => { // This API Endpoint m
             //     customerId: await Customer.findOne({ customerReference: customerIds[index]}) 
             // }))
 
+
+
+
             let response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
-                messages: await Message.find({ adminReference: user._id, customerReference: customerIds[index] }).populate('adminReference', req.body.email).lean(),
+                messages: await Message.find({ adminReference: user._id, customerReference: customerIds[index]}),
                 adminId: req.body.email,
-                // customerId: customerIds[index]
-                customerId: await Customer.findOne({customerReference: customerIds[index]}).select({phoneNumber: 1, _id: 0})
+                customerId: await Customer.findOne({ _id: customerIds[index]}).select({phoneNumber: 1, _id: 0})
             })))
 
-            response = response.map(conversation => ({
-                ...conversation,
-                messages: conversation.messages.map(message => ({
-                    ...message,
-                    adminReference: req.body.email
-                }))
-            }))
+            // console.log('first query result: ', response)
+
+            // const newFormattedResponse = response.map( async (conversation, index) => ({
+            //     ...conversation,
+            //     messages: conversation.messages.map(async message => ({
+            //         ...message,
+            //         adminReference: req.body.email,
+            //         customerReference: await Customer.findOne({ _id: customerIds[index]}).select({phoneNumber: 1, _id: 0})
+            //     }))
+            // }))
+
+
+
+
+            console.log('testing reach of the code. Response halfwaythrough: ', response)
+
+
+
+            // let response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
+            //     messages: await Message.find({ adminReference: user._id, customerReference: customerIds[index] }).populate('adminReference', req.body.email).lean(),
+            //     adminId: req.body.email,
+            //     // customerId: customerIds[index]
+            //     customerId: await Customer.findOne({customerReference: customerIds[index]}).select({phoneNumber: 1, _id: 0})
+            // })))
+
+            // response = response.map(conversation => ({
+            //     ...conversation,
+            //     messages: conversation.messages.map(message => ({
+            //         ...message,
+            //         adminReference: req.body.email
+            //     }))
+            // }))
             
+            // let response = await Promise.all(conversationsIndexes.map(async (conversationIndex, index) => {
+            //     // let customer;
+            //     const customer = await Customer.findOne({ customerReference: customerIds[index] });
+            //     if(customer){
+            //         const messages = await Message.find({ adminReference: user._id, customerReference: customer._id }).populate('adminReference', req.body.email).lean();
+            //         if(messages){
+            //             return {
+            //                 messages,
+            //                 adminId: req.body.email,
+            //                 customerId: customer.phoneNumber
+            //             };
+            //         }
+            //     }
+            // }));
+
+            // response = response.map(conversation => ({
+            //     ...conversation,
+            //     messages: conversation.messages.map(message => ({
+            //         ...message,
+            //         adminReference: req.body.email
+            //     }))
+            // }))
+
+
+
+
+
+
+
+
+
+
+
+
             // for(let i = 0; i < conversationsIndexes.length; i++){
             //     response[0] = {
             //         messages: await Message.find({  

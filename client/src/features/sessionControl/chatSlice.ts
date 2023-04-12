@@ -36,7 +36,32 @@ export const fetchMessages = createAsyncThunk(
       throw new Error("Failed to fetch messages");
     }
     const data = await response.json();
-    return data.conversations;
+    console.log('conversation being received by the fetchMessages AsyncThunk: ', data.conversations)
+    
+    
+    const newConversationsInMemory = data.conversations.map((conversation, index) => ({
+      ...conversation,
+      adminReference: conversation.adminId,
+      customerId: conversation.customerId.phoneNumber,
+      messages: conversation.messages.map(message => ({
+        ...message, 
+        adminReference: conversation.adminId,
+        customerReference: conversation.customerId.phoneNumber
+      }))
+    }))
+    console.log('newConversationsInMemory on createAsyncThunk: ', newConversationsInMemory);
+    
+    // response = response.map(conversation => ({
+            //     ...conversation,
+            //     messages: conversation.messages.map(message => ({
+            //         ...message,
+            //         adminReference: req.body.email
+            //     }))
+            // }))
+
+
+    return newConversationsInMemory;
+    // return data.conversations;
   }
 );
 
@@ -93,6 +118,7 @@ export const chatSlice = createSlice({
       .addCase(fetchMessages.fulfilled, (state, action) => {
         state.isLoading = false;
         state.conversationsInMemory = action.payload;
+        console.log('conversationsBeingLoadedOnExtraReducers: ', action.payload);
         // Set the first conversation as the conversation on screen by default
         state.conversationOnScreen = action.payload[0] || { messages: [], adminId: "", customerId: "" };
       })
