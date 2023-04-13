@@ -1,18 +1,40 @@
-import { Divider, Fab, Grid, List, TextField } from "@mui/material";
+import { Fab, Grid, Divider, TextField, List } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import {io} from "socket.io-client";
 import { useState } from "react";
-import MessageComponentSimulator from "../ChatsContainer/components/CurrentChat/components/CustomerSimulatorMessage";
+import { Message } from "../../types/message";
+import MessageComponent from "../ChatsContainer/components/CurrentChat/components/Message";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { sendMessage, sendMessageCustomer } from "../../features/sessionControl/chatSlice";
+import { useUserEmail } from "../../hooks";
+
+const socket = io("http://localhost:3001");
 
 export default function CustomerSimulator(){
 
-    const [customerId, setCustomerId] = useState('+55084998345849');
+    const [currentChatId, setCurrentChatId] = useState('')
+    const [messageInput, setMessageInput] = useState<string>('');
+    const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);
+
+    const loggedUser = useUserEmail();    
+
+    const dispatch = useAppDispatch();
+
+    const joinRoom = () => {
+        socket.emit("join_room",)
+    }
+
+    const handleSubmit = () =>{
+        dispatch(sendMessageCustomer(messageInput));
+        setMessageInput('');
+    }
 
     return(
         <Grid item xs={9}>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
-                {conversationToLoad.messages ? (conversationToLoad.messages.map((message, index) => (
+                {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message, index) => (
                     <div key={index}>
-                        <MessageComponentSimulator index={index} content={message.content} senderType={message.senderType} date={message.date} type='standard'}/>
+                        <MessageComponent index={index} content={message.content} senderType={message.senderType === 'admin' ? 'customer' : 'admin'} date={message.date}/>
                     </div>
                 ))) : (<div></div>)}
             </List>
@@ -28,3 +50,5 @@ export default function CustomerSimulator(){
         </Grid>
     )
 }
+// Credits for this component's UI:
+// https://medium.com/@awaisshaikh94/chat-component-built-with-react-and-material-ui-c2b0d9ccc491

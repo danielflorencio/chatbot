@@ -23,6 +23,7 @@ import { Avatar, Button, Menu, MenuItem } from '@mui/material';
 import { useAppDispatch } from '../hooks';
 import { logout, registerLoggedUserState } from '../features/sessionControl/sessionSlice';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { Link } from 'react-router-dom';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -76,7 +77,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 
-export default function Sidebar({children}: {children: ReactJSXElement}) {
+export default function Sidebar({children, setRenderedComponentId}: {children: ReactJSXElement, setRenderedComponentId: (id: number) => void;}) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   // const email = useAppSelector(state => state.session.userData.email);
@@ -170,7 +171,8 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
             </Menu>
         </DrawerHeader>
         <Divider />
-        <List>
+        {/* <Link to='/user-page/chats'> */}
+        <List onClick={() => setRenderedComponentId(0)}>
           {['Chats'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
@@ -182,9 +184,11 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
             </ListItem>
           ))}
         </List>
+        {/* </Link> */}
         <Divider />
-        <List>
-          {['Bots'].map((text, index) => (
+        {/* <Link to='/user-page/customer-simulator'> */}
+        <List onClick={() => setRenderedComponentId(1)}>
+          {['Simulator'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -195,6 +199,7 @@ export default function Sidebar({children}: {children: ReactJSXElement}) {
             </ListItem>
           ))}
         </List>
+        {/* </Link> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

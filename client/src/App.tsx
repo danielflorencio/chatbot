@@ -2,7 +2,7 @@ import {useEffect, lazy} from 'react'
 import CssBaseline from '@mui/material/CssBaseline';
 import {Container} from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
-// import { useConversationsInMemory } from './hooks';
+import CustomerSimulator from './components/CustomerSimulator';
 
 const SignIn = lazy(() => import('./pages/SignInPage/SignInPage'));
 const UserPage = lazy(() => import('./pages/UserPage/UserPage'));
@@ -42,6 +42,7 @@ export default function App() {
           <Route path="/" element={<SignIn/>}/>
           <Route path="/sign-up" element={<SignUp/>}/>
           <Route path="/user-page" element={<UserPage/>}/>
+          {/* <Route path="/customer-simulator" element={<CustomerSimulator/>}/> */}
         </Routes>  
       </Container>
     </>

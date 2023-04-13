@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "../../store";
+import { RootState } from "../../store";
 import { Conversation } from "../../types/conversation";
 import { Message } from "../../types/message";
-import { useAppDispatch } from "../../hooks";
-
 interface ChatState {
   conversationsInMemory: Conversation[],
   currentChatId: string, 
@@ -38,7 +36,6 @@ export const fetchMessages = createAsyncThunk(
     const data = await response.json();
     console.log('conversation being received by the fetchMessages AsyncThunk: ', data.conversations)
     
-    
     const newConversationsInMemory = data.conversations.map((conversation, index) => ({
       ...conversation,
       adminReference: conversation.adminId,
@@ -50,18 +47,7 @@ export const fetchMessages = createAsyncThunk(
       }))
     }))
     console.log('newConversationsInMemory on createAsyncThunk: ', newConversationsInMemory);
-    
-    // response = response.map(conversation => ({
-            //     ...conversation,
-            //     messages: conversation.messages.map(message => ({
-            //         ...message,
-            //         adminReference: req.body.email
-            //     }))
-            // }))
-
-
     return newConversationsInMemory;
-    // return data.conversations;
   }
 );
 
@@ -70,11 +56,30 @@ export const chatSlice = createSlice({
   initialState,
   reducers: {
     sendMessage: (state, action: PayloadAction<string>) => {
+      console.log('sendMessage being called.')
       const newMessage: Message = {
         content: action.payload,
         adminReference: state.currentChatId,
         customerReference: state.conversationOnScreen.adminId,
         senderType: 'admin',
+        date: new Date().toISOString() // convert the date to string
+      }
+      const conversationIndex = state.conversationsInMemory.findIndex(
+        conversation => conversation.customerId === state.currentChatId
+      );
+      console.log('state.currentChatId: ', state.currentChatId)
+      console.log('state.conversationsInMemory[index]: ', state.conversationsInMemory[conversationIndex])
+      console.log('conversationIndex: ', conversationIndex)
+      state.conversationsInMemory[conversationIndex].messages.push(newMessage);
+      state.conversationOnScreen.messages.push(newMessage);
+    },
+    sendMessageCustomer: (state, action: PayloadAction<string>) => {
+      console.log('sendmessageCustomer being called.')
+      const newMessage: Message = {
+        content: action.payload,
+        adminReference: state.currentChatId,
+        customerReference: state.conversationOnScreen.adminId,
+        senderType: 'customer',
         date: new Date().toISOString() // convert the date to string
       }
       const conversationIndex = state.conversationsInMemory.findIndex(
@@ -93,8 +98,6 @@ export const chatSlice = createSlice({
       state.conversationOnScreen = action.payload;
     },
     setConversationOnScreenValues: (state, action: PayloadAction<Conversation>) => {
-      console.log('setConversationOnScreenValues being called.')
-      // console.log('format expected by the dispatcher: ', state.conversationOnScreen)
       const newState = {
         ...state,
         conversationOnScreen: {...action.payload}
@@ -102,7 +105,6 @@ export const chatSlice = createSlice({
       state = newState;
     }, 
     setNewCurrentChatId: (state, action: PayloadAction<string>) => {
-      // console.log('conversationInMemory on chat Change ------------------------: ', state.conversationsInMemory.toString())
       state.currentChatId = action.payload
       const conversationIndex = state.conversationsInMemory.findIndex(
         conversation => conversation.customerId === action.payload && conversation.adminId === "test@gmail.com"
@@ -128,55 +130,11 @@ export const chatSlice = createSlice({
   },
 });
 
-
-// export const fetchUserMessages = (userEmail: string | null | undefined) => async (dispatch: AppDispatch, getState: RootState) => {
-//   // const userEmail = getState().SessionState.email
-//   console.log('fetchUserMessages being called.')
-//   const response = await fetch('/api/getOneChatMessages', {
-//     method: 'POST',
-//     body: JSON.stringify({email: userEmail}),
-//     headers: {
-//       'Content-Type': 'application/json'
-//     }
-//   });
-//   const data = await response.json();
-
-//   console.log('data being received on fetchUserMessages: ', data.conversations)
-//   if (data.status === 'ok') {
-//     dispatch(setConversationsInMemory(data.conversations));
-//   } else {
-//     console.log("Error fetching user messages");
-//   }
-//   // console.log('newConversationsInMemory: ')
-// };
-
-// export const fetchUserMessages = (userEmail: string | null | undefined) => async (dispatch: AppDispatch, getState: RootState) => {
-//   // const userEmail = getState().SessionState.email
-//   console.log('fetchUserMessages being called.')
-//   const response = await fetch('/api/getOneChatMessages', {
-//     method: 'POST',
-//     body: JSON.stringify({email: userEmail}),
-//     headers: {
-//       'Content-Type': 'application/json'
-//     }
-//   });
-//   const data = await response.json();
-
-//   console.log('data being received on fetchUserMessages: ', data.conversations)
-//   if (data.status === 'ok') {
-//     dispatch(setConversationsInMemory(data.conversations));
-//   } else {
-//     console.log("Error fetching user messages");
-//   }
-//   // console.log('newConversationsInMemory: ')
-// };
-
-
 export const selectConversationsInMemory = (state: RootState) => {return state.chat.conversationsInMemory};
 export const selectCurrentChatId = (state: RootState) => {return state.chat.currentChatId};
 export const selectConversationsOnScreen = (state: RootState) => {return state.chat.conversationOnScreen};
 
-export const {sendMessage, setNewCurrentChatId, setConversationOnScreen, setConversationsInMemory, setConversationOnScreenValues} = chatSlice.actions;
+export const {sendMessage, setNewCurrentChatId, sendMessageCustomer, setConversationOnScreen, setConversationsInMemory, setConversationOnScreenValues} = chatSlice.actions;
 export const chatActions = {
   ...chatSlice.actions,
 }
