@@ -34,8 +34,6 @@ export const fetchMessages = createAsyncThunk(
       throw new Error("Failed to fetch messages");
     }
     const data = await response.json();
-    console.log('conversation being received by the fetchMessages AsyncThunk: ', data.conversations)
-    
     const newConversationsInMemory = data.conversations.map((conversation, index) => ({
       ...conversation,
       adminReference: conversation.adminId,
@@ -46,7 +44,6 @@ export const fetchMessages = createAsyncThunk(
         customerReference: conversation.customerId.phoneNumber
       }))
     }))
-    console.log('newConversationsInMemory on createAsyncThunk: ', newConversationsInMemory);
     return newConversationsInMemory;
   }
 );
@@ -56,7 +53,6 @@ export const chatSlice = createSlice({
   initialState,
   reducers: {
     sendMessage: (state, action: PayloadAction<string>) => {
-      console.log('sendMessage being called.')
       const newMessage: Message = {
         content: action.payload,
         adminReference: state.currentChatId,
@@ -67,14 +63,10 @@ export const chatSlice = createSlice({
       const conversationIndex = state.conversationsInMemory.findIndex(
         conversation => conversation.customerId === state.currentChatId
       );
-      console.log('state.currentChatId: ', state.currentChatId)
-      console.log('state.conversationsInMemory[index]: ', state.conversationsInMemory[conversationIndex])
-      console.log('conversationIndex: ', conversationIndex)
       state.conversationsInMemory[conversationIndex].messages.push(newMessage);
       state.conversationOnScreen.messages.push(newMessage);
     },
     sendMessageCustomer: (state, action: PayloadAction<string>) => {
-      console.log('sendmessageCustomer being called.')
       const newMessage: Message = {
         content: action.payload,
         adminReference: state.currentChatId,
@@ -120,8 +112,6 @@ export const chatSlice = createSlice({
       .addCase(fetchMessages.fulfilled, (state, action) => {
         state.isLoading = false;
         state.conversationsInMemory = action.payload;
-        console.log('conversationsBeingLoadedOnExtraReducers: ', action.payload);
-        // Set the first conversation as the conversation on screen by default
         state.conversationOnScreen = action.payload[0] || { messages: [], adminId: "", customerId: "" };
       })
       .addCase(fetchMessages.rejected, (state) => {

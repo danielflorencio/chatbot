@@ -18,23 +18,23 @@ export default function ChatsContainer(){
   // fetchUserMessages(email);
 
   useEffect(() => {
-    // if
     store.dispatch(fetchMessages(email));
   }, [email]);
 
-  useEffect(() => {
-    console.log('second useEffect being called.')
-    dispatch(setNewCurrentChatId(conversationsInMemory[0].messages[0].customerReference))
-    const conversationIndex = conversationsInMemory.findIndex(
-      conversation => conversation.customerId === currentChatId 
-    );
-    const newConversation: Conversation = conversationsInMemory[conversationIndex]
-    // try{
-    dispatch(setConversationOnScreenValues(newConversation))
-    // }catch(error){
-    //   console.log('ERROR: ', error)
-    // }
-  }, [conversationsInMemory])
+  // useEffect(() => {
+  //   // console.log('second useEffect being called.')
+  //   console.log('newConversationsInMemory on UseEffect: ', conversationsInMemory)
+  //   dispatch(setNewCurrentChatId(conversationsInMemory[0].messages[0].customerReference))
+  //   const conversationIndex = conversationsInMemory.findIndex(
+  //     conversation => conversation.customerId === currentChatId 
+  //   );
+  //   const newConversation: Conversation = conversationsInMemory[conversationIndex]
+  //   // try{
+  //   dispatch(setConversationOnScreenValues(newConversation))
+  //   // }catch(error){
+  //   //   console.log('ERROR: ', error)
+  //   // }
+  // }, [conversationsInMemory])
 
   return(
   <Grid container component={Paper} sx={{width: 1, height: '100%'}}>
