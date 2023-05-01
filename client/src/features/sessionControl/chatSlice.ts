@@ -23,13 +23,12 @@ const initialState: ChatState = {
 export const fetchMessages = createAsyncThunk(
   "chat/fetchMessages",
   async (email: string | null | undefined) => {
-    const response = await fetch("http://localhost:3000/api/getOneChatMessages", {
-      method: "POST",
+    const response = await fetch(`http://localhost:3000/api/messages?email=${email}`, {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+        "Content-type": "Application/json"
+      }
+    })
     if (!response.ok) {
       throw new Error("Failed to fetch messages");
     }

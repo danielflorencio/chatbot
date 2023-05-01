@@ -7,7 +7,6 @@ import models from './models/models';
 const port = 3000
 const cors = require('cors')
 const mongoose = require('mongoose')
-// const User = require('./models/user.model')
 const User = models.User
 const Conversation = models.Conversation;
 const Message = models.Message;
@@ -126,18 +125,7 @@ app.post('/api/sendMessage', async (req, res) => {
     // }
 });
 
-app.get('/api/getAllMessages', async (req, res) => { // This API Endpoint must be called as soon as the user is correctly authenticated and must load the user's messages with customers.
-    try {
-        const query = req.body.userEmail
-        const messages = await Message.find(); // Here goes the query.
-        res.status(200).json(messages);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send('Error getting messages');
-    }
-});
-
-app.post('/api/getOneChatMessages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
+app.post('/api/messages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
 
     try{
         const user = await User.findOne({email: req.body.email})
@@ -152,7 +140,29 @@ app.post('/api/getOneChatMessages', async (req, res) => { // This API Endpoint m
                 customerId: await Customer.findOne({ _id: customerIds[index]}).select({phoneNumber: 1, _id: 0})
             })))
 
-            console.log('API Response: ', response)
+            res.status(200).json({status: 'ok', conversations: response});
+        }
+    }catch(error){
+        res.status(500).json({status: 'error'})
+    }
+})
+
+app.get('/api/messages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
+    try{
+
+        const user = await User.findOne({email: req.query.email})
+        
+        if(user){
+            const conversationsIndexes = await Conversation.find({adminId: user._id})     
+            const customerIds = conversationsIndexes.map((conversationIndex) => conversationIndex.customerId)
+
+            let response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
+                messages: await Message.find({ adminReference: user._id, customerReference: customerIds[index]}),
+                adminId: req.query.email,
+                customerId: await Customer.findOne({ _id: customerIds[index]}).select({phoneNumber: 1, _id: 0})
+            })))
+
+            console.log('API/messages Response: ', response)
             res.status(200).json({status: 'ok', conversations: response});
         }
     }catch(error){
@@ -165,13 +175,6 @@ app.listen(port, () => {
 })
 
 socketIoHttpServer.listen(3001)
-
-
-
-const { Conversation: ConversationModel, Message: MessageModel } = models;
-
-
-
 
 async function createConversationAndMessage() {
     try {
@@ -191,14 +194,14 @@ async function createConversationAndMessage() {
                 date: message.date,
               }));
         
-              const messages = await MessageModel.insertMany(messagesData);
+              const messages = await Conversation.insertMany(messagesData);
         
               const conversationData = {
                 messages: messages.map((message) => message._id),
                 adminId: user._id,
                 customerId: customer._id,
               };
-              await ConversationModel.create(conversationData);
+              await Conversation.create(conversationData);
         }
 
       }

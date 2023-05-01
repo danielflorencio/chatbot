@@ -35,8 +35,8 @@ const theme = createTheme();
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('test@gmail.com');
+  const [password, setPassword] = useState('asfasfas');
   const dispatch = useAppDispatch();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
@@ -68,38 +68,6 @@ export default function SignIn() {
         
       }
   })();
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   };
   
   return (

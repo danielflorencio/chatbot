@@ -1,11 +1,12 @@
-import { Avatar, Divider, List, ListItem, Paper, ListItemIcon, ListItemText } from "@mui/material";
+import { Avatar, Divider, List, ListItem, Paper, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import { useAppDispatch, useConversationsInMemory, useCurrentChatId, useUserEmail } from "../../hooks";
 import { fetchMessages, setConversationOnScreen, setConversationOnScreenValues, setConversationsInMemory, setNewCurrentChatId } from "../../features/sessionControl/chatSlice";
 import { Conversation } from "../../types/conversation";
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { store } from "../../store";
 export default function ChatsContainer(){
 
@@ -36,19 +37,48 @@ export default function ChatsContainer(){
   //   // }
   // }, [conversationsInMemory])
 
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`http://localhost:3000/api/messages?email=${email}`, {
+        method: 'GET',
+        headers: {
+          "Content-type": "Application/json"
+        }
+      })
+      const data = await response.json();
+      console.log('get endpoint response: ', response);
+      console.log('get endpoint data: ', data);
+    })();
+  }, [])
+
+
+  const matches = useMediaQuery('(max-width:600px)');
+  const [displayState, setDisplayState] = useState<'none' | 'block'>('block')
+
+  useEffect(() => {
+    if(matches) {
+        setDisplayState('none');
+    } else{
+        setDisplayState('block')
+    }
+  }, [matches])
+  
   return(
-  <Grid container component={Paper} sx={{width: 1, height: '100%'}}>
-    <Grid item xs={3} sx={{borderRight: '1px solid #e0e0e0'}}>
+  <Grid container component={Paper} sx={{width: 1, height: 'fit-content'}}>
+    <Grid item sx={{borderRight: '1px solid #e0e0e0', width: {xs: 'fit-content', display: `${displayState}`}}}>
         <List>
-            <ListItem button key="RemySharp">
-                <ListItemIcon>
-                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                </ListItemIcon>
-                <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
+            <Tooltip title='Remy Sharp' sx={{ display: {xs: 'none', md: 'contents'}}}> 
+              <ListItem button key="RemySharp" sx={{width: 1, height: 1}}>
+                  <ListItemIcon>
+                  <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                  </ListItemIcon>
+                  <ListItemText primary="John Wick" sx={{ display: {xs: 'none', md: 'contents'}}}></ListItemText>
+              </ListItem>
+            </Tooltip>
         </List>
         <Divider />
-        <ChatList/>
+        <ChatList displayState={displayState}/>
       </Grid>
     <CurrentChat currentChatId={currentChatId} />
   </Grid>
