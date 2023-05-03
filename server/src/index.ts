@@ -112,44 +112,49 @@ app.post('/api/messages', async (req, res) => {
         const customer = await Customer.findOne({
             phoneNumber: req.body.customerReference
         })
-        console.log('user: ', user)
-        console.log('customer: ', customer)
-        /*
-        // if(req.body.senderType === 'admin'){
-        //     try{
-        //         await Message.create({
-        //             content: req.body.content,
-        //             senderType: req.body.senderType,
-        //             adminReference: user?.id,
-        //             customerReference: customer?.id,
-        //             date: req.body.date
-        //         })
-        //     } catch(error){
-        //         console.log('ERROR: ', error)
-        //     }
-        // } else{
-        //     try{
-        //         await Message.create({
-        //             content: req.body.content,
-        //             senderType: req.body.senderType,
-        //             adminReference: user?.id,
-        //             customerReference: customer?.id,
-        //             date: req.body.date
-        //         })
-        //     } catch(error){
-        //         console.log('ERROR: ', error)
-        //     }
-        // }
-        // res.json({status: 'ok'})
-        */
+        console.log('user found: ', user)
+        console.log('customer found: ', customer)
+
         try{
-            await Message.create({
+            const newMessage = await Message.create({
                 content: req.body.content,
                 senderType: req.body.senderType,
                 adminReference: user?.id,
                 customerReference: customer?.id,
                 date: req.body.date
             })
+
+            try{
+                const newConversation = await Conversation.findOneAndUpdate(
+                    {adminId: user?._id, customerId: customer?._id}, 
+                    { $push: { messages: newMessage._id } })
+
+                // const newConversation = await Conversation.
+                // conversation?.save();
+
+                // const conversation = await Conversation.findOne({
+                //     adminId: user?._id,
+                //     customerId: customer?._id
+                // });
+                // if (!conversation) {
+                //     // If the conversation doesn't exist, create a new one
+                //     const newConversation = await Conversation.create({
+                //       adminId: user?._id,
+                //       customerId: customer?._id,
+                //       messages: [newMessage._id]
+                //     });
+                //     console.log('new conversation created: ', newConversation);
+                // } else{
+                //      // If the conversation exists, update its messages array
+                //     conversation.messages.push(newMessage._id);
+                //     await conversation.save();
+
+                //     console.log('conversation updated: ', conversation);
+                // }
+                console.log('conversation created: ', newConversation)
+            } catch(error){
+                res.json({status: 'error', message: 'error when updating the conversation.'})
+            }
             res.json({status: 'ok', message: 'message created.'})
         } catch(error){
             console.log('ERROR: ', error)
@@ -164,10 +169,17 @@ app.post('/api/messages', async (req, res) => {
 app.get('/api/messages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
     try{
 
+        console.log('API/getMessages user email query: ', req.query.email)
+
         const user = await User.findOne({email: req.query.email})
         
+        console.log('API/getMessages user: ', user)
+
         if(user){
-            const conversationsIndexes = await Conversation.find({adminId: user._id})     
+            console.log('API/getMessages user._id: ', user._id)
+            const conversationsIndexes = await Conversation.find({adminId: user._id})
+
+            console.log('API/getMessages conversationsIndexes: ', conversationsIndexes)
             const customerIds = conversationsIndexes.map((conversationIndex) => conversationIndex.customerId)
 
             let response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
@@ -176,7 +188,7 @@ app.get('/api/messages', async (req, res) => { // This API Endpoint must be call
                 customerId: await Customer.findOne({ _id: customerIds[index]}).select({phoneNumber: 1, _id: 0})
             })))
 
-            // console.log('API/messages Response: ', response)
+            console.log('API/messages Response: ', response)
             res.status(200).json({status: 'ok', conversations: response});
         }
     }catch(error){
@@ -208,8 +220,10 @@ async function createConversationAndMessage() {
                 date: message.date,
               }));
         
-              const messages = await Conversation.insertMany(messagesData);
+            //   const messages = await Conversation.insertMany(messagesData);
         
+              const messages = await Message.insertMany(messagesData);
+
               const conversationData = {
                 messages: messages.map((message) => message._id),
                 adminId: user._id,
