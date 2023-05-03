@@ -2,7 +2,6 @@ import { Fab, Grid, Divider, TextField, List } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import {io} from "socket.io-client";
 import { useState } from "react";
-import { Message } from "../../../../types/message";
 import MessageComponent from "./components/Message";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import { sendMessage } from "../../../../features/sessionControl/chatSlice";
@@ -24,9 +23,6 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
     }
 
     const handleSubmit = () =>{
-        // let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), adminReference: loggedUser, customerReference: currentChatId}
-        // dispatch(sendMessage(message.content));
-        // setMessageInput('');
         sendNewMessage();
     }
 

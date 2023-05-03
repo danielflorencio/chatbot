@@ -2,7 +2,6 @@ import { Avatar, List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@mui
 import { useAppDispatch, useConversationsInMemory} from "../../../hooks";
 import { setNewCurrentChatId } from "../../../features/sessionControl/chatSlice";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useEffect, useState } from "react";
 export default function ChatList({displayState}: {displayState: 'none' | 'block'}){
 
     const conversationsInMemory = useConversationsInMemory();

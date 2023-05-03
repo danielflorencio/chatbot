@@ -3,9 +3,8 @@ import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
 import {useEffect, useState} from 'react'
-import { useAppDispatch, useConversationsInMemory, useCurrentChatId, useUserEmail } from "../../hooks";
-import { fetchMessages, setConversationOnScreen, setConversationOnScreenValues, setConversationsInMemory, setNewCurrentChatId } from "../../features/sessionControl/chatSlice";
-import { Conversation } from "../../types/conversation";
+import { useCurrentChatId, useUserEmail } from "../../hooks";
+import { fetchMessages } from "../../features/sessionControl/chatSlice";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { store } from "../../store";
 export default function ChatsContainer(){
@@ -13,29 +12,10 @@ export default function ChatsContainer(){
   const currentChatId = useCurrentChatId();
 
   const email = useUserEmail();
-  const conversationsInMemory = useConversationsInMemory();
-
-  const dispatch = useAppDispatch();
-  // fetchUserMessages(email);
 
   useEffect(() => {
     store.dispatch(fetchMessages(email));
   }, [email]);
-
-  // useEffect(() => {
-  //   // console.log('second useEffect being called.')
-  //   console.log('newConversationsInMemory on UseEffect: ', conversationsInMemory)
-  //   dispatch(setNewCurrentChatId(conversationsInMemory[0].messages[0].customerReference))
-  //   const conversationIndex = conversationsInMemory.findIndex(
-  //     conversation => conversation.customerId === currentChatId 
-  //   );
-  //   const newConversation: Conversation = conversationsInMemory[conversationIndex]
-  //   // try{
-  //   dispatch(setConversationOnScreenValues(newConversation))
-  //   // }catch(error){
-  //   //   console.log('ERROR: ', error)
-  //   // }
-  // }, [conversationsInMemory])
 
   const matches = useMediaQuery('(max-width:600px)');
   const [displayState, setDisplayState] = useState<'none' | 'block'>('block')
