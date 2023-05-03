@@ -11,7 +11,7 @@ import { useUserEmail } from "../../../../hooks";
 const socket = io("http://localhost:3001");
 
 export default function CurrentChat({currentChatId} : {currentChatId: string}){
-    
+    console.log('currentChatId: ', currentChatId)
     const [messageInput, setMessageInput] = useState<string>('');
     const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);
 
@@ -24,9 +24,34 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
     }
 
     const handleSubmit = () =>{
-        let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), adminReference: loggedUser, customerReference: currentChatId}
-        dispatch(sendMessage(message.content));
-        setMessageInput('');
+        // let message: Message = {content: messageInput, senderType: "admin", date: new Date().toISOString(), adminReference: loggedUser, customerReference: currentChatId}
+        // dispatch(sendMessage(message.content));
+        // setMessageInput('');
+        sendNewMessage();
+    }
+
+    const sendNewMessage = async () => {
+        console.log('sendNewMessage called.')
+        const response = await fetch('http://localhost:3000/api/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                adminReference: loggedUser,
+                customerReference: currentChatId,
+                content: messageInput,
+                senderType: 'admin',
+                date: new Date(),
+            })
+        })
+        const data = await response.json();
+        console.log('isResponseOk: ', response.ok)
+        console.log('data: ', data)
+        if(response.ok){
+            dispatch(sendMessage(messageInput));
+            setMessageInput('')
+        }
     }
 
     return(
@@ -44,7 +69,7 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
                     <TextField id="outlined-basic-email" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
                 <Grid item xs={1} sx={{textAlign: "right"}}>
-                    <Fab color="primary" aria-label="add"><SendIcon onClick={() => handleSubmit()} /></Fab>
+                    <Fab color="primary" aria-label="add"><SendIcon onClick={() => sendNewMessage()} /></Fab>
                 </Grid>
             </Grid>
         </Grid>

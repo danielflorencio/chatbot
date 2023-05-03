@@ -37,22 +37,6 @@ export default function ChatsContainer(){
   //   // }
   // }, [conversationsInMemory])
 
-
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(`http://localhost:3000/api/messages?email=${email}`, {
-        method: 'GET',
-        headers: {
-          "Content-type": "Application/json"
-        }
-      })
-      const data = await response.json();
-      console.log('get endpoint response: ', response);
-      console.log('get endpoint data: ', data);
-    })();
-  }, [])
-
-
   const matches = useMediaQuery('(max-width:600px)');
   const [displayState, setDisplayState] = useState<'none' | 'block'>('block')
 

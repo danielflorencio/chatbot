@@ -100,52 +100,66 @@ app.post('/api/login', async (req: Request, res: Response) => {
     }
 })
 
-app.post('/api/sendMessage', async (req, res) => {
+app.post('/api/messages', async (req, res) => {
+    // console.log('request being received on sendMessage API endpoint: ', req)
+    console.log('req.body: ', req.body)
+    console.log('req.params: ', req.params)
+    console.log('req.query: ', req.query)
     try{
-        await Message.create({
-            content: req.body.content,
-            senderReference: req.body.senderReference,
-            recipientReference: req.body.recipientReference,
-            senderType: req.body.senderType,
-            date: req.body.date,
+        const user = await User.findOne({
+            email: req.body.adminReference
         })
-        console.log('Message gone to the database: ', Message)
-        res.json({status: 'ok'})
-    }catch(error){
-        res.json({status: 'error', error: "Wasn't able to save message to the database."})
-    }
-    // const { content, senderReference, recipientReference, senderType, date } = req.body;
-    // try {
-    //     const message = new Message({ content, senderReference, recipientReference, senderType, date });
-    //     await message.save();
-    //     res.status(200).json(message);
-    // } catch (err) {
-    //     console.log(err);
-    //     res.status(500).send('Error saving message');
-    // }
-});
-
-app.post('/api/messages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
-
-    try{
-        const user = await User.findOne({email: req.body.email})
-
-        if(user){
-            const conversationsIndexes = await Conversation.find({adminId: user._id})     
-            const customerIds = conversationsIndexes.map((conversationIndex) => conversationIndex.customerId)
-
-            let response = await Promise.all(conversationsIndexes.map(async (conversation, index) => ({
-                messages: await Message.find({ adminReference: user._id, customerReference: customerIds[index]}),
-                adminId: req.body.email,
-                customerId: await Customer.findOne({ _id: customerIds[index]}).select({phoneNumber: 1, _id: 0})
-            })))
-
-            res.status(200).json({status: 'ok', conversations: response});
+        const customer = await Customer.findOne({
+            phoneNumber: req.body.customerReference
+        })
+        console.log('user: ', user)
+        console.log('customer: ', customer)
+        /*
+        // if(req.body.senderType === 'admin'){
+        //     try{
+        //         await Message.create({
+        //             content: req.body.content,
+        //             senderType: req.body.senderType,
+        //             adminReference: user?.id,
+        //             customerReference: customer?.id,
+        //             date: req.body.date
+        //         })
+        //     } catch(error){
+        //         console.log('ERROR: ', error)
+        //     }
+        // } else{
+        //     try{
+        //         await Message.create({
+        //             content: req.body.content,
+        //             senderType: req.body.senderType,
+        //             adminReference: user?.id,
+        //             customerReference: customer?.id,
+        //             date: req.body.date
+        //         })
+        //     } catch(error){
+        //         console.log('ERROR: ', error)
+        //     }
+        // }
+        // res.json({status: 'ok'})
+        */
+        try{
+            await Message.create({
+                content: req.body.content,
+                senderType: req.body.senderType,
+                adminReference: user?.id,
+                customerReference: customer?.id,
+                date: req.body.date
+            })
+            res.json({status: 'ok', message: 'message created.'})
+        } catch(error){
+            console.log('ERROR: ', error)
+            res.json({status: 'Error', message: error})
         }
-    }catch(error){
-        res.status(500).json({status: 'error'})
+    } catch(error){
+        console.log('ERROR: ', error)
+        res.json({status: 'error'})
     }
-})
+});
 
 app.get('/api/messages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
     try{
@@ -162,7 +176,7 @@ app.get('/api/messages', async (req, res) => { // This API Endpoint must be call
                 customerId: await Customer.findOne({ _id: customerIds[index]}).select({phoneNumber: 1, _id: 0})
             })))
 
-            console.log('API/messages Response: ', response)
+            // console.log('API/messages Response: ', response)
             res.status(200).json({status: 'ok', conversations: response});
         }
     }catch(error){
