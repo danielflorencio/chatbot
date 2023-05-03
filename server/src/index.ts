@@ -101,10 +101,9 @@ app.post('/api/login', async (req: Request, res: Response) => {
 })
 
 app.post('/api/messages', async (req, res) => {
-    // console.log('request being received on sendMessage API endpoint: ', req)
-    console.log('req.body: ', req.body)
-    console.log('req.params: ', req.params)
-    console.log('req.query: ', req.query)
+    console.log('API/messages post endpoint req.body: ', req.body)
+    console.log('API/messages post endpoint req.params: ', req.params)
+    console.log('API/messages post endpoint req.query: ', req.query)
     try{
         const user = await User.findOne({
             email: req.body.adminReference
@@ -112,8 +111,8 @@ app.post('/api/messages', async (req, res) => {
         const customer = await Customer.findOne({
             phoneNumber: req.body.customerReference
         })
-        console.log('user found: ', user)
-        console.log('customer found: ', customer)
+        console.log('API/messages post endpoint user found: ', user)
+        console.log('API/messages post endpoint customer found: ', customer)
 
         try{
             const newMessage = await Message.create({
@@ -129,29 +128,7 @@ app.post('/api/messages', async (req, res) => {
                     {adminId: user?._id, customerId: customer?._id}, 
                     { $push: { messages: newMessage._id } })
 
-                // const newConversation = await Conversation.
-                // conversation?.save();
-
-                // const conversation = await Conversation.findOne({
-                //     adminId: user?._id,
-                //     customerId: customer?._id
-                // });
-                // if (!conversation) {
-                //     // If the conversation doesn't exist, create a new one
-                //     const newConversation = await Conversation.create({
-                //       adminId: user?._id,
-                //       customerId: customer?._id,
-                //       messages: [newMessage._id]
-                //     });
-                //     console.log('new conversation created: ', newConversation);
-                // } else{
-                //      // If the conversation exists, update its messages array
-                //     conversation.messages.push(newMessage._id);
-                //     await conversation.save();
-
-                //     console.log('conversation updated: ', conversation);
-                // }
-                console.log('conversation created: ', newConversation)
+                console.log('API/messages post endpoint conversation created: ', newConversation)
             } catch(error){
                 res.json({status: 'error', message: 'error when updating the conversation.'})
             }
@@ -166,7 +143,7 @@ app.post('/api/messages', async (req, res) => {
     }
 });
 
-app.get('/api/messages', async (req, res) => { // This API Endpoint must be called when a user scrolls top to the current chat and new messages must be loaded in a single chat.
+app.get('/api/messages', async (req, res) => {
     try{
 
         console.log('API/getMessages user email query: ', req.query.email)
