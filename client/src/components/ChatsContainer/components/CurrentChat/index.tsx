@@ -4,7 +4,7 @@ import {io} from "socket.io-client";
 import { useState } from "react";
 import MessageComponent from "./components/Message";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
-import { sendMessage } from "../../../../features/sessionControl/chatSlice";
+import { sendMessage, sendMessageCustomer } from "../../../../features/sessionControl/chatSlice";
 import { useUserEmail } from "../../../../hooks";
 
 const socket = io("http://localhost:3001");
@@ -65,7 +65,7 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
                     <TextField id="outlined-basic-email" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
                 <Grid item xs={1} sx={{textAlign: "right"}}>
-                    <Fab color="primary" aria-label="add"><SendIcon onClick={() => sendNewMessage()} /></Fab>
+                    <Fab color="primary" aria-label="add"><SendIcon onClick={() => handleSubmit()} /></Fab>
                 </Grid>
             </Grid>
         </Grid>

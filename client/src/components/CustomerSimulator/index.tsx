@@ -3,8 +3,8 @@ import SendIcon from '@mui/icons-material/Send';
 import {io} from "socket.io-client";
 import { useState } from "react";
 import MessageComponent from "../ChatsContainer/components/CurrentChat/components/Message";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { sendMessageCustomer } from "../../features/sessionControl/chatSlice";
+import { useAppDispatch, useAppSelector, useCurrentChatId, useUserEmail } from "../../hooks";
+import { sendMessage, sendMessageCustomer } from "../../features/sessionControl/chatSlice";
 
 const socket = io("http://localhost:3001");
 
@@ -12,6 +12,9 @@ export default function CustomerSimulator(){
 
     const [messageInput, setMessageInput] = useState<string>('');
     const conversationOnScreen = useAppSelector(state => state.chat.conversationOnScreen);
+    const currentChatId = useCurrentChatId();
+
+    const loggedUser = useUserEmail();   
 
     const dispatch = useAppDispatch();
 
@@ -20,8 +23,31 @@ export default function CustomerSimulator(){
     }
 
     const handleSubmit = () =>{
-        dispatch(sendMessageCustomer(messageInput));
-        setMessageInput('');
+        sendNewMessage();
+    }
+
+    const sendNewMessage = async () => {
+        console.log('sendNewMessage called.')
+        const response = await fetch('http://localhost:3000/api/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                adminReference: loggedUser,
+                customerReference: currentChatId,
+                content: messageInput,
+                senderType: 'customer',
+                date: new Date(),
+            })
+        })
+        const data = await response.json();
+        console.log('isResponseOk: ', response.ok)
+        console.log('data: ', data)
+        if(response.ok){
+            dispatch(sendMessageCustomer(messageInput));
+            setMessageInput('')
+        }
     }
 
     return(
