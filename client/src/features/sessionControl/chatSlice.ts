@@ -33,11 +33,11 @@ export const fetchMessages = createAsyncThunk(
       throw new Error("Failed to fetch messages");
     }
     const data = await response.json();
-    const newConversationsInMemory = data.conversations.map((conversation, index) => ({
+    const newConversationsInMemory = data.conversations.map((conversation: any, index: any) => ({
       ...conversation,
       adminReference: conversation.adminId,
       customerId: conversation.customerId.phoneNumber,
-      messages: conversation.messages.map(message => ({
+      messages: conversation.messages.map((message: any) => ({
         ...message, 
         adminReference: conversation.adminId,
         customerReference: conversation.customerId.phoneNumber
@@ -96,9 +96,14 @@ export const chatSlice = createSlice({
       state = newState;
     }, 
     setNewCurrentChatId: (state, action: PayloadAction<string>) => {
+      // state.currentChatId = action.payload
+      // const conversationIndex = state.conversationsInMemory.findIndex(
+      //   conversation => conversation.customerId === action.payload && conversation.adminId === "test@gmail.com"
+      // );
+      // state.conversationOnScreen = state.conversationsInMemory[conversationIndex]
       state.currentChatId = action.payload
       const conversationIndex = state.conversationsInMemory.findIndex(
-        conversation => conversation.customerId === action.payload && conversation.adminId === "test@gmail.com"
+        conversation => conversation.customerId === action.payload
       );
       state.conversationOnScreen = state.conversationsInMemory[conversationIndex]
     }
@@ -112,6 +117,7 @@ export const chatSlice = createSlice({
         state.isLoading = false;
         state.conversationsInMemory = action.payload;
         state.conversationOnScreen = action.payload[0] || { messages: [], adminId: "", customerId: "" };
+        state.currentChatId = state.conversationOnScreen.customerId
       })
       .addCase(fetchMessages.rejected, (state) => {
         state.isLoading = false;

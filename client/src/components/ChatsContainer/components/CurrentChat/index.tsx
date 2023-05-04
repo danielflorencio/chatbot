@@ -4,7 +4,7 @@ import {io} from "socket.io-client";
 import { useState } from "react";
 import MessageComponent from "./components/Message";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
-import { sendMessage, sendMessageCustomer } from "../../../../features/sessionControl/chatSlice";
+import { sendMessage } from "../../../../features/sessionControl/chatSlice";
 import { useUserEmail } from "../../../../hooks";
 
 const socket = io("http://localhost:3001");
