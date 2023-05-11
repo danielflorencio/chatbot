@@ -143,7 +143,7 @@ app.post('/api/messages', async (req, res) => {
     }
 });
 
-app.get('/api/messages', async (req, res) => {
+app.get('/api/messages', async (req: Request, res: Response) => {
     try{
 
         console.log('API/getMessages user email query: ', req.query.email)
@@ -170,6 +170,31 @@ app.get('/api/messages', async (req, res) => {
         }
     }catch(error){
         res.status(500).json({status: 'error'})
+    }
+})
+
+app.post('/api/newConversation', async (req: Request, res: Response) => {
+    try{
+        const user = await User.findOne({
+            email: req.body.adminReference
+        })
+        if(user){
+            const customer = await Customer.create({
+                phoneNumber: req.body.newConversationPhoneNumber
+            })
+            try{
+                const conversation = await Conversation.create({
+                    messages: [],
+                    adminId: user._id,
+                    customerId: customer._id        
+                })
+                res.status(200).json({status: 'ok'})
+            }catch{
+                res.status(500).json({status: 'error', message: 'error while creating customer/conversation'})
+            }
+        }
+    }catch(error){
+        res.status(500).json({status: 'error', message: 'internal server error.'})
     }
 })
 

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
+import { RootState, store } from "../../store";
 import { Conversation } from "../../types/conversation";
 import { Message } from "../../types/message";
 interface ChatState {
@@ -19,6 +19,11 @@ const initialState: ChatState = {
   },
   isLoading: false
 };
+
+interface AddConversationInMemoryProps {
+  userEmail: string;
+  newCustomerNumber: string;  
+}
 
 export const fetchMessages = createAsyncThunk(
   "chat/fetchMessages",
@@ -96,16 +101,18 @@ export const chatSlice = createSlice({
       state = newState;
     }, 
     setNewCurrentChatId: (state, action: PayloadAction<string>) => {
-      // state.currentChatId = action.payload
-      // const conversationIndex = state.conversationsInMemory.findIndex(
-      //   conversation => conversation.customerId === action.payload && conversation.adminId === "test@gmail.com"
-      // );
-      // state.conversationOnScreen = state.conversationsInMemory[conversationIndex]
       state.currentChatId = action.payload
       const conversationIndex = state.conversationsInMemory.findIndex(
         conversation => conversation.customerId === action.payload
       );
       state.conversationOnScreen = state.conversationsInMemory[conversationIndex]
+    },
+    addConversationInMemory: (state, action: PayloadAction<AddConversationInMemoryProps>) => {
+      console.log('addConversationInMemory being called.')
+      console.log('addConversationInMemroy payload: ', action.payload)
+      const user = action.payload.userEmail 
+      const newConversation: Conversation = {customerId: action.payload.newCustomerNumber, messages: [], adminId: user}
+      state.conversationsInMemory = [...state.conversationsInMemory, newConversation]
     }
   }, 
   extraReducers: (builder) => {
@@ -129,7 +136,7 @@ export const selectConversationsInMemory = (state: RootState) => {return state.c
 export const selectCurrentChatId = (state: RootState) => {return state.chat.currentChatId};
 export const selectConversationsOnScreen = (state: RootState) => {return state.chat.conversationOnScreen};
 
-export const {sendMessage, setNewCurrentChatId, sendMessageCustomer, setConversationOnScreen, setConversationsInMemory, setConversationOnScreenValues} = chatSlice.actions;
+export const {sendMessage, setNewCurrentChatId, addConversationInMemory, sendMessageCustomer, setConversationOnScreen, setConversationsInMemory, setConversationOnScreenValues} = chatSlice.actions;
 export const chatActions = {
   ...chatSlice.actions,
 }

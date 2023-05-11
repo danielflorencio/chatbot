@@ -122,8 +122,8 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
-          <IconButton onClick={handleDrawerClose} sx={{color: 'white', ...(!open && {display: 'none'})}}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          <IconButton onClick={handleDrawerClose} id='close-drawer-button' sx={{color: 'white', ...(!open && {display: 'none'})}}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
           </IconButton>
           <IconButton
             color="inherit"
@@ -132,7 +132,7 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
             edge="start"
             sx={{ mr: 2, ...(open && { display: 'none' }) }}
           >
-            <MenuIcon />
+            <MenuIcon id='open-drawer-button' />
           </IconButton>
           <Button onClick={() => {dispatch(logout())}} variant='contained' sx={{fontWeight:600}}>Logout</Button>
         </Toolbar>
@@ -177,7 +177,7 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
         </DrawerHeader>
         <Divider />
         {/* <Link to='/user-page/chats'> */}
-        <List onClick={() => setRenderedComponentId(0)}>
+        <List id='chat-tab' onClick={() => setRenderedComponentId(0)}>
           {['Chats'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
@@ -192,7 +192,7 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
         {/* </Link> */}
         <Divider />
         {/* <Link to='/user-page/customer-simulator'> */}
-        <List onClick={() => setRenderedComponentId(1)}>
+        <List id='simulator-tab' onClick={() => setRenderedComponentId(1)}>
           {['Simulator'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>

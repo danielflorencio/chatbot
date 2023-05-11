@@ -2,6 +2,7 @@ import { Avatar, List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@mui
 import { useAppDispatch, useConversationsInMemory} from "../../../hooks";
 import { setNewCurrentChatId } from "../../../features/sessionControl/chatSlice";
 import useMediaQuery from '@mui/material/useMediaQuery';
+import CreateNewChat from "./CreateNewChat";
 export default function ChatList({displayState}: {displayState: 'none' | 'block'}){
 
     const conversationsInMemory = useConversationsInMemory();
@@ -38,7 +39,7 @@ export default function ChatList({displayState}: {displayState: 'none' | 'block'
             {/* <ListItem button key={index} onClick={() => {handleSelectConversation(index)}} sx={{width: 1, height: 1}}>             */}
             {/* <ListItem button key={index} onClick={() => {handleSelectConversation(index)}} sx={{width: {xs: 'fit-content', md: 1}, height: 1}}>    */}
             {/* <ListItem button key={index} onClick={() => {handleSelectConversation(index)}} sx={{width: {xs: 'fit-content'}, height: 1}}>    */}
-            <ListItem button onClick={() => {handleSelectConversation(index)}} sx={{width: {xs: 'fit-content'}}}>
+            <ListItem id={`chat-list-item-${index}`} button onClick={() => {handleSelectConversation(index)}} sx={{width: {xs: 'fit-content'}}}>
                 <ListItemIcon>
                     <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
                 </ListItemIcon>
@@ -48,6 +49,7 @@ export default function ChatList({displayState}: {displayState: 'none' | 'block'
             ))
             ) : (<div></div>)
         }
+        <CreateNewChat/>
     </List>
     )
 }

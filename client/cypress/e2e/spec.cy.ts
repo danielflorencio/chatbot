@@ -1,41 +1,28 @@
-// import { describe, it } from 'mocha';
-
-// describe('template spec', () => {
-//   it('passes', () => {
-//     cy.visit('https://example.cypress.io')
-//   })
-// })
-
-// describe('My First Test', () => {
-//   it('Does not do much!', () => {
-//     expect(true).to.equal(true)
-//   })
-// })
-
-// describe('My First Test', () => {
-//   it('Does not do much!', () => {
-//     expect(true).to.equal(false)
-//   })
-// })
-
-describe('My First Test', () => {
-  it('Visits the Kitchen Sink', () => {
-    cy.visit('http://localhost:5173')
+describe('Chatbot tests', () => {
+  // beforeEach(() => {
+    // cy.visit('http://localhost:5173');
+    // cy.get('form').submit();
+    // cy.url().should('include', '/user-page');
+  // })
+  it('Should test the whole application.', () => {
+    cy.visit('http://localhost:5173');
+    cy.get('form').submit();
+    cy.url().should('include', '/user-page');
+    cy.get('#text-message').type('Cypress automated test message.');
+    cy.get('#text-message').type('{enter}')
+    cy.get('#open-drawer-button').click();
+    cy.get('#simulator-tab').click();
+    cy.get('#close-drawer-button').click();
+    cy.get('#customer-simulator-input-field').type('Cypress customer automated message.')
+    cy.get('#send-customer-message-icon').click();
+    cy.get('#open-drawer-button').click();
+    cy.get('#chat-tab').click();
+    cy.get('#close-drawer-button').click();
+    cy.get('#chat-list-item-1').click();
+    cy.get('#text-message').type("Cypress sending a message on another user's chat.");
+    cy.get('#text-message').type('{enter}')
+    cy.get('#open-drawer-button').click();
+    cy.get('#simulator-tab').click();
+    cy.get('#close-drawer-button').click();
   })
 })
-
-// describe('My First Test', () => {
-//   it('finds the content "type"', () => {
-//     cy.visit('https://example.cypress.io')
-
-//     cy.contains('type')
-//   })
-// })
-
-// describe('My First Test', () => {
-//   it('clicks the link "type"', () => {
-//     cy.visit('https://example.cypress.io')
-
-//     cy.contains('type').click()
-//   })
-// })

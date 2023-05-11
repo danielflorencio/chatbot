@@ -1,13 +1,10 @@
 import { Fab, Grid, Divider, TextField, List } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
-import {io} from "socket.io-client";
 import { useState } from "react";
 import MessageComponent from "./components/Message";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import { sendMessage } from "../../../../features/sessionControl/chatSlice";
 import { useUserEmail } from "../../../../hooks";
-
-const socket = io("http://localhost:3001");
 
 export default function CurrentChat({currentChatId} : {currentChatId: string}){
     console.log('currentChatId: ', currentChatId)
@@ -17,10 +14,6 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
     const loggedUser = useUserEmail();    
 
     const dispatch = useAppDispatch();
-
-    const joinRoom = () => {
-        socket.emit("join_room",)
-    }
 
     const handleSubmit = () =>{
         sendNewMessage();
@@ -62,7 +55,7 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
             <Divider />
             <Grid container style={{padding: '20px'}}>
                 <Grid item xs={11}>
-                    <TextField id="outlined-basic-email" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
+                    <TextField id="text-message" label="Type Something" name="message" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
                 <Grid item xs={1} sx={{textAlign: "right"}}>
                     <Fab color="primary" aria-label="add"><SendIcon onClick={() => handleSubmit()} /></Fab>

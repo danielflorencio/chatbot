@@ -62,10 +62,10 @@ export default function CustomerSimulator(){
             <Divider />
             <Grid container style={{padding: '20px'}}>
                 <Grid item xs={11}>
-                    <TextField id="outlined-basic-email" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
+                    <TextField id="customer-simulator-input-field" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
                 <Grid item xs={1} sx={{textAlign: "right"}}>
-                    <Fab color="primary" aria-label="add"><SendIcon onClick={() => handleSubmit()} /></Fab>
+                    <Fab color="primary" aria-label="add"><SendIcon id='send-customer-message-icon' onClick={() => handleSubmit()} /></Fab>
                 </Grid>
             </Grid>
         </Grid>
