@@ -13,9 +13,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { UserData } from '../../types/userData';
-import { redirectToUserPage } from '../../helpers/loginHelpers';
-
-redirectToUserPage();
 
 function Copyright(props: any) {
     return (

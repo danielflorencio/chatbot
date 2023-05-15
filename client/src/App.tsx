@@ -11,30 +11,6 @@ const UserPage = lazy(() => import('./pages/UserPage/UserPage'));
 const SignUp = lazy(() => import('./pages/SingUpPage/SignUpPage'));
 
 export default function App() {
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if(token){
-      if(token === ''){
-        window.location.href = '/'
-      }
-      (async () => {
-        const response = await fetch('http://localhost:3000/api/verifyStatus', {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json',
-          },
-          body: JSON.stringify({
-            token: token
-          })
-        })
-        const data = await response.json()
-        if (data.status !== 'ok'){
-          window.location.href = '/'
-        }
-      })();
-    }
-  }, [])
   
   return (
     <>
@@ -44,7 +20,6 @@ export default function App() {
           <Route path="/" element={<SignIn/>}/>
           <Route path="/sign-up" element={<SignUp/>}/>
           <Route path="/user-page" element={<UserPage/>}/>
-          {/* <Route path="/customer-simulator" element={<CustomerSimulator/>}/> */}
         </Routes>  
       </Container>
     </>

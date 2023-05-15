@@ -48,7 +48,6 @@ export const sessionSlice = createSlice({
   },
 })
 
-
 export const selectUserIsLogged = (state: RootState) =>{return state.session.userIsLogged};
 export const selectUserEmail = (state: RootState) =>{return state.session.userData.email};
 export const { logout, registerLoggedUserState } = sessionSlice.actions;
