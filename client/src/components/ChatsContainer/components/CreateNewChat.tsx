@@ -24,10 +24,12 @@ export default function CreateNewChat(){
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(inputFieldValue !== ''){
+            const token = localStorage.getItem('token')
             const response = await fetch('http://localhost:3000/api/newConversation',{
                 method: 'POST',
                 headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    'authorization': `${token}`
                 },
                 body: JSON.stringify({
                     adminReference: loggedUser,

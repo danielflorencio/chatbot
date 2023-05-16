@@ -107,7 +107,7 @@ app.post('/api/login', async (req: Request, res: Response) => {
     }
 })
 
-app.post('/api/messages', authenticateToken,async (req, res) => {
+app.post('/api/messages', authenticateToken, async (req, res) => {
     try{
         const user = await User.findOne({
             email: req.body.adminReference
@@ -141,7 +141,7 @@ app.post('/api/messages', authenticateToken,async (req, res) => {
     }
 });
 
-app.get('/api/messages', async (req: Request, res: Response) => {
+app.get('/api/messages', authenticateToken, async (req: Request, res: Response) => {
     try{
         const user = await User.findOne({email: req.query.email})
         if(user){
@@ -159,7 +159,7 @@ app.get('/api/messages', async (req: Request, res: Response) => {
     }
 })
 
-app.post('/api/newConversation', async (req: Request, res: Response) => {
+app.post('/api/newConversation', authenticateToken, async (req: Request, res: Response) => {
     try{
         const user = await User.findOne({
             email: req.body.adminReference

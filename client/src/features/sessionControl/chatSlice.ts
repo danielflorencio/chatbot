@@ -28,10 +28,12 @@ interface AddConversationInMemoryProps {
 export const fetchMessages = createAsyncThunk(
   "chat/fetchMessages",
   async (email: string | null | undefined) => {
+    const token = localStorage.getItem('token')
     const response = await fetch(`http://localhost:3000/api/messages?email=${email}`, {
       method: 'GET',
       headers: {
-        "Content-type": "Application/json"
+        "Content-type": "Application/json",
+        "authorization": `${token}`
       }
     })
     if (!response.ok) {
