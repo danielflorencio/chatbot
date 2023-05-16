@@ -6,13 +6,13 @@ const UserSchema = new mongoose.Schema({
   email: {type: String, required: true, unique: true},
   password: {type: String, required: true},
   conversations: [{ type: Schema.Types.ObjectId, ref: 'Conversation' }],
-  token: {type: String, required: true}
+  token: {type: String, required: false}
 }, {collection: 'user-data'}); 
 
 const messageSchema = new mongoose.Schema({
   content: { type: String, required: true },
-  customerReference: { type: Schema.Types.ObjectId, ref: 'Customer' }, // There might be an error in here.
-  adminReference: { type: Schema.Types.ObjectId, ref: 'User' }, // There might be an error in here.
+  customerReference: { type: Schema.Types.ObjectId, ref: 'Customer' },
+  adminReference: { type: Schema.Types.ObjectId, ref: 'User' },
   senderType: { type: String, required: true },
   date: { type: Date, default: Date.now }
 }, {collection: 'text-messages'});

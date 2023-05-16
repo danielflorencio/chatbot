@@ -20,11 +20,13 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
     }
 
     const sendNewMessage = async () => {
+        const token = localStorage.getItem('token');
         console.log('sendNewMessage called.')
         const response = await fetch('http://localhost:3000/api/messages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'authorization': `${token}`
               },
               body: JSON.stringify({
                 adminReference: loggedUser,

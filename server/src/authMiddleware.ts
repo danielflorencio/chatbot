@@ -6,9 +6,14 @@ interface CustomRequest extends Request {
 }
 
 export const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
 
+  // Still have to improve this middleware to better handle errors in case there is no auth headers.
+
+  const authHeader = req.headers['authorization'];
+  const token = authHeader
+  console.log('AUTHHEADER: ', authHeader)
+  console.log('REQ.HEADERS: ', req.headers)
+  console.log('AUTH MIDDLEWARE TOKEN: ', token)
   if (token == null) {
     return res.sendStatus(401);
   }
