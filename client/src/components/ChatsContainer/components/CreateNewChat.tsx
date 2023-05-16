@@ -1,7 +1,7 @@
-import { Box, Button, FormControl, Input, ListItem, TextField, Typography } from "@mui/material";
+import { Box, Button, ListItem, TextField } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addConversationInMemory, setConversationsInMemory } from "../../../features/sessionControl/chatSlice";
+import { addConversationInMemory } from "../../../features/sessionControl/chatSlice";
 import { useUserEmail } from "../../../hooks";
 
 export default function CreateNewChat(){

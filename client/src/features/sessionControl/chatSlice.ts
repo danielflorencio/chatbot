@@ -28,8 +28,12 @@ interface AddConversationInMemoryProps {
 export const fetchMessages = createAsyncThunk(
   "chat/fetchMessages",
   async (email: string | null | undefined) => {
-    const token = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/api/messages?email=${email}`, {
+    let token = localStorage.getItem('token')
+    if(!token){
+      token = ''
+    }
+    console.log('POST TOKEN CODE BEING CALLED.')
+    const response = await fetch(`http://localhost:8080/api/messages?email=${email}`, {
       method: 'GET',
       headers: {
         "Content-type": "Application/json",
@@ -40,6 +44,7 @@ export const fetchMessages = createAsyncThunk(
       throw new Error("Failed to fetch messages");
     }
     const data = await response.json();
+    console.log('DATA BEING RECEIVED FROM THE MOCK API: ', data)
     const newConversationsInMemory = data.conversations.map((conversation: any, index: any) => ({
       ...conversation,
       adminReference: conversation.adminId,

@@ -4,22 +4,22 @@ export const Conversations: Conversation[] = [
         messages: [
             {
             content: 'Hey, message number one here.',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 1',
+            customerReference: 'Customer user 1',
             senderType: 'customer',
             date: new Date().toISOString()
             },
             {
             content: '',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 1',
+            customerReference: 'Customer user 1',
             senderType: 'customer',
             date: new Date().toISOString()
             },
             {
             content: '',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 1',
+            customerReference: 'Customer user 1',
             senderType: 'customer',
             date: new Date().toISOString()
             },
@@ -31,22 +31,22 @@ export const Conversations: Conversation[] = [
         messages: [
             {
             content: 'Message number two',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 2',
+            customerReference: 'Customer user 2',
             senderType: 'customer',
             date: new Date().toISOString()
             },
             {
             content: '',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 2',
+            customerReference: 'Customer user 2',
             senderType: 'customer',
             date: new Date().toISOString()
             },
             {
             content: '',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 2',
+            customerReference: 'Customer user 2',
             senderType: 'customer',
             date: new Date().toISOString()
             },
@@ -58,22 +58,22 @@ export const Conversations: Conversation[] = [
         messages: [
             {
             content: 'And then three.',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 3',
+            customerReference: 'Customer user 3',
             senderType: 'customer',
             date: new Date().toISOString()
             },
             {
             content: '',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 3',
+            customerReference: 'Customer user 3',
             senderType: 'customer',
             date: new Date().toISOString()
             },
             {
             content: '',
-            senderReference: '',
-            recipientReference: '',
+            adminReference: 'Admin user 3',
+            customerReference: 'Customer user 3',
             senderType: 'customer',
             date: new Date().toISOString()
             },

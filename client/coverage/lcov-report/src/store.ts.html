@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/hooks.ts</title>
+    <title>Code coverage report for src/store.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">src</a> hooks.ts</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">src</a> store.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/5</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -75,10 +75,7 @@
 <a name='L10'></a><a href='#L10'>10</a>
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -90,25 +87,19 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { useDispatch, useSelector } from 'react-redux'
-import type { TypedUseSelectorHook } from 'react-redux'
-import type { RootState, AppDispatch } from './store'
-import { selectUserEmail, selectUserIsLogged } from './features/sessionControl/sessionSlice'
-import { selectConversationsInMemory, selectConversationsOnScreen, selectCurrentChatId } from './features/sessionControl/chatSlice'
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { configureStore } from '@reduxjs/toolkit'
+import sessionSlice from './features/sessionControl/sessionSlice'
+import chatSlice from './features/sessionControl/chatSlice'
 &nbsp;
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch: () =&gt; AppDispatch = useDispatch
-export const useAppSelector: TypedUseSelectorHook&lt;RootState&gt; = useSelector
+export const store = configureStore({
+  reducer: {
+    session: sessionSlice,
+    chat: chatSlice
+  }
+})
 &nbsp;
-export const useUserEmail = () =&gt; useAppSelector(state =&gt; selectUserEmail(state))
-export const useLoginStatus = <span class="fstat-no" title="function not covered" >() =&gt; useAppSelector(state =&gt; selectUserIsLogged(state))</span>
-&nbsp;
-export const useConversationsInMemory = () =&gt; useAppSelector(state =&gt; selectConversationsInMemory(state));
-export const useConversationsOnScreen = <span class="fstat-no" title="function not covered" >() =&gt; useAppSelector(state =&gt; selectConversationsOnScreen(state));</span>
-export const useCurrentChatId = () =&gt; useAppSelector(state =&gt; selectCurrentChatId(state));</pre></td></tr></table></pre>
+export type RootState = ReturnType&lt;typeof store.getState&gt;
+export type AppDispatch = typeof store.dispatch</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

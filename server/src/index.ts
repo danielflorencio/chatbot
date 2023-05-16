@@ -152,6 +152,7 @@ app.get('/api/messages', authenticateToken, async (req: Request, res: Response) 
                 adminId: req.query.email,
                 customerId: await Customer.findOne({ _id: customerIds[index]}).select({phoneNumber: 1, _id: 0})
             })))
+            console.log('RESPONSE FORMAT: ', response)
             res.status(200).json({status: 'ok', conversations: response});
         }
     }catch(error){
