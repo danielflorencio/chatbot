@@ -13,6 +13,7 @@ const Conversation = models.Conversation;
 const Message = models.Message;
 const Customer = models.Customer;
 const jwt = require('jsonwebtoken') 
+const rateLimit = require('express-rate-limit')
 // const { Server} = require('socket.io')
 
 const app = express();
@@ -54,7 +55,12 @@ io.on("connection", (socket: Socket) => {
     });
 })
 
-app.post('/api/verifyStatus', async (req: Request, res: Response) => {
+const verifyStatusRateLimit = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 10
+})
+
+app.post('/api/verifyStatus', verifyStatusRateLimit, async (req: Request, res: Response) => {
     try{
         const decodedToken = await jwt.decode( req.body.token, 'secretPass')
         const userEmail = decodedToken.email
@@ -72,7 +78,12 @@ app.post('/api/verifyStatus', async (req: Request, res: Response) => {
     }    
 })
 
-app.post('/api/register', async (req: Request, res: Response) => {
+const registerRateLimit = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 3
+})
+
+app.post('/api/register', registerRateLimit, async (req: Request, res: Response) => {
     try{
         await User.create({
             firstName: req.body.firstName,
@@ -86,7 +97,12 @@ app.post('/api/register', async (req: Request, res: Response) => {
     }    
 })
 
-app.post('/api/login', async (req: Request, res: Response) => {
+const loginRateLimit = rateLimit({
+    windowMs: 20 * 60 * 1000, 
+    max: 12
+})
+
+app.post('/api/login', loginRateLimit, async (req: Request, res: Response) => {
     const user = await User.findOne({
         email: req.body.email,
         password: req.body.password
@@ -107,7 +123,12 @@ app.post('/api/login', async (req: Request, res: Response) => {
     }
 })
 
-app.post('/api/messages', authenticateToken, async (req, res) => {
+const newMessageRateLimit = rateLimit({
+    windowMs: 30 * 60 * 1000,
+    max: 18
+})
+
+app.post('/api/messages', newMessageRateLimit, authenticateToken, async (req, res) => {
     try{
         const user = await User.findOne({
             email: req.body.adminReference
@@ -141,7 +162,14 @@ app.post('/api/messages', authenticateToken, async (req, res) => {
     }
 });
 
-app.get('/api/messages', authenticateToken, async (req: Request, res: Response) => {
+const getMessagesRateLimit = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20
+})
+
+app.get('/api/messages', getMessagesRateLimit, authenticateToken, async (req: Request, res: Response) => {
+    console.log('Get messages endpoint being hit.')
+    console.log('GET REQUEST BEING MADE BY THE CLIENT: ', req)
     try{
         const user = await User.findOne({email: req.query.email})
         if(user){
@@ -160,7 +188,12 @@ app.get('/api/messages', authenticateToken, async (req: Request, res: Response) 
     }
 })
 
-app.post('/api/newConversation', authenticateToken, async (req: Request, res: Response) => {
+const newConversationRateLimit = rateLimit({
+    windowMs: 45 * 60 * 1000,
+    max: 10
+})
+
+app.post('/api/newConversation', newConversationRateLimit, authenticateToken, async (req: Request, res: Response) => {
     try{
         const user = await User.findOne({
             email: req.body.adminReference

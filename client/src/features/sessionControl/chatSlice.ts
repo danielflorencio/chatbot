@@ -32,14 +32,16 @@ export const fetchMessages = createAsyncThunk(
     if(!token){
       token = ''
     }
-    console.log('POST TOKEN CODE BEING CALLED.')
-    const response = await fetch(`http://localhost:8080/api/messages?email=${email}`, {
+    console.log('PRIOR TO FETCH REQUEST CODE CALLED ----- ')
+    // const testEmail = 'testEmail'
+    const response = await fetch(`http://localhost:3000/api/messages?email=${email}`, {
       method: 'GET',
       headers: {
         "Content-type": "Application/json",
         "authorization": `${token}`
       }
     })
+    console.log('POST FETCH REQUEST CODE CALLED ----- ')
     if (!response.ok) {
       throw new Error("Failed to fetch messages");
     }
