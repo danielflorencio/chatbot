@@ -1,12 +1,22 @@
 import ChatsContainer from "../../components/ChatsContainer";
 import Sidebar from "../../components/Sidebar";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { verifyPageAccessPermission } from "../../helpers/loginHelpers";
 import CustomerSimulator from "../../components/CustomerSimulator";
+import { fetchMessages } from "../../features/sessionControl/chatSlice";
+import { useUserEmail } from "../../hooks";
+import { store } from "../../store";
 
 export default function UserPage(){
     
+    const email = useUserEmail();
+
     verifyPageAccessPermission();
+
+    useEffect(() => {
+        console.log('Main useEffect being called.')
+        store.dispatch(fetchMessages(email));
+    }, [email]);
     
     const [renderedComponent, setRenderedComponent] = useState([<ChatsContainer/>, <CustomerSimulator/>]);
     const [renderedComponentId, setRenderedComponentId] = useState<number>(0);

@@ -3,19 +3,11 @@ import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
 import {useEffect, useState} from 'react'
-import { useCurrentChatId, useUserEmail } from "../../hooks";
-import { fetchMessages } from "../../features/sessionControl/chatSlice";
+import { useCurrentChatId } from "../../hooks";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { store } from "../../store";
 export default function ChatsContainer(){
 
   const currentChatId = useCurrentChatId();
-
-  const email = useUserEmail();
-
-  useEffect(() => {
-    store.dispatch(fetchMessages(email));
-  }, [email]);
 
   const matches = useMediaQuery('(max-width:600px)');
   const [displayState, setDisplayState] = useState<'none' | 'block'>('block')
