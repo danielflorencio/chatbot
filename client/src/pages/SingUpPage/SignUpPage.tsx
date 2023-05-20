@@ -30,8 +30,8 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignUp() {
-    const [userData, setUserData] = useState<UserData>({firstName: '', lastName: '', email: '', password: ''})
-
+  const [userData, setUserData] = useState<UserData>({firstName: '', lastName: '', email: '', password: ''})
+  
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -45,6 +45,7 @@ export default function SignUp() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         firstName: userData.firstName,
@@ -53,7 +54,13 @@ export default function SignUp() {
         password: userData.password
       })
     })
-    const data = await response.json() 
+    const data = await response.json()
+    console.log('response: ', response)
+    if(response.ok){
+      window.location.href = '/'
+    }else{
+      alert('There was an error while trying to register the user.')
+    }
     console.log('data: ', data)
   };
   
@@ -84,7 +91,7 @@ export default function SignUp() {
                   name="firstName"
                   required
                   fullWidth
-                  id="firstName"
+                  id="first-name-input"
                   label="First Name"
                   autoFocus
                   value={userData.firstName}
@@ -95,7 +102,7 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
+                  id="last-name-input"
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
@@ -107,7 +114,7 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="email"
+                  id="email-input"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
@@ -122,7 +129,7 @@ export default function SignUp() {
                   name="password"
                   label="Password"
                   type="password"
-                  id="password"
+                  id="password-input"
                   autoComplete="new-password"
                   value={userData.password}
                   onChange={(e) => setUserData({ ...userData, password: e.target.value })}
