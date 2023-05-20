@@ -32,6 +32,7 @@ export default function CustomerSimulator(){
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                "authorization": `${localStorage.getItem('token')}`
               },
               body: JSON.stringify({
                 adminReference: loggedUser,

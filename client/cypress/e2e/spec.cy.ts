@@ -1,11 +1,19 @@
+// https://www.slingacademy.com/article/ways-to-generate-random-strings-in-javascript/
+const generateRandomString = (length: number) => {
+  let result = '';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
 describe('Chatbot tests', () => {
-  // beforeEach(() => {
-    // cy.visit('http://localhost:5173');
-    // cy.get('form').submit();
-    // cy.url().should('include', '/user-page');
-  // })
   it('Should test the whole application.', () => {
     cy.visit('http://localhost:5173');
+    console.log(generateRandomString(10));
     cy.get('form').submit();
     cy.url().should('include', '/user-page');
     cy.get('#text-message').type('Cypress automated test message.');

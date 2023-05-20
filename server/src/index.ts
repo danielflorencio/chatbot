@@ -57,7 +57,7 @@ io.on("connection", (socket: Socket) => {
 
 const verifyStatusRateLimit = rateLimit({
     windowMs: 15 * 60 * 1000, 
-    max: 10
+    // max: 10
 })
 
 app.post('/api/verifyStatus', verifyStatusRateLimit, async (req: Request, res: Response) => {
@@ -80,7 +80,7 @@ app.post('/api/verifyStatus', verifyStatusRateLimit, async (req: Request, res: R
 
 const registerRateLimit = rateLimit({
     windowMs: 60 * 60 * 1000,
-    max: 3
+    // max: 3
 })
 
 app.post('/api/register', registerRateLimit, async (req: Request, res: Response) => {
@@ -99,7 +99,7 @@ app.post('/api/register', registerRateLimit, async (req: Request, res: Response)
 
 const loginRateLimit = rateLimit({
     windowMs: 20 * 60 * 1000, 
-    max: 12
+    // max: 12
 })
 
 app.post('/api/login', loginRateLimit, async (req: Request, res: Response) => {
@@ -125,7 +125,7 @@ app.post('/api/login', loginRateLimit, async (req: Request, res: Response) => {
 
 const newMessageRateLimit = rateLimit({
     windowMs: 30 * 60 * 1000,
-    max: 18
+    // max: 18
 })
 
 app.post('/api/messages', newMessageRateLimit, authenticateToken, async (req, res) => {
@@ -164,7 +164,7 @@ app.post('/api/messages', newMessageRateLimit, authenticateToken, async (req, re
 
 const getMessagesRateLimit = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 20
+    // max: 20
 })
 
 app.get('/api/messages', getMessagesRateLimit, authenticateToken, async (req: Request, res: Response) => {
@@ -190,7 +190,7 @@ app.get('/api/messages', getMessagesRateLimit, authenticateToken, async (req: Re
 
 const newConversationRateLimit = rateLimit({
     windowMs: 45 * 60 * 1000,
-    max: 10
+    // max: 10
 })
 
 app.post('/api/newConversation', newConversationRateLimit, authenticateToken, async (req: Request, res: Response) => {
