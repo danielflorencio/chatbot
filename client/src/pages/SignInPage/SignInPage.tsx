@@ -47,6 +47,7 @@ export default function SignIn() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'authorization': `${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ 
           email: email,

@@ -56,11 +56,11 @@ io.on("connection", (socket: Socket) => {
 })
 
 const verifyStatusRateLimit = rateLimit({
-    windowMs: 15 * 60 * 1000, 
+    // windowMs: 15 * 60 * 1000, 
     // max: 10
 })
 
-app.post('/api/verifyStatus', verifyStatusRateLimit, async (req: Request, res: Response) => {
+app.post('/api/verifyStatus', async (req: Request, res: Response) => {
     try{
         const decodedToken = await jwt.decode( req.body.token, 'secretPass')
         const userEmail = decodedToken.email
@@ -79,7 +79,7 @@ app.post('/api/verifyStatus', verifyStatusRateLimit, async (req: Request, res: R
 })
 
 const registerRateLimit = rateLimit({
-    windowMs: 60 * 60 * 1000,
+    // windowMs: 60 * 60 * 1000,
     // max: 3
 })
 
@@ -98,11 +98,11 @@ app.post('/api/register', registerRateLimit, async (req: Request, res: Response)
 })
 
 const loginRateLimit = rateLimit({
-    windowMs: 20 * 60 * 1000, 
+    // windowMs: 20 * 60 * 1000, 
     // max: 12
 })
 
-app.post('/api/login', loginRateLimit, async (req: Request, res: Response) => {
+app.post('/api/login', async (req: Request, res: Response) => {
     const user = await User.findOne({
         email: req.body.email,
         password: req.body.password
@@ -124,11 +124,11 @@ app.post('/api/login', loginRateLimit, async (req: Request, res: Response) => {
 })
 
 const newMessageRateLimit = rateLimit({
-    windowMs: 30 * 60 * 1000,
+    // windowMs: 30 * 60 * 1000,
     // max: 18
 })
 
-app.post('/api/messages', newMessageRateLimit, authenticateToken, async (req, res) => {
+app.post('/api/messages', authenticateToken, async (req, res) => {
     try{
         const user = await User.findOne({
             email: req.body.adminReference
@@ -163,11 +163,11 @@ app.post('/api/messages', newMessageRateLimit, authenticateToken, async (req, re
 });
 
 const getMessagesRateLimit = rateLimit({
-    windowMs: 15 * 60 * 1000,
+    // windowMs: 15 * 60 * 1000,
     // max: 20
 })
 
-app.get('/api/messages', getMessagesRateLimit, authenticateToken, async (req: Request, res: Response) => {
+app.get('/api/messages', authenticateToken, async (req: Request, res: Response) => {
     console.log('Get messages endpoint being hit.')
     console.log('GET REQUEST BEING MADE BY THE CLIENT: ', req)
     try{
@@ -189,11 +189,11 @@ app.get('/api/messages', getMessagesRateLimit, authenticateToken, async (req: Re
 })
 
 const newConversationRateLimit = rateLimit({
-    windowMs: 45 * 60 * 1000,
+    // windowMs: 45 * 60 * 1000,
     // max: 10
 })
 
-app.post('/api/newConversation', newConversationRateLimit, authenticateToken, async (req: Request, res: Response) => {
+app.post('/api/newConversation', authenticateToken, async (req: Request, res: Response) => {
     try{
         const user = await User.findOne({
             email: req.body.adminReference

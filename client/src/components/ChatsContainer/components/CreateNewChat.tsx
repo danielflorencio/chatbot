@@ -50,10 +50,10 @@ export default function CreateNewChat(){
         <ListItem>
             {
                 componentState === 'inactive' ? (
-                    <Button fullWidth color="success" onClick={handleClick}>Create New Chat.</Button>
+                    <Button fullWidth id="create-chat-button" color="success" onClick={handleClick}>Create New Chat.</Button>
                 ) : (
-                    <Box component="form" onSubmit={(e) => handleSubmit(e)}>
-                        <TextField fullWidth id="my-input" placeholder="Phone number" value={inputFieldValue} onChange={(e) => {e.preventDefault(); setInputFieldValue(e.target.value)}} aria-describedby="my-helper-text" />
+                    <Box component="form" id="new-chat-number-form" onSubmit={(e) => handleSubmit(e)}>
+                        <TextField fullWidth id="new-chat-number-field" placeholder="Phone number" value={inputFieldValue} onChange={(e) => {e.preventDefault(); setInputFieldValue(e.target.value)}} aria-describedby="my-helper-text" />
                     </Box>
                 )
             }

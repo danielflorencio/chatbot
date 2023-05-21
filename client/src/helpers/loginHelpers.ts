@@ -10,6 +10,8 @@ import { SessionState } from "../features/sessionControl/sessionSlice";
 // }
 
 export async function verifyPageAccessPermission(){
+  // Verify this function later.
+  // Remove the redundancy of sending the token both in the header and the json body.
   (async () => {
     console.log('ASYNC FUNCTION BEING CALLED.')
     const token = localStorage.getItem('token')
@@ -25,6 +27,7 @@ export async function verifyPageAccessPermission(){
           method: 'POST',
           headers: {
             'Content-type': 'application/json',
+            'authorization': `${localStorage.getItem('token')}`
           },
           body: JSON.stringify({
             token: token
@@ -58,12 +61,16 @@ export async function redirectToUserPage(){
 }
 
 export async function fetchUserLoginStatus(): Promise<SessionState>{
+  // Verify later the places where this function is being called if they still make sense.
+  // This function probably doesn't make sense anymore, at least not the way it is implemented.
+  // It probably does not make any sense at all to send the local JWT token both in the Json body and in the authorization headers.
   const token = localStorage.getItem('token');
   if (token) {
     const response = await fetch('http://localhost:3000/api/verifyStatus', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         token: token,
