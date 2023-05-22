@@ -6,6 +6,7 @@ import CustomerSimulator from "../../components/CustomerSimulator";
 import { fetchMessages } from "../../features/sessionControl/chatSlice";
 import { useUserEmail } from "../../hooks";
 import { store } from "../../store";
+import BotsPage from "../../components/Bots";
 
 export default function UserPage(){
     
@@ -18,7 +19,7 @@ export default function UserPage(){
         store.dispatch(fetchMessages(email));
     }, [email]);
     
-    const [renderedComponent, setRenderedComponent] = useState([<ChatsContainer/>, <CustomerSimulator/>]);
+    const [renderedComponent, setRenderedComponent] = useState([<ChatsContainer/>, <CustomerSimulator/>, <BotsPage/>]);
     const [renderedComponentId, setRenderedComponentId] = useState<number>(0);
 
     return( 

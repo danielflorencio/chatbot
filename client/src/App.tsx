@@ -2,6 +2,7 @@ import { lazy} from 'react'
 import CssBaseline from '@mui/material/CssBaseline';
 import {Container} from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
+import BotsPage from './components/Bots';
 // import SignIn from './pages/SignInPage/SignInPage';
 // import SignUp from './pages/SingUpPage/SignUpPage';
 // import UserPage from './pages/UserPage/UserPage';
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/" element={<SignIn/>}/>
           <Route path="/sign-up" element={<SignUp/>}/>
           <Route path="/user-page" element={<UserPage/>}/>
+          {/* <Route path='/bots' element={<BotsPage/>}/> */}
         </Routes>  
       </Container>
     </>
