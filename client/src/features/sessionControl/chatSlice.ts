@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, store } from "../../store";
 import { Conversation } from "../../types/conversation";
 import { Message } from "../../types/message";
+import { formatDate } from "../../helpers/dateFilters";
 interface ChatState {
   conversationsInMemory: Conversation[],
   currentChatId: string, 
@@ -32,7 +33,6 @@ export const fetchMessages = createAsyncThunk(
     if(!token){
       token = ''
     }
-    console.log('PRIOR TO FETCH REQUEST CODE CALLED ----- ')
     // const testEmail = 'testEmail'
     const response = await fetch(`http://localhost:3000/api/messages?email=${email}`, {
       method: 'GET',
@@ -41,12 +41,10 @@ export const fetchMessages = createAsyncThunk(
         "authorization": `${token}`
       }
     })
-    console.log('POST FETCH REQUEST CODE CALLED ----- ')
     if (!response.ok) {
       throw new Error("Failed to fetch messages");
     }
     const data = await response.json();
-    console.log('DATA BEING RECEIVED FROM THE MOCK API: ', data)
     const newConversationsInMemory = data.conversations.map((conversation: any, index: any) => ({
       ...conversation,
       adminReference: conversation.adminId,
@@ -54,7 +52,8 @@ export const fetchMessages = createAsyncThunk(
       messages: conversation.messages.map((message: any) => ({
         ...message, 
         adminReference: conversation.adminId,
-        customerReference: conversation.customerId.phoneNumber
+        customerReference: conversation.customerId.phoneNumber,
+        date: formatDate(message.date)
       }))
     }))
     return newConversationsInMemory;
