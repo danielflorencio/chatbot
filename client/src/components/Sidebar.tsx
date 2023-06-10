@@ -114,8 +114,6 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
     setOpen(false);
   };
 
-
-
   return (
   
     <Box sx={{ display: 'flex' }}>
@@ -204,6 +202,7 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
             </ListItem>
           ))}
         </List>
+        <Divider />
         <List id='bots-tab' onClick={() => setRenderedComponentId(2)}>
           {['Bots'].map((text, index) => (
             <ListItem key={text} disablePadding>
