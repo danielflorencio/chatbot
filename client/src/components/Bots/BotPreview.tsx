@@ -6,6 +6,7 @@ import { sendMessage } from "../../features/sessionControl/chatSlice";
 // import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useUserEmail } from "../../hooks";
+import { Message } from "../../types/message";
 export default function BotPreview(){
 
     const [messageInput, setMessageInput] = useState('');
@@ -47,7 +48,7 @@ export default function BotPreview(){
     return(
         <Box component={Paper} sx={{width: '400px', height: '80vh'}}>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
-                {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message, index) => (
+                {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message: Message, index: number) => (
                     <div key={index}>
                         <MessageComponent index={index} content={message.content} senderType={message.senderType} date={message.date}/>
                     </div>

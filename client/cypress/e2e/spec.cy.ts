@@ -52,3 +52,5 @@ describe('Chatbot tests', () => {
     cy.get('#close-drawer-button').click();
   })
 })
+
+export {};
