@@ -5,7 +5,7 @@ import { Conversations } from './data/Conversations';
 import models from './models/models';
 import { authenticateToken } from './authMiddleware';
 
-const port = 3000
+const port = 5000
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = models.User
