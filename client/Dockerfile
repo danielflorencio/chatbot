@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as the base image
-FROM node:14-alpine
+FROM node:18-alpine
 
 # Set the working directory inside the container
 WORKDIR /src
@@ -17,4 +17,4 @@ COPY . .
 RUN npm run build
 
 # Specify the command to run your frontend application
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev", "--host"]

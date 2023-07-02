@@ -8,15 +8,16 @@ services:
       - 5173:5173
     depends_on:
       - backend
+  mongodb: 
+    container_name: mongodb
+    image: mongo:latest
+    ports: 
+      - 27017:27017
   backend:
     build:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - 5000:5000
+      - 3000:3000
     depends_on:
       - mongodb
-  mongodb:
-    image: mongo:latest
-    ports:
-      - 27017:27017

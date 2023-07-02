@@ -5,7 +5,7 @@ import { Conversations } from './data/Conversations';
 import models from './models/models';
 import { authenticateToken } from './authMiddleware';
 
-const port = 5000
+const port = 3000
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = models.User
@@ -24,7 +24,7 @@ app.use(express.json())
 
 const server = createServer(app)
 
-mongoose.connect('mongodb://localhost:27017/chatbot-application')
+mongoose.connect('mongodb://mongodb:27017/chatbot-application')
 
 const io = new Server(socketIoHttpServer, {
     cors: {
