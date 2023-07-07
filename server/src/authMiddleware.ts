@@ -11,9 +11,7 @@ export const authenticateToken = (req: CustomRequest, res: Response, next: NextF
 
   const authHeader = req.headers['authorization'];
   const token = authHeader
-  console.log('AUTHHEADER: ', authHeader)
-  console.log('REQ.HEADERS: ', req.headers)
-  console.log('AUTH MIDDLEWARE TOKEN: ', token)
+
   if (token == null) {
     return res.sendStatus(401);
   }
