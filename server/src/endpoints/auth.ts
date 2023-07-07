@@ -37,3 +37,21 @@ export const login = async (req: Request, res: Response) => {
         return res.json({status: 'error', user: false})
     }
 };
+
+export const verifyStatus = async (req: Request, res: Response) => {
+    try{
+        const decodedToken = await jwt.decode( req.body.token, 'secretPass')
+        const userEmail = decodedToken.email
+        const user = await User.findOne({
+            email: userEmail
+        })
+        console.log('user found: ', user)
+        if(user){
+            res.json({status: 'ok', token: decodedToken, userEmail: user.email})
+        } else {
+            res.json({status: 'error', error: 'User not found'})
+        }
+    }catch(error){
+        res.json({status: 'error', error: 'Could not decode the token.'})
+    }    
+};
