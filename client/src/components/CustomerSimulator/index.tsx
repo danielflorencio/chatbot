@@ -1,12 +1,9 @@
 import { Fab, Grid, Divider, TextField, List } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
-import {io} from "socket.io-client";
 import { useState } from "react";
 import MessageComponent from "../ChatsContainer/components/CurrentChat/components/Message";
 import { useAppDispatch, useAppSelector, useCurrentChatId, useUserEmail } from "../../hooks";
-import { sendMessage, sendMessageCustomer } from "../../features/sessionControl/chatSlice";
-
-const socket = io("http://localhost:3001");
+import { sendMessageCustomer } from "../../features/sessionControl/chatSlice";
 
 export default function CustomerSimulator(){
 
@@ -17,10 +14,6 @@ export default function CustomerSimulator(){
     const loggedUser = useUserEmail();   
 
     const dispatch = useAppDispatch();
-
-    const joinRoom = () => {
-        socket.emit("join_room",)
-    }
 
     const handleSubmit = () =>{
         sendNewMessage();

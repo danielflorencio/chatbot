@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { UserData } from '../../types/userData';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props: any) {
     return (
@@ -30,6 +31,8 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignUp() {
+
+  const navigate = useNavigate();
   const [userData, setUserData] = useState<UserData>({firstName: '', lastName: '', email: '', password: ''})
   
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
@@ -63,6 +66,10 @@ export default function SignUp() {
     }
     console.log('data: ', data)
   };
+
+  const navigateToPage = async (url: string) => {
+    await navigate(url);
+  }
   
   return (
     <Suspense>
@@ -151,8 +158,8 @@ export default function SignUp() {
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
+              <Grid item onClick={() => navigateToPage('/sign-up')}>
+                <Link variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

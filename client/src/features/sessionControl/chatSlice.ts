@@ -41,22 +41,26 @@ export const fetchMessages = createAsyncThunk(
         "authorization": `${token}`
       }
     })
-    if (!response.ok) {
-      throw new Error("Failed to fetch messages");
-    }
-    const data = await response.json();
-    const newConversationsInMemory = data.conversations.map((conversation: any, index: any) => ({
-      ...conversation,
-      adminReference: conversation.adminId,
-      customerId: conversation.customerId.phoneNumber,
-      messages: conversation.messages.map((message: any) => ({
-        ...message, 
+    if (response.ok) {
+      const data = await response.json();
+      const newConversationsInMemory = data.conversations.map((conversation: any, index: any) => ({
+        ...conversation,
         adminReference: conversation.adminId,
-        customerReference: conversation.customerId.phoneNumber,
-        date: formatDate(message.date)
+        customerId: conversation.customerId.phoneNumber,
+        messages: conversation.messages.map((message: any) => ({
+          ...message, 
+          adminReference: conversation.adminId,
+          customerReference: conversation.customerId.phoneNumber,
+          date: formatDate(message.date)
+        }))
       }))
-    }))
-    return newConversationsInMemory;
+      return newConversationsInMemory;      
+    } else{
+      console.log('There were no messages to be fetched.')
+      return [];
+      // throw new Error("Failed to fetch messages");
+    }
+
   }
 );
 

@@ -215,6 +215,19 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
             </ListItem>
           ))}
         </List>
+        <Divider />
+        <List id='flows-tab' onClick={() => setRenderedComponentId(3)}>
+          {['Flows'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
         {/* </Link> */}
       </Drawer>
       <Main open={open}>
