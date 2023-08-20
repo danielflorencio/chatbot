@@ -18,28 +18,17 @@ export default function ChatList({displayState}: {displayState: 'none' | 'block'
     }
 
     const matches = useMediaQuery('(max-width:600px)');
-    // const [displayState, setDisplayState] = useState<'none' | 'contents'>('contents')
 
     console.log('matches: ', matches)
     
-    // useEffect(() => {
-    //     if(matches) {
-    //         setDisplayState('none');
-    //     } else{
-    //         setDisplayState('contents')
-    //     }
-    // }, [matches])
-
     return(
-        <List sx={{display: `${displayState}`}}>
+    <List sx={{display: `${displayState}`, maxHeight: '76vh', overflow: 'auto', minWidth: 'fit-content'}}>
+        <CreateNewChat/>
         {
             customers ? (
             customers.map((customer, index) => (
-            <Tooltip key={index} title={`${customer}`} sx={{ display: {xs: 'none', md: 'contents'}}}> 
-            {/* <ListItem button key={index} onClick={() => {handleSelectConversation(index)}} sx={{width: 1, height: 1}}>             */}
-            {/* <ListItem button key={index} onClick={() => {handleSelectConversation(index)}} sx={{width: {xs: 'fit-content', md: 1}, height: 1}}>    */}
-            {/* <ListItem button key={index} onClick={() => {handleSelectConversation(index)}} sx={{width: {xs: 'fit-content'}, height: 1}}>    */}
-            <ListItem id={`chat-list-item-${index}`} button onClick={() => {handleSelectConversation(index)}} sx={{width: {xs: 'fit-content'}}}>
+            <Tooltip key={index} title={`${customer}`}> 
+            <ListItem id={`chat-list-item-${index}`} button onClick={() => {handleSelectConversation(index)}} sx={{width: 1}}>
                 <ListItemIcon>
                     <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
                 </ListItemIcon>
@@ -49,7 +38,6 @@ export default function ChatList({displayState}: {displayState: 'none' | 'block'
             ))
             ) : (<div></div>)
         }
-        <CreateNewChat/>
     </List>
     )
 }

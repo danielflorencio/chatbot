@@ -21,11 +21,12 @@ export default function ChatsContainer(){
   }, [matches])
   
   return(
-  <Grid container component={Paper} sx={{width: 1, height: 'fit-content'}}>
-    <Grid item sx={{borderRight: '1px solid #e0e0e0', width: {xs: 'fit-content', display: `${displayState}`}}}>
+  <Grid container component={Paper} sx={{width: 1}}>
+    {/* <Grid item sx={{borderRight: '1px solid #e0e0e0', width: {xs: 'fit-content', display: `${displayState}`}}}> */}
+    <Grid item sx={{borderRight: '1px solid #e0e0e0', width: {xs: 'fit-content'}}}>
         <List>
             <Tooltip title='Remy Sharp' sx={{ display: {xs: 'none', md: 'contents'}}}> 
-              <ListItem button key="RemySharp" sx={{width: 1, height: 1}}>
+              <ListItem button key="RemySharp" sx={{width: 1}}>
                   <ListItemIcon>
                   <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
                   </ListItemIcon>
@@ -35,7 +36,7 @@ export default function ChatsContainer(){
         </List>
         <Divider />
         <ChatList displayState={displayState}/>
-      </Grid>
+    </Grid>
     <CurrentChat currentChatId={currentChatId} />
   </Grid>
 )
