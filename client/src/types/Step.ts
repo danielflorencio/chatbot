@@ -1,7 +1,10 @@
+import { Message } from "./message"
+
 export type Step = {
     referenceLastStepId?: string,
-    LastUserReceivedMessages: string[],
+    LastUserReceivedMessages?: string[],
     options: Option[],
+    messages: Message[]
 }
 
 export type Option = {
@@ -10,7 +13,8 @@ export type Option = {
 }
 
 /* 
-Each step shall have different options to choose from.
-Each option should contain a reference (link) to the next step.
-Each step should understand the last messages sent by the user.
+    Each step shall have different options to choose from.
+    Each option should contain a reference (link) to the next step.
+    Each step should understand the last messages sent by the user.
+    It can work by by putting the message's content in the Option type message CTA.
 */

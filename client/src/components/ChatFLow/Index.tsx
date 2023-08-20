@@ -6,28 +6,32 @@ import ReactFlow, {
   Edge,
   Connection,
   useNodesState,
-  useEdgesState
+  useEdgesState,
+  Controls,
+  ConnectionMode
 } from "reactflow";
 
-import CustomNode from "./CustomNode";
+import CustomNode from "./FlowComponents/CustomNode";
 
 import "reactflow/dist/style.css";
+import { Box } from "@mui/material";
+import StepNode from "./FlowComponents/StepNode";
 
 const initialNodes: Node[] = [
   {
     id: "1",
-    type: "input",
+    type: "step",
     data: { label: "Node 1" },
-    position: { x: 250, y: 5 }
+    position: { x: 250, y: 5 }, 
   },
-  { id: "2", data: { label: "Node 2" }, position: { x: 100, y: 100 } },
-  { id: "3", data: { label: "Node 3" }, position: { x: 400, y: 100 } },
-  {
-    id: "4",
-    type: "custom",
-    data: { label: "Custom Node" },
-    position: { x: 400, y: 200 }
-  }
+  { id: "2", type: 'step', data: { label: "Node 2" }, position: { x: 100, y: 100 } },
+  { id: "3", type: 'step', data: { label: "Node 3" }, position: { x: 400, y: 100 } },
+  // {
+    // id: "4",
+    // type: "custom",
+    // data: { label: "Custom Node" },
+    // position: { x: 400, y: 200 }
+  // }
 ];
 
 const initialEdges: Edge[] = [
@@ -36,7 +40,8 @@ const initialEdges: Edge[] = [
 ];
 
 const nodeTypes = {
-  custom: CustomNode
+  custom: CustomNode,
+  step: StepNode
 };
 
 const BasicFlow = () => {
@@ -48,6 +53,7 @@ const BasicFlow = () => {
   );
 
   return (
+    <Box sx={{height: '100%', width: '100vw', marginBottom: '5vh'}}>
     <ReactFlow
       nodes={nodes}
       edges={edges}
@@ -56,9 +62,17 @@ const BasicFlow = () => {
       onConnect={onConnect}
       nodeTypes={nodeTypes}
       fitView
+      connectionMode={ConnectionMode.Loose}
+      style={{border: '1px solid #ccc', height: '100%', width: '100vw'}}
     >
-      <Background />
+      <Background 
+        gap={12}
+        size={2}
+        color="#ccc"
+      />
+      <Controls/>
     </ReactFlow>
+    </Box>
   );
 };
 

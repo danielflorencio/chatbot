@@ -117,7 +117,7 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
   return (
   
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton onClick={handleDrawerClose} id='close-drawer-button' sx={{color: 'white', ...(!open && {display: 'none'})}}>
@@ -230,7 +230,7 @@ export default function Sidebar({children, setRenderedComponentId}: {children: R
         </List>
         {/* </Link> */}
       </Drawer>
-      <Main open={open}>
+      <Main open={open} sx={{minHeight: '90vh', width: '100%'}}>
         <DrawerHeader />
         {children}
       </Main>
