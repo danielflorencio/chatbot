@@ -1,7 +1,4 @@
-import ChatsContainer from "../../components/ChatsContainer";
-import { Suspense, useEffect, useState } from "react";
-import { verifyPageAccessPermission } from "../../helpers/loginHelpers";
-import CustomerSimulator from "../../components/CustomerSimulator";
+import { Suspense, useEffect } from "react";
 import { fetchMessages } from "../../features/sessionControl/chatSlice";
 import { useUserEmail } from "../../hooks";
 import { store } from "../../store";
@@ -11,8 +8,6 @@ import { Outlet } from "react-router-dom";
 export default function UserPage(){
     
     const email = useUserEmail();
-
-    // verifyPageAccessPermission();
 
     useEffect(() => {
         console.log('Main useEffect being called.')

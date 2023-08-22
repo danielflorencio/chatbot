@@ -2,27 +2,15 @@ import { Avatar, Divider, List, ListItem, Paper, ListItemIcon, ListItemText, Too
 import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
-import {useEffect, useState} from 'react'
+import { useState } from 'react'
 import { useCurrentChatId } from "../../hooks";
 import useMediaQuery from '@mui/material/useMediaQuery';
 export default function ChatsContainer(){
 
   const currentChatId = useCurrentChatId();
 
-  const matches = useMediaQuery('(max-width:600px)');
   const [displayState, setDisplayState] = useState<'none' | 'block'>('block')
 
-  console.log('LocalStorage.getItem(token)', localStorage.getItem('token'));
-  // console.log('LocalStorage.getItem(token).parse()', JSON.parse(localStorage.getItem('token')));
-
-  useEffect(() => {
-    if(matches) {
-        setDisplayState('none');
-    } else{
-        setDisplayState('block')
-    }
-  }, [matches])
-  
   return(
   <Grid container component={Paper} sx={{width: 1}}>
     {/* <Grid item sx={{borderRight: '1px solid #e0e0e0', width: {xs: 'fit-content', display: `${displayState}`}}}> */}
@@ -38,7 +26,7 @@ export default function ChatsContainer(){
             </Tooltip>
         </List>
         <Divider />
-        <ChatList displayState={displayState}/>
+        <ChatList/>
     </Grid>
     <CurrentChat currentChatId={currentChatId} />
   </Grid>

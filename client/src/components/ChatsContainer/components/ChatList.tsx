@@ -1,9 +1,8 @@
 import { Avatar, List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@mui/material";
 import { useAppDispatch, useConversationsInMemory} from "../../../hooks";
 import { setNewCurrentChatId } from "../../../features/sessionControl/chatSlice";
-import useMediaQuery from '@mui/material/useMediaQuery';
 import CreateNewChat from "./CreateNewChat";
-export default function ChatList({displayState}: {displayState: 'none' | 'block'}){
+export default function ChatList(){
 
     const conversationsInMemory = useConversationsInMemory();
     
@@ -16,13 +15,9 @@ export default function ChatList({displayState}: {displayState: 'none' | 'block'
     const handleSelectConversation = (index: number) => {
         dispatch(setNewCurrentChatId(customers[index]));
     }
-
-    const matches = useMediaQuery('(max-width:600px)');
-
-    console.log('matches: ', matches)
-    
+   
     return(
-    <List sx={{display: `${displayState}`, maxHeight: '76vh', overflow: 'auto', minWidth: 'fit-content'}}>
+    <List sx={{maxHeight: '76vh', overflow: 'auto', minWidth: 'fit-content'}}>
         <CreateNewChat/>
         {
             customers ? (
@@ -32,7 +27,7 @@ export default function ChatList({displayState}: {displayState: 'none' | 'block'
                 <ListItemIcon>
                     <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
                 </ListItemIcon>
-                <ListItemText primary={customer} sx={{ display: {xs: 'none', md: 'contents'}}}></ListItemText>
+                <ListItemText primary={customer}></ListItemText>
             </ListItem>
             </Tooltip>
             ))

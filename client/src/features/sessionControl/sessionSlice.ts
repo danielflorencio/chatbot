@@ -22,8 +22,6 @@ let initialState: SessionState = {
   isLoading: true
 };
 
-console.log('REDUX LOCALSTORAGE.GETTOKEN: ', localStorage.getItem('token'))
-
 export const sessionSlice = createSlice({
   name: 'session',
   initialState,
