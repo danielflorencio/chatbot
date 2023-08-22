@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import {  fetchUserLoginStatus } from '../../helpers/loginHelpers'
 import { UserData } from '../../types/userData';
 import { RootState } from '../../store';
 export interface SessionState {
