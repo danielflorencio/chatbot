@@ -53,7 +53,7 @@ export default function ChatFlows(){
   );
 
   return (
-    <Box sx={{height: '100vh', width: '100%', marginBottom: '5vh', border: '1px solid red'}}>
+    <Box sx={{height: '100vh', width: '100%', marginBottom: '5vh'}}>
     <ReactFlow
       nodes={nodes}
       edges={edges}

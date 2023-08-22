@@ -65,35 +65,6 @@ export default function SignIn() {
     } else{
       
     }
-
-
-
-    //   (async () => {
-  //     console.log('async function being called.')
-  //     const response = await fetch('http://localhost:3000/api/login', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'authorization': `${localStorage.getItem('token')}`
-  //       },
-  //       body: JSON.stringify({ 
-  //         email: email,
-  //         password: password
-  //       })
-  //     })
-  //     const data = await response.json() 
-  //     console.log('Data being received by the login api endpoint: ', data)
-  //     if(data.user){
-  //       console.log('if data.user being called.')
-  //       console.log('local email state in SignIn: ', email)
-  //       localStorage.setItem('token', data.user);
-  //       localStorage.setItem('userEmail', email)
-  //       dispatch(registerLoggedUserState(email))
-  //       await navigate('/home/chats') 
-  //     } else{
-        
-  //     }
-  // })();
   };
   
   return (
@@ -140,10 +111,10 @@ export default function SignIn() {
               value={password}
               onChange={(e) => {setPassword(e.target.value)}}
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
@@ -154,12 +125,12 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                {/* <Link href="#" variant="body2">
                   Forgot password?
-                </Link>
+                </Link> */}
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/sign-up" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

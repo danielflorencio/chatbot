@@ -158,7 +158,7 @@ export default function SignUp() {
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
-              <Grid item onClick={() => navigateToPage('/sign-up')}>
+              <Grid item onClick={() => navigateToPage('/login')}>
                 <Link variant="body2">
                   Already have an account? Sign in
                 </Link>
