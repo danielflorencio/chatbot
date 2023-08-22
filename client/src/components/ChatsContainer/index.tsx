@@ -2,26 +2,22 @@ import { Avatar, Divider, List, ListItem, Paper, ListItemIcon, ListItemText, Too
 import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
-import { useState } from 'react'
 import { useCurrentChatId } from "../../hooks";
-import useMediaQuery from '@mui/material/useMediaQuery';
+
 export default function ChatsContainer(){
 
   const currentChatId = useCurrentChatId();
 
-  const [displayState, setDisplayState] = useState<'none' | 'block'>('block')
-
   return(
   <Grid container component={Paper} sx={{width: 1}}>
-    {/* <Grid item sx={{borderRight: '1px solid #e0e0e0', width: {xs: 'fit-content', display: `${displayState}`}}}> */}
     <Grid item sx={{borderRight: '1px solid #e0e0e0', width: {xs: 'fit-content'}}}>
         <List>
-            <Tooltip title='Remy Sharp' sx={{ display: {xs: 'none', md: 'contents'}}}> 
+            <Tooltip title='Remy Sharp'> 
               <ListItem button key="RemySharp" sx={{width: 1}}>
                 <ListItemIcon>
                 <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
                 </ListItemIcon>
-                <ListItemText primary="John Wick" sx={{ display: {xs: 'none', md: 'contents'}}}></ListItemText>
+                <ListItemText primary="John Wick"></ListItemText>
               </ListItem>
             </Tooltip>
         </List>

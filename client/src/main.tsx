@@ -2,14 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import {BrowserRouter, Navigate, RouterProvider, createBrowserRouter} from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter} from 'react-router-dom'
 import { store } from './store'
 import { Provider } from 'react-redux'
 import UserPage from './pages/UserPage/UserPage'
 import ChatsContainer from './components/ChatsContainer'
 import { Container, CssBaseline } from '@mui/material'
 import CustomerSimulator from './components/CustomerSimulator'
-import BotsPage from './components/Bots'
 import ChatFlows from './components/ChatFLow/Index'
 import ProtectedRoute from './helpers/ProtectedRoute'
 import SignIn from './pages/SignInPage/SignInPage'
@@ -22,19 +21,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/home', 
-    element: <UserPage/>,
+    element: <ProtectedRoute><UserPage/></ProtectedRoute>,
     children: [
       {
         path: '/home/chats',
-        element: <ProtectedRoute><ChatsContainer/></ProtectedRoute>
+        element: <ChatsContainer/>
       },
       {
         path: '/home/simulator',
         element: <CustomerSimulator/>
-      },
-      {
-        path: '/home/bots',
-        element: <BotsPage/>
       },
       {
         path: '/home/flows',
