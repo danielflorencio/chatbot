@@ -50,8 +50,8 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <CssBaseline enableColorScheme/>
-      <Container sx={{ height: '100vh', width: 1}}>
+      {/* <CssBaseline enableColorScheme/> */}
+      <Container sx={{ height: '100vh', width: 1, border: '1px solid blue', padding: 0, margin: 0}}>
         <RouterProvider router={router}/>
         {/* <App/> */}
       </Container>

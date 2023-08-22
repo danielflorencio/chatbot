@@ -53,7 +53,7 @@ export default function ChatFlows(){
   );
 
   return (
-    <Box sx={{height: '100vh', width: '100%', marginBottom: '5vh'}}>
+    <Box sx={{height: '90vh', width: '100vw', marginBottom: '5vh', border: '1px solid green'}}>
     <ReactFlow
       nodes={nodes}
       edges={edges}
@@ -63,7 +63,7 @@ export default function ChatFlows(){
       nodeTypes={nodeTypes}
       fitView
       connectionMode={ConnectionMode.Loose}
-      style={{border: '1px solid #ccc', height: '100%', width: '100vw'}}
+      style={{border: '1px solid #ccc', height: '100%', width: '100%'}}
     >
       <Background 
         gap={12}

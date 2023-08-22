@@ -42,7 +42,7 @@ export default function ResponsiveDrawer(props: Props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex', paddingBottom: 10 }}>
+    <Box sx={{ display: 'flex', paddingBottom: 10, border: '1px solid yellow' }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -75,7 +75,7 @@ export default function ResponsiveDrawer(props: Props) {
       </Drawer>
       <Box
         component="main"
-        sx={{ height: '100%', width: '100%' }}
+        sx={{ height: '100%', width: '100%', border: '1px solid red'}}
       >
         <Toolbar />
           {props.children}
