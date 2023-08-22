@@ -44,7 +44,7 @@ const nodeTypes = {
   step: StepNode
 };
 
-const BasicFlow = () => {
+export default function ChatFlows(){
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect = useCallback(
@@ -75,5 +75,3 @@ const BasicFlow = () => {
     </Box>
   );
 };
-
-export default BasicFlow;

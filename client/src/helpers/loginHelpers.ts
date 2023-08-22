@@ -52,6 +52,44 @@ export async function verifyPageAccessPermission(){
   })();
 }
 
+export const VerifyUserIsLogged = async (): Promise<boolean> => {
+  // Verify this function later.
+  // Remove the redundancy of sending the token both in the header and the json body.
+  
+  
+    console.log('ASYNC FUNCTION BEING CALLED.')
+    const token = localStorage.getItem('token')
+    console.log('token: ', token)
+    if(token){
+      console.log('if token being called.')
+      if(token === '' || token === null || token === undefined){
+        return false;
+      }
+
+    const response = await fetch('http://localhost:3000/api/verifyStatus', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({
+        token: token
+      })
+    })
+    const data = await response.json()
+    if(data){
+      return data.status
+    }
+    else{
+      console.log('An error has ocurred during login status verification.')
+      return false;
+    }
+  } else{
+    return false;
+  }
+}
+
+
 export async function redirectToUserPage(){
   const response = await fetch('http://localhost:3000/verify')
   const token = localStorage.getItem('token');

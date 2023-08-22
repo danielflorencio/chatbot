@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import {  fetchUserLoginStatus } from '../../helpers/loginHelpers'
 import { UserData } from '../../types/userData';
@@ -12,16 +12,18 @@ export interface SessionState {
 }
 
 let initialState: SessionState = {
-  userData: {email: '', password: '', firstName: '', lastName: ''},
-  userIsLogged: false,
-  token: null,
+  userData: {
+    email: localStorage.getItem('userEmail') ? localStorage.getItem('userEmail') : '', 
+    password: '', 
+    firstName: '', 
+    lastName: ''},
+  userIsLogged: localStorage.getItem('token') ? true : false,
+  token: localStorage.getItem('token') ? localStorage.getItem('token') : null,
   connectionError: false,
   isLoading: true
 };
 
-(async () => {
-  initialState = await fetchUserLoginStatus();
-})
+console.log('REDUX LOCALSTORAGE.GETTOKEN: ', localStorage.getItem('token'))
 
 export const sessionSlice = createSlice({
   name: 'session',
@@ -32,18 +34,19 @@ export const sessionSlice = createSlice({
         ...state, 
         userData: {
           email: action.payload
-        }
+        },
+        userIsLogged: true
       }
       state = newState;
       return state
     },
     logout: (state) => {
-      localStorage.clear()
+      localStorage.removeItem('token');
+      localStorage.removeItem('userEmail');
       state.userIsLogged = false;
       state.connectionError = false;
       state.isLoading = false;
       state.userData = {email: '', firstName: '', lastName: '', password: ''}
-      window.location.href = '/'
     },
   },
 })

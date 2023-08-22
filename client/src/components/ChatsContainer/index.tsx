@@ -12,6 +12,9 @@ export default function ChatsContainer(){
   const matches = useMediaQuery('(max-width:600px)');
   const [displayState, setDisplayState] = useState<'none' | 'block'>('block')
 
+  console.log('LocalStorage.getItem(token)', localStorage.getItem('token'));
+  // console.log('LocalStorage.getItem(token).parse()', JSON.parse(localStorage.getItem('token')));
+
   useEffect(() => {
     if(matches) {
         setDisplayState('none');
@@ -27,10 +30,10 @@ export default function ChatsContainer(){
         <List>
             <Tooltip title='Remy Sharp' sx={{ display: {xs: 'none', md: 'contents'}}}> 
               <ListItem button key="RemySharp" sx={{width: 1}}>
-                  <ListItemIcon>
-                  <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                  </ListItemIcon>
-                  <ListItemText primary="John Wick" sx={{ display: {xs: 'none', md: 'contents'}}}></ListItemText>
+                <ListItemIcon>
+                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                </ListItemIcon>
+                <ListItemText primary="John Wick" sx={{ display: {xs: 'none', md: 'contents'}}}></ListItemText>
               </ListItem>
             </Tooltip>
         </List>

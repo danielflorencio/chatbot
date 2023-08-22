@@ -41,32 +41,59 @@ export default function SignIn() {
     e.preventDefault();
     console.log('handle submit being called.');
     console.log('Data being sent by SignInPage - email: ', email, ' password: ', password);
-    (async () => {
-      console.log('async function being called.')
-      const response = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': `${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ 
-          email: email,
-          password: password
-        })
+
+    const response = await fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({ 
+        email: email,
+        password: password
       })
-      const data = await response.json() 
-      console.log('Data being received by the login api endpoint: ', data)
-      if(data.user){
-        console.log('if data.user being called.')
-        console.log('local email state in SignIn: ', email)
-        localStorage.setItem('token', data.user);
-        localStorage.setItem('userEmail', email)
-        dispatch(registerLoggedUserState(email))
-        await navigate('/user-page') 
-      } else{
+    })
+    const data = await response.json() 
+    console.log('Data being received by the login api endpoint: ', data)
+    if(data.user){
+      console.log('if data.user being called.')
+      console.log('local email state in SignIn: ', email)
+      localStorage.setItem('token', data.user);
+      localStorage.setItem('userEmail', email)
+      dispatch(registerLoggedUserState(email))
+      await navigate('/home/chats') 
+    } else{
+      
+    }
+
+
+
+    //   (async () => {
+  //     console.log('async function being called.')
+  //     const response = await fetch('http://localhost:3000/api/login', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'authorization': `${localStorage.getItem('token')}`
+  //       },
+  //       body: JSON.stringify({ 
+  //         email: email,
+  //         password: password
+  //       })
+  //     })
+  //     const data = await response.json() 
+  //     console.log('Data being received by the login api endpoint: ', data)
+  //     if(data.user){
+  //       console.log('if data.user being called.')
+  //       console.log('local email state in SignIn: ', email)
+  //       localStorage.setItem('token', data.user);
+  //       localStorage.setItem('userEmail', email)
+  //       dispatch(registerLoggedUserState(email))
+  //       await navigate('/home/chats') 
+  //     } else{
         
-      }
-  })();
+  //     }
+  // })();
   };
   
   return (
