@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../hooks";
 import { logout } from "../../features/sessionControl/sessionSlice";
+import AccountMenu from "../AccountMenu/Index";
 export default function Header({handleDrawerToggle}: {handleDrawerToggle: () => void}){
 
     const navigate = useNavigate();
@@ -31,7 +32,8 @@ export default function Header({handleDrawerToggle}: {handleDrawerToggle: () => 
                 Chatbot
                 </Typography>
             </Box>
-            <Button variant='contained' sx={{fontWeight: 600}} onClick={handleLogout}>Logout</Button>
+            {/* <Button variant='contained' sx={{fontWeight: 600}} onClick={handleLogout}>Logout</Button> */}
+            <AccountMenu/>
         </Toolbar>
     )
 }
