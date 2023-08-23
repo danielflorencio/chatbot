@@ -46,7 +46,7 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
     }
 
     return(
-        <Grid item xs={9}>
+        <Grid item xs={8}>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
                 {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message, index) => (
                     <div key={index}>

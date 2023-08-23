@@ -8,7 +8,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 export default function Sidebar({handleDrawerToggle}: {handleDrawerToggle: () => void}){
     return(
-        <div>
+        <>
             <Divider />
             <List>
                 {['Chats'].map((text, index) => (
@@ -69,6 +69,6 @@ export default function Sidebar({handleDrawerToggle}: {handleDrawerToggle: () =>
                             </Link>
                         ))}
                 </List>
-        </div>
+        </>
     )
 }

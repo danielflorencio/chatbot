@@ -21,7 +21,8 @@ const router = createBrowserRouter([
   },
   {
     path: '/home', 
-    element: <ProtectedRoute><UserPage/></ProtectedRoute>,
+    element: <UserPage/>,
+    // element: <ProtectedRoute><UserPage/></ProtectedRoute>,
     children: [
       {
         path: '/home/chats',
@@ -51,7 +52,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       {/* <CssBaseline enableColorScheme/> */}
-      <Container sx={{ height: '100vh', width: 1, border: '1px solid blue', padding: 0, margin: 0}}>
+      <Container id='main-container' sx={{ height: '100vh', minWidth: '100vw'}}>
         <RouterProvider router={router}/>
         {/* <App/> */}
       </Container>
