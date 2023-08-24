@@ -1,9 +1,8 @@
 # Chatbot Application
 
-This is a monorepo containing both the client and server components of a chatbot application. 
-The client is built with React, TypeScript, Material UI, and Redux Toolkit...
-While the server is built with Node.js, Express.js, TypeScript, and JSON Web Token (JWT) for authentication. 
-The application uses a MongoDB database and NPM as the package manager.
+This is an in-development chatbot SaaS application for creating automated message workflows for whatsapp and other platforms.
+
+The repository a monorepo containing both the client and server components of the application. 
 
 ## This Readme file is still being written.
 
@@ -55,7 +54,7 @@ To get started with the chatbot application, follow the instructions below:
 1. Clone the repository:
 
 ```shell
-git clone [[repository-url]](https://github.com/danielflorencio/chatbot-monorepo.git)https://github.com/danielflorencio/chatbot-monorepo.git
+git clone (https://github.com/danielflorencio/chatbot-monorepo.git)https://github.com/danielflorencio/chatbot-monorepo.git
 ```
 
 2. Start the development server for both the client and server:
@@ -63,9 +62,15 @@ git clone [[repository-url]](https://github.com/danielflorencio/chatbot-monorepo
 cd client
 npm run dev
 ```
-- Then Start a new terminal on your machine, go to the project's root folder:
+
+3. Then Start a new terminal on your machine, and go to the project's root folder:
 ```
 cd server
 npm run dev
 ```
 
+4. Open your browser and access the client application at `http://localhost:5173/sign-up`.
+
+## Contributing
+
+Contributions to the chatbot application are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
