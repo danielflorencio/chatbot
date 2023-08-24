@@ -54,7 +54,7 @@ To get started with the chatbot application, follow the instructions below:
 1. Clone the repository:
 
 ```shell
-git clone (https://github.com/danielflorencio/chatbot-monorepo.git)https://github.com/danielflorencio/chatbot-monorepo.git
+git clone https://github.com/danielflorencio/chatbot-monorepo.git
 ```
 
 2. Start the development server for both the client and server:
