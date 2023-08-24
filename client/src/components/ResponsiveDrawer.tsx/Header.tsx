@@ -29,7 +29,7 @@ export default function Header({handleDrawerToggle}: {handleDrawerToggle: () => 
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap component="div" fontWeight={'550'}>
-                Chatbot
+                IN DEVELOPMENT.
                 </Typography>
             </Box>
             {/* <Button variant='contained' sx={{fontWeight: 600}} onClick={handleLogout}>Logout</Button> */}

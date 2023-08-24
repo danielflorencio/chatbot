@@ -24,7 +24,7 @@ export default function Sidebar({handleDrawerToggle}: {handleDrawerToggle: () =>
                     </Link>
                 ))}
                 </List>
-                <Divider />
+                {/* <Divider />
                     <List>
                         {['Simulator'].map((text, index) => (
                             <Link to="/home/simulator" onClick={handleDrawerToggle} key={index} style={{textDecoration: 'none', color: 'grey', padding: 0, margin: 0}}>
@@ -38,7 +38,7 @@ export default function Sidebar({handleDrawerToggle}: {handleDrawerToggle: () =>
                                 </ListItem>
                             </Link>
                         ))}
-                </List>
+                </List> */}
                 {/* <Divider />
                     <List>
                         {['Bots'].map((text, index) => (

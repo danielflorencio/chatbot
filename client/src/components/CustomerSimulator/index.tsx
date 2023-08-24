@@ -45,7 +45,8 @@ export default function CustomerSimulator(){
     }
 
     return(
-        <Grid item xs={9}>
+        // <Grid item xs={9}>
+        <Grid item>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
                 {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message, index) => (
                     <div key={index}>
@@ -56,7 +57,7 @@ export default function CustomerSimulator(){
             <Divider />
             <Grid container style={{padding: '20px'}}>
                 <Grid item xs={11}>
-                    <TextField id="customer-simulator-input-field" label="Type Something" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
+                    <TextField id="customer-simulator-input-field" label="Customer chat" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
                 <Grid item xs={1} sx={{textAlign: "right"}}>
                     <Fab color="primary" aria-label="add"><SendIcon id='send-customer-message-icon' onClick={() => handleSubmit()} /></Fab>

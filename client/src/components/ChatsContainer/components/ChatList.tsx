@@ -17,13 +17,13 @@ export default function ChatList(){
     }
    
     return(
-    <List sx={{maxHeight: '76vh', overflow: 'auto', minWidth: 'fit-content', paddingRight: 2}}>
+    <List sx={{maxHeight: '82vh', overflow: 'auto', minWidth: 'fit-content', paddingRight: 2}}>
         <CreateNewChat/>
         {
             customers ? (
             customers.map((customer, index) => (
             <Tooltip key={index} title={`${customer}`}> 
-            <ListItem id={`chat-list-item-${index}`} button onClick={() => {handleSelectConversation(index)}} sx={{width: 1}}>
+            <ListItem id={`chat-list-item-${index}`} button onClick={() => {handleSelectConversation(index)}} sx={{width: 1, paddingRight: 4}}>
                 <ListItemIcon>
                     <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
                 </ListItemIcon>

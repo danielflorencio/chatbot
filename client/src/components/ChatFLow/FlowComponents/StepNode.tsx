@@ -8,9 +8,9 @@ export default function StepNode(props: NodeProps){
             <Divider sx={{marginY: 1}} orientation="horizontal"/>
 
             <Box sx={{display: 'flex', flexDirection: 'column', gap: 0.6}}>
-                <Typography variant="body2" sx={{border: '1px solid gray', borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>{props.data.label}</Typography>
-                <Typography variant="body2" sx={{border: '1px solid gray', borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>Condition two</Typography>
-                <Typography variant="body2" sx={{border: '1px solid gray', borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>Condition three</Typography>
+                <Typography variant="body2" sx={{border: '1px solid gray', paddingLeft: 1, borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>{props.data.label}</Typography>
+                <Typography variant="body2" sx={{border: '1px solid gray', paddingLeft: 1, borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>Condition two</Typography>
+                <Typography variant="body2" sx={{border: '1px solid gray', paddingLeft: 1, borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>Condition three</Typography>
             </Box>
             <Handle id='right' type='source' position={Position.Right}/>
             <Handle id='left' type='source' position={Position.Left}/>

@@ -3,17 +3,18 @@ import Grid from "@mui/material/Grid";
 import ChatList from "./components/ChatList";
 import CurrentChat from "./components/CurrentChat";
 import { useCurrentChatId } from "../../hooks";
+import CustomerSimulator from "../CustomerSimulator";
 
 export default function ChatsContainer(){
 
   const currentChatId = useCurrentChatId();
 
   return(
-  <Box sx={{display: 'flex', justifyContent: 'flexStart', alignItems: 'center', paddingTop: 3, paddingLeft: 3}}>
+  <Box sx={{display: 'flex', justifyContent: 'flexStart', alignItems: 'center', paddingTop: 1, paddingLeft: 1}}>
     <Box>
       <Grid container component={Paper}>
-        <Grid item xs={4} sx={{borderRight: '1px solid #e0e0e0'}}>
-            <List>
+        <Grid item sx={{borderRight: '1px solid #e0e0e0', minWidth: '250px'}}>
+            {/* <List>
                 <Tooltip title='Remy Sharp'> 
                   <ListItem button key="RemySharp" sx={{width: 1}}>
                     <ListItemIcon>
@@ -23,10 +24,11 @@ export default function ChatsContainer(){
                   </ListItem>
                 </Tooltip>
             </List>
-            <Divider />
+            <Divider /> */}
             <ChatList/>
         </Grid>
         <CurrentChat currentChatId={currentChatId} />
+        <CustomerSimulator/>
       </Grid>
     </Box>
   </Box>

@@ -67,7 +67,7 @@ export default function ChatFlows(){
     >
       <Background 
         gap={12}
-        size={2}
+        size={1.5}
         color="#ccc"
       />
       <Controls/>

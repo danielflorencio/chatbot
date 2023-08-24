@@ -46,7 +46,7 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
     }
 
     return(
-        <Grid item xs={8}>
+        <Grid item width={'500px'}>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
                 {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message, index) => (
                     <div key={index}>
@@ -57,7 +57,7 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
             <Divider />
             <Grid container style={{padding: '20px'}}>
                 <Grid item xs={11}>
-                    <TextField id="text-message" label="Type Something" name="message" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
+                    <TextField id="text-message" label="Admin chat" name="message" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
                 <Grid item xs={1} sx={{textAlign: "right"}}>
                     <Fab color="primary" aria-label="add"><SendIcon onClick={() => handleSubmit()} /></Fab>
