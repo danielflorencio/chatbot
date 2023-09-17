@@ -10,10 +10,10 @@ export default function ChatsContainer(){
   const currentChatId = useCurrentChatId();
 
   return(
-  <Box sx={{display: 'flex', justifyContent: 'flexStart', alignItems: 'center', paddingTop: 1, paddingLeft: 1}}>
+  <Box sx={{display: 'flex', paddingTop: 1, paddingLeft: 1}}>
     <Box>
       <Grid container component={Paper}>
-        <Grid item sx={{borderRight: '1px solid #e0e0e0', minWidth: '250px'}}>
+        <Grid item sx={{borderRight: '1px solid #e0e0e0', display: 'flex', minWidth: '250px'}}>
             {/* <List>
                 <Tooltip title='Remy Sharp'> 
                   <ListItem button key="RemySharp" sx={{width: 1}}>

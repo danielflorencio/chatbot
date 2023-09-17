@@ -1,15 +1,17 @@
 import { Message } from "./message"
 
 export type Step = {
-    referenceLastStepId?: string,
-    LastUserReceivedMessages?: string[],
-    options: Option[],
-    messages: Message[]
+    id: string, 
+    lastStepId?: string,
+    options?: Option[],
+    messages: Message[], 
+    NodeXPosition: number, 
+    NodeYPosition: number,
 }
 
 export type Option = {
     optionCTA: string, 
-    referenceNextStepId: string
+    referenceNextStepId?: string
 }
 
 /* 
