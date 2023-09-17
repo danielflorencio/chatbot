@@ -1,19 +1,58 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Handle, NodeProps, Position } from "reactflow";
 
-export default function StepNode(props: NodeProps){
-    return(
-        <Box sx={{minHeight: '80px', width: '200px', border: '2px solid black', borderRadius: 1, backgroundColor: 'white', padding: 0.6}}>
-            <Typography variant="body2" sx={{border: '1px solid gray', borderRadius: 1}}>Message's first paragraph</Typography>
-            <Divider sx={{marginY: 1}} orientation="horizontal"/>
+export default function StepNode(
+    props: NodeProps,
+    {
+        setSelectedNode
+    }:
+    {
+        setSelectedNode: (node: NodeProps) => void,
+    }
+    ){
 
-            <Box sx={{display: 'flex', flexDirection: 'column', gap: 0.6}}>
-                <Typography variant="body2" sx={{border: '1px solid gray', paddingLeft: 1, borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>{props.data.label}</Typography>
-                <Typography variant="body2" sx={{border: '1px solid gray', paddingLeft: 1, borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>Condition two</Typography>
-                <Typography variant="body2" sx={{border: '1px solid gray', paddingLeft: 1, borderRadius: 1, '&:hover': {border: '1px solid blue'}}}>Condition three</Typography>
-            </Box>
-            <Handle id='right' type='source' position={Position.Right}/>
-            <Handle id='left' type='source' position={Position.Left}/>
+        console.log('Node props data: ', props)
+
+        console.log('Node options: ', props.data.options)
+
+        console.log('Props.data.step: ', props.data.step)
+    
+        return(
+        <Box sx={{
+            minHeight: '80px', 
+            minWidth: '200px', 
+            paddingX: 3,
+            paddingY: 1,
+            border: `${props.selected ? '1px solid blue' : '1px solid #000'}`, 
+            backgroundColor: '#fff', 
+            borderRadius: 8, 
+            display: 'grid', 
+            cursor: 'pointer',
+            placeItems: 'center'}}>
+            
+            <Typography variant='body1'>{props.data.messages[0].content}</Typography>
+
+            {props.data.options &&
+                props.data.options.map((option: any, index: number) => (
+                    <Handle 
+                    key={index}
+                    id={`right-handle-stepId${props.id}-optionId-${index}`} 
+                    type="source" 
+                    style={{width: 8, height: 8, bottom: index*8}} 
+                    position={Position.Right}
+                    />
+                ))
+            }
+
+            {
+                props.data.lastStepId &&
+                <Handle
+                    type='target'
+                    style={{width: 8, height: 8}}
+                    position={Position.Left} 
+                />
+            }
+            
         </Box>
     )
 }

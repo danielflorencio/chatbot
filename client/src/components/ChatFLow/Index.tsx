@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ReactFlow, {
   Node,
   addEdge,
@@ -12,68 +12,56 @@ import ReactFlow, {
   NodeProps
 } from "reactflow";
 import { FlowsData } from "../../data/flows";
-import CustomNode from "./Nodes/CustomNode";
 
 import "reactflow/dist/style.css";
 import { Box, Paper, Slide, Typography } from "@mui/material";
 import StepNode from "./Nodes/StepNode";
-
-// const initialNodes: Node[] = [
-//   {
-//     id: "1",
-//     type: "custom",
-//     data: { label: "Node 1" },
-//     position: { x: 200, y: 100 },
-//     selectable: true
-//   },
-//   { id: "2", type: 'custom', data: { label: "Node 2" }, position: { x: 500, y: 50 } },
-//   { id: "3", type: 'custom', data: { label: "Node 3" }, position: { x: 500, y: 150 } },
-//   // {
-//     // id: "4",
-//     // type: "custom",
-//     // data: { label: "Custom Node" },
-//     // position: { x: 400, y: 200 }
-//   // }
-// ];
-
-// const initialEdges: Edge[] = [
-//   { id: "e1-2", source: "1", target: "2", animated: true },
-//   { id: "e1-3", source: "1", target: "3" }
-// ];
-
-const nodeTypes = {
-  custom: CustomNode,
-  step: StepNode
-};
+import StepMenu from "./StepMenu"; 
+import { Step } from "../../types/Step";
 
 export default function ChatFlows(){
+  
+
+  // First off, I'm gonna start loading the Flow...
+
+  const [flow, setFlow] = useState([]);
+  const [selectedStep, setSelectedStep] = useState<Step | null>(null);
+
+  useEffect(() => {
+    const fetchFlowData = async () => {
+
+      // setFlow([]);
+
+      // Then I'm going to create the nodes based on this flow data.
+
+      // setNodes([]);
+    }
+    fetchFlowData();
+  }, [])
+
+  /* Adding the Node Type
+
+  You can add a new node type to React Flow by adding it to the nodeTypes prop. 
+  It's important that the nodeTypes are memoized or defined outside of the component. 
+  Otherwise React creates a new object on every render which leads to performance issues and bugs.
+
+  */
+
+  const nodeTypes = useMemo(() => ({ step: StepNode }), []);
 
   const newInitialNodes: Node[] = FlowsData[0].steps.map((step) => {
     return {
       id: step.id,
-      type: 'custom',
+      type: 'step', // After defining your new node type, you can use it by using the type node option.
       data: {
         label: 'node',
+        lastStepId: step.lastStepId !== undefined ? step.lastStepId : null,
         messages: [...step.messages],
         options: step.options !== undefined ? [...step.options] : null
       },
       position: { x: step.NodeXPosition, y: step.NodeYPosition}
     }
   })
-
-  // const newInitialEdges: Edge[] = 
-
-  // const initialNodes: Node[] = [
-  //   {
-  //     id: "1",
-  //     type: "custom",
-  //     data: { label: "Node 1" },
-  //     position: { x: 200, y: 100 },
-  //     selectable: true
-  //   },
-  //   { id: "2", type: 'custom', data: { label: "Node 2" }, position: { x: 500, y: 50 } },
-  //   { id: "3", type: 'custom', data: { label: "Node 3" }, position: { x: 500, y: 150 } },
-  // ];
   
   const initialEdges: Edge[] = [
     { id: "e1-2", source: "1", target: "2", animated: true },
@@ -82,7 +70,7 @@ export default function ChatFlows(){
 
 
 
-  const [nodes, , onNodesChange] = useNodesState(newInitialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(newInitialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   
   const onConnect = useCallback(
@@ -90,9 +78,11 @@ export default function ChatFlows(){
     [setEdges]
   );
   
+  
+
   const [selectedNode, setSelectedNode] = useState<Node>();
 
-  const handleChangeSelectedNode = (props: NodeProps) => {
+  const handleChangeSelectedNode = (props: Node) => {
     // setSelectedNode({...props})
   }
 
@@ -100,27 +90,7 @@ export default function ChatFlows(){
 
   return (
     <Box sx={{height: '90vh', width: '100%', margin: 0}}>
-      <Box sx={{position: 'absolute', right: 0, margnRight: 3, height: '90vh', display: 'flex', alignItems: 'center', zIndex: 1}}>    
-        <Slide in={open}>
-          <Box component={Paper} elevation={3} sx={{display: 'flex', flexDirection: 'column', minHeight: 400, minWidth: 350, borderRadius: 8, padding: 2}}>
-            <Typography>Em caso PIZZA: </Typography>
-            <Box>
-              <Typography>Enviar opções: </Typography>
-              <Box>
-                <Typography>Opção 1</Typography>
-              </Box>
-              <Box>
-                <Typography>Opção 2</Typography>
-              </Box>
-              <Box>
-                <Typography>Opção 3</Typography>
-              </Box>
-            </Box>  
-            
-          </Box>
-        </Slide>
-      </Box>
-
+    <StepMenu open={open} selectedStep={selectedStep}/>
     <ReactFlow
       nodes={nodes}
       edges={edges}
