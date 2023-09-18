@@ -12,7 +12,7 @@ export const authenticateToken = (req: CustomRequest, res: Response, next: NextF
   const authHeader = req.headers['authorization'];
   const token = authHeader
 
-  if (token == null) {
+  if (token === null) {
     return res.sendStatus(401);
   }
 

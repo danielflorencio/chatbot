@@ -9,23 +9,35 @@ import ReactFlow, {
   useEdgesState,
   Controls,
   ConnectionMode,
-  NodeProps
+  useReactFlow,
+  useOnSelectionChange,
 } from "reactflow";
 import { FlowsData } from "../../data/flows";
 
 import "reactflow/dist/style.css";
-import { Box, Paper, Slide, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import StepNode from "./Nodes/StepNode";
 import StepMenu from "./StepMenu"; 
 import { Step } from "../../types/Step";
 
-export default function ChatFlows(){
-  
 
+// With the getNode() function I can possibly get the node I have currently selected... 
+
+// For the functionality I'm trying to build right now... 
+
+// I should probably build something using the getNode() function together with the Toolbar Component from the library.
+
+// https://reactflow.dev/docs/api/react-flow-instance/#nodes-and-edges
+
+
+export default function ChatFlow(){
+  
   // First off, I'm gonna start loading the Flow...
 
   const [flow, setFlow] = useState([]);
   const [selectedStep, setSelectedStep] = useState<Step | null>(null);
+
+
 
   useEffect(() => {
     const fetchFlowData = async () => {
@@ -68,8 +80,6 @@ export default function ChatFlows(){
     { id: "e1-3", source: "1", target: "3" }
   ];
 
-
-
   const [nodes, setNodes, onNodesChange] = useNodesState(newInitialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   
@@ -77,8 +87,7 @@ export default function ChatFlows(){
     (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
     [setEdges]
   );
-  
-  
+
 
   const [selectedNode, setSelectedNode] = useState<Node>();
 
@@ -88,27 +97,56 @@ export default function ChatFlows(){
 
   const [open, setOpen] = useState(true);
 
+  const reactFlowInstance = useReactFlow();
+
+//   console.log('GET NODES: ', reactFlowInstance.getNodes());
+  
+
+  function SelectionChangeLogger() {
+    useOnSelectionChange({
+      onChange: ({ nodes, edges }) => {
+        console.log('changed selection', nodes, edges)
+        if(nodes.length === 1){
+            const newSelectedStep = FlowsData[0].steps.find((step) => step.id === nodes[0].id) 
+            
+            // This function looks into all the loaded steps of the current flow...
+            // Then it compares the current selected node's id with all the step's id's in the flow. 
+
+            if(newSelectedStep){
+                setSelectedStep(newSelectedStep);   
+            }
+        }
+    },
+    });
+  
+    return null;
+  }
+
+  SelectionChangeLogger();
+
+
+
   return (
     <Box sx={{height: '90vh', width: '100%', margin: 0}}>
-    <StepMenu open={open} selectedStep={selectedStep}/>
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      nodeTypes={nodeTypes}
-      fitView
-      connectionMode={ConnectionMode.Loose}
-      style={{border: '1px solid #ccc', height: '100%', width: '100%', zIndex: 0}}
-    >
-      <Background 
-        gap={12}
-        size={1.5}
-        color="#ccc"
-      />
-      <Controls/>
-    </ReactFlow>
+        <StepMenu open={open} selectedStep={selectedStep}/>
+        <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        fitView
+        connectionMode={ConnectionMode.Loose}
+        style={{border: '1px solid #ccc', height: '100%', width: '100%', zIndex: 0}}
+        >
+        <Background 
+            gap={12}
+            size={1.5}
+            color="#ccc"
+        />
+        <Controls/>
+        </ReactFlow>
     </Box>
   );
 };

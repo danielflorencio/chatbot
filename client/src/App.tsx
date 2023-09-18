@@ -3,7 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {Container} from '@mui/material';
 import { Routes, Route, Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import BotsPage from './components/Bots';
-import ChatFlows from './components/ChatFLow/Index';
+import ChatFlows from './components/ChatFLow/ChatFlowProvider';
 import CustomerSimulator from './components/CustomerSimulator';
 import ProtectedRoute from './helpers/ProtectedRoute';
 import ChatsContainer from './components/ChatsContainer';

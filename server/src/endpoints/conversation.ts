@@ -13,18 +13,15 @@ export const newConversation = async (req: Request, res: Response) => {
             const customer = await Customer.create({
                 phoneNumber: req.body.newConversationPhoneNumber
             })
-            try{
-                const conversation = await Conversation.create({
-                    messages: [],
-                    adminId: user._id,
-                    customerId: customer._id        
-                })
-                res.status(200).json({status: 'ok'})
-            }catch{
-                res.status(500).json({status: 'error', message: 'error while creating customer/conversation'})
-            }
+            const conversation = await Conversation.create({
+                messages: [],
+                adminId: user._id,
+                customerId: customer._id        
+            })
         }
+        res.status(200).json({status: 'ok'})
     }catch(error){
-        res.status(500).json({status: 'error', message: 'internal server error.'})
+        console.error('Error while trying to create a new conversation: ', error)
+        res.status(500).json({status: 'error', message: 'error while creating customer/conversation.'})
     }
 };

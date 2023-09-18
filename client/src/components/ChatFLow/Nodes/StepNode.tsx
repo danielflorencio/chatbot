@@ -4,19 +4,13 @@ import { Handle, NodeProps, Position } from "reactflow";
 export default function StepNode(
     props: NodeProps,
     {
-        setSelectedNode
+
     }:
     {
-        setSelectedNode: (node: NodeProps) => void,
+
     }
     ){
 
-        console.log('Node props data: ', props)
-
-        console.log('Node options: ', props.data.options)
-
-        console.log('Props.data.step: ', props.data.step)
-    
         return(
         <Box sx={{
             minHeight: '80px', 

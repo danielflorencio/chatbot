@@ -1,5 +1,6 @@
 import { Box, Paper, Slide, Typography } from "@mui/material";
 import { Step } from "../../types/Step";
+import { useStore } from "reactflow";
 
 export default function StepMenu(
     {
@@ -11,6 +12,9 @@ export default function StepMenu(
         selectedStep: Step | null
     }
 ){
+
+    console.log('selectedStep: ', selectedStep)
+
     return(
         <Box sx={{position: 'absolute', right: 8, height: '90vh', display: 'flex', alignItems: 'center', zIndex: 1}}>    
             <Slide in={open}>
