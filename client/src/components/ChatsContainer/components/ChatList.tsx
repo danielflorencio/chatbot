@@ -17,7 +17,7 @@ export default function ChatList(){
     }
    
     return(
-    <List sx={{maxHeight: '82vh', overflow: 'auto', minWidth: 'fit-content', paddingRight: 2}}>
+    <List sx={{height: '82vh', overflow: 'auto', minWidth: 'fit-content', paddingRight: 2}}>
         <CreateNewChat/>
         {
             customers ? (

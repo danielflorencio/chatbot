@@ -1,4 +1,4 @@
-import { Fab, Grid, Divider, TextField, List } from "@mui/material";
+import { Fab, Grid, Divider, TextField, List, Box, Typography } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import { useState } from "react";
 import MessageComponent from "../ChatsContainer/components/CurrentChat/components/Message";
@@ -47,6 +47,9 @@ export default function CustomerSimulator(){
     return(
         // <Grid item xs={9}>
         <Grid item>
+            <Box sx={{display: 'grid', placeItems: 'center', paddingY: 1, borderBottom: '1px solid #ccc'}}>
+                <Typography variant='body1' color='darkgreen' fontWeight={'600'}>Customer view</Typography>
+            </Box>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
                 {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message, index) => (
                     <div key={index}>
@@ -55,11 +58,11 @@ export default function CustomerSimulator(){
                 ))) : (<div></div>)}
             </List>
             <Divider />
-            <Grid container style={{padding: '20px'}}>
-                <Grid item xs={11}>
+            <Grid container style={{padding: '10px'}}>
+                <Grid item xs={10}>
                     <TextField id="customer-simulator-input-field" label="Customer chat" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
-                <Grid item xs={1} sx={{textAlign: "right"}}>
+                <Grid item xs={2} sx={{textAlign: "right"}}>
                     <Fab color="primary" aria-label="add"><SendIcon id='send-customer-message-icon' onClick={() => handleSubmit()} /></Fab>
                 </Grid>
             </Grid>

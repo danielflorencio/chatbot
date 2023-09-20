@@ -1,4 +1,4 @@
-import { Fab, Grid, Divider, TextField, List } from "@mui/material";
+import { Fab, Grid, Divider, TextField, List, Paper, Typography, Box } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import { useState } from "react";
 import MessageComponent from "./components/Message";
@@ -47,6 +47,9 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
 
     return(
         <Grid item width={'500px'}>
+            <Box sx={{display: 'grid', placeItems: 'center', paddingY: 1, borderBottom: '1px solid #ccc', borderRight: '1px solid #ccc'}}>
+                <Typography variant='body1' color='darkgreen' fontWeight={'600'}>Attendant view</Typography>
+            </Box>
             <List sx={{height: '70vh', overflowY: 'auto'}}>
                 {conversationOnScreen.messages ? (conversationOnScreen.messages.map((message, index) => (
                     <div key={index}>
@@ -55,11 +58,11 @@ export default function CurrentChat({currentChatId} : {currentChatId: string}){
                 ))) : (<div></div>)}
             </List>
             <Divider />
-            <Grid container style={{padding: '20px'}}>
-                <Grid item xs={11}>
+            <Grid container style={{padding: '10px'}}>
+                <Grid item xs={10}>
                     <TextField id="text-message" label="Admin chat" name="message" fullWidth value={messageInput} onChange={(e) => {e.preventDefault; setMessageInput(e.target.value)}} onKeyPress={(e) => {if (e.key === 'Enter') {handleSubmit();}}} />
                 </Grid>
-                <Grid item xs={1} sx={{textAlign: "right"}}>
+                <Grid item xs={2} sx={{textAlign: "right"}}>
                     <Fab color="primary" aria-label="add"><SendIcon onClick={() => handleSubmit()} /></Fab>
                 </Grid>
             </Grid>

@@ -113,8 +113,10 @@ export default function ChatFlow(){
             // Then it compares the current selected node's id with all the step's id's in the flow. 
 
             if(newSelectedStep){
-                setSelectedStep(newSelectedStep);   
-            }
+              setSelectedStep(newSelectedStep);   
+            } 
+        } else{
+          setSelectedStep(null);
         }
     },
     });
