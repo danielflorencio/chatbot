@@ -32,6 +32,7 @@ The repository a monorepo containing both the client and server components of th
 - Cypress (End-to-End Tests)
 - Jest + React Testing Library (Unit and Integration Tests)
 - Vite (Build Tool)
+- React Flow Library (For the bots creation panel)
 
 ### Server
 
