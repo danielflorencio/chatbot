@@ -1,7 +1,9 @@
-import { Box, Divider, MenuItem, Paper, Slide, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, MenuItem, Paper, Slide, TextField, Typography } from "@mui/material";
 import { Step } from "../../types/Step";
 import { useStore } from "reactflow";
 import { useEffect, useState } from "react";
+import NextStepConfig from "./NextStepConfig";
+import AddResponseButton from "./AddResponseButton";
 
 export default function StepMenu(
     {
@@ -10,13 +12,22 @@ export default function StepMenu(
     }:
     {
         open: boolean,
-        selectedStep: Step | null | undefined
+        selectedStep: Step
     }
 ){
 
     console.log('Selected step: ', selectedStep);
 
     const [choiceInputs, setChoiceInputs] = useState<string[]>([]);
+    const [triggerConditionType, setTriggerConditionType] = useState<string>('includes');
+    const [conditionMessage, setConditionMessage] = useState<string>('');
+    const [botAnswer, setBotAnswer] = useState<string[]>(['']);
+
+    const handleBotAnswerChange = (newBotAnswer: string, index: number) => {
+        let newBotAnswerState = botAnswer;
+        newBotAnswerState[index] = newBotAnswer;
+        setBotAnswer(newBotAnswerState);
+    }
 
     useEffect(() => {
         if(selectedStep){
@@ -37,50 +48,81 @@ export default function StepMenu(
                     {
                         selectedStep !== null && selectedStep !== undefined ? (
                             <Box sx={{padding: 2, display: 'flex', flexDirection: 'column'}}>
-                                <Typography variant='h6' sx={{marginBottom: 1}}>Em caso de PIZZA: </Typography>
-                                <Divider/>
+                                <Typography variant='h6' sx={{marginBottom: 2}}>Trigger condition </Typography>
+                                <Box sx={{display: 'flex', gap: 1, marginBottom: 1}}>
                                 <TextField
+                                label='Condition Type'
                                 select
-                                label='Condition type'
+                                value={triggerConditionType}
                                 fullWidth
-                                value={'multiple-choice'}
-                                sx={{marginTop: 2}}
+                                size='small'
                                 >
-                                    <MenuItem value={'multiple-choice'}>Multiple Choice</MenuItem>
+                                    <MenuItem value='includes'>Messages include</MenuItem>
                                 </TextField>
+                                <TextField
+                                type='text'
+                                label='Condition messages'
+                                fullWidth
+                                value={conditionMessage}
+                                onChange={(e) => setConditionMessage(e.target.value)}
+                                size='small'
+                                />
+                                
+                                </Box>
+                                <Divider/>
+                                <Typography variant='h6' sx={{marginBottom: 1}}>Response</Typography>
+                                <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
+                                {
+                                    botAnswer.map((answer, index) => (
+                                        <TextField disabled type='text' label='Response' size='small' value={answer} onChange={(e) => handleBotAnswerChange(e.target.value, index)}></TextField>
+                                    ))
+                                }
+                                {botAnswer.length <= 4 ? <AddResponseButton/> : null}
+                                </Box>
+                                <Divider sx={{marginTop: 1}}/>                                
+                                <Typography variant='h6' sx={{marginBottom: 1}}>Next step condition</Typography>
+                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                                    <TextField 
+                                    label='Step title'
+                                    type='text'
+                                    fullWidth
+                                    size='small'
+                                    />
+                                    <TextField
+                                    select
+                                    label='Condition type'
+                                    fullWidth
+                                    value={'multiple-choice'}
+                                    size='small'
+                                    >
+                                        <MenuItem value={'multiple-choice'}>Multiple Choice</MenuItem>
+                                    </TextField>
+                                </Box>
                                 <Box sx={{marginY: 1}}>
                                 <Divider/>
-                                <Typography variant='h6' sx={{marginBottom: 2}}>Case: </Typography>
-                                {/* {
-                                    selectedStep.options &&
-                                    selectedStep.options.map((option, index) => (
-                                        <Box key={index} sx={{display: 'flex', flexWrap: 'wrap', gap: 2}}>
-                                            {
-                                                choiceInputs.map((choiceInput: string, index: number) => (
-                                                    <TextField 
-                                                    type='text' 
-                                                    value={choiceInput} 
-                                                    label={`Choice number ${index}`}
-                                                    sx={{width: '50%'}}
-                                                    />
-                                                ))
-                                            }
-                                        </Box>
-                                    ))
-                                } */}                                 
-                                {/* <Box sx={{display: 'grid', flexDirection: 'row', gridTemplateColumns: '1fr 1fr', gap: 2}}> */}
-                                <Box sx={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1}}>
+                                <Box>
+                                </Box>
+
                                     {
                                         choiceInputs.map((choiceInput: string, index: number) => (
-                                            <TextField 
-                                            type='text' 
-                                            value={choiceInput} 
-                                            label={`Choice ${index}`}
-                                            sx={{width: '49%', boxSizing: 'border-box'}}
-                                            />
+                                            <Box>
+                                                <Typography variant='h6' sx={{marginBottom: 2}}>Case: {index + 1}</Typography>
+                                                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: 1}}>
+                                                <TextField 
+                                                type='text' 
+                                                value={choiceInput} 
+                                                label={`Choice ${index}`}
+                                                size="small"
+                                                sx={{width: '49%', borderBox: 'box-sizing'}}
+                                                />
+                                                {selectedStep.options &&
+                                                <NextStepConfig option={selectedStep.options[index]}/>
+                                                }
+                                                </Box>
+                                                <Divider sx={{marginTop: 2, marginBottom: 1}}/>
+                                            </Box>
                                         ))
                                     }
-                                </Box>
                                 </Box>
                             </Box>
                         ) : (

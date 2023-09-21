@@ -17,7 +17,7 @@ import SignUp from './pages/SingUpPage/SignUpPage'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/home"/>
+    element: <Navigate to="/home/flows"/>
   },
   {
     path: '/home', 

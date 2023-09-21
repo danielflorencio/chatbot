@@ -130,7 +130,9 @@ export default function ChatFlow(){
 
   return (
     <Box sx={{height: '90vh', width: '100%', margin: 0}}>
-        <StepMenu open={open} selectedStep={selectedStep}/>
+        {selectedStep &&
+          <StepMenu open={open} selectedStep={selectedStep}/>        
+        }
         <ReactFlow
         nodes={nodes}
         edges={edges}
