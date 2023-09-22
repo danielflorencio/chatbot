@@ -20,6 +20,7 @@ import StepNode from "./Nodes/StepNode";
 import StepMenu from "./StepMenu"; 
 import { Step } from "../../types/Step";
 import OptionNode from "./Nodes/OptionNode";
+import { generateUUID } from "../../helpers/uuidGenerator";
 
 // With the getNode() function I can possibly get the node I have currently selected... 
 // For the functionality I'm trying to build right now... 
@@ -34,7 +35,6 @@ const newFirstNode: Node = {
     lastStepId: null, 
     nodeTitle: 'Hey',
     messages: [...FlowsData[0].steps[0].messages],
-    // options: FlowsData[0].steps[0].options !== undefined ? [...FlowsData[0].steps[0].options] : null
     options: FlowsData[0].steps[0].options !== undefined ? [...FlowsData[0].steps[0].options] : null
   },
   position: {x: FlowsData[0].steps[0].NodeXPosition, y: FlowsData[0].steps[0].NodeYPosition}
@@ -102,25 +102,23 @@ export default function ChatFlow(){
     const lastNode: Node<any, string | undefined> | undefined = nodes.find((node) => node.id === lastStepId);
     if(lastNode){
 
-      
+      const newNodeId = generateUUID();
 
       const newChildNode: Node = {
-        // id: (Number(lastNode.id) + 1).toString(),
-        id: nodes.length.toString(),
+        id: generateUUID(),
         position: {x: 0, y: 20},
         type: 'option',
         data: {
           label: 'node',
           optionCTA: 'CTA',
-          referenceNextStepId: (Number(lastNode.id) + 2).toString()
+          referenceNextStepId: newNodeId
         },
         extent: 'parent',
         parentNode: lastNode.id
       }
 
       const newNode: Node = {
-        // id: (Number(lastNode.id) + 2).toString(),
-        id: (nodes.length + 1).toString(),
+        id: newNodeId,
         position: {x: lastNode.position.x + 300, y: lastNode.position.y},
         type: 'step',
         data: {
@@ -140,6 +138,7 @@ export default function ChatFlow(){
       }
 
       let newNodesState: Node[] = [...nodes];
+    
       newNodesState[nodes.length - 1] = {
         ...newNodesState[nodes.length - 1],
         data: {
@@ -149,7 +148,6 @@ export default function ChatFlow(){
       }
 
       setEdges([...edges, newEdge])
-      // setNodes([...nodes, newChildNode, newNode])
       setNodes([...newNodesState, newChildNode, newNode])
     }
   }

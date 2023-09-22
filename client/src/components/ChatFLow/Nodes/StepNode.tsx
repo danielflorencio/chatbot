@@ -27,7 +27,7 @@ export default function StepNode(
             
             <Typography variant='body1'>{props.data.nodeTitle}</Typography>
 
-            {props.data.options &&
+            {/* {props.data.options &&
                 props.data.options.map((option: any, index: number) => (
                     <Handle 
                     key={index}
@@ -37,7 +37,7 @@ export default function StepNode(
                     position={Position.Right}
                     />
                 ))
-            }
+            } */}
 
             {
                 props.data.lastStepId &&
