@@ -13,7 +13,8 @@ export default function StepNode(
 
         return(
         <Box sx={{
-            minHeight: '80px', 
+            minHeight: '80px',
+            height: `${!!props.data.height ? `${props.data.height*80}px` : '80px'}`, 
             minWidth: '200px', 
             paddingX: 3,
             paddingY: 1,
