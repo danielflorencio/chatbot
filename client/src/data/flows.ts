@@ -5,6 +5,7 @@ export const FlowsData: Flow[] = [
         steps: [
             {
                 id: '1',
+                conditionType: 'includes',
                 messages: [
                     {
                         content: 'Hey, what do you wanna do now?',
@@ -28,6 +29,7 @@ export const FlowsData: Flow[] = [
             },
             {
                 id: '2',
+                conditionType: 'choice',
                 lastStepId: '1',
                 messages: [
                     {
@@ -43,6 +45,7 @@ export const FlowsData: Flow[] = [
             },
             {
                 id: '3',
+                conditionType: 'choice',
                 lastStepId: '2',
                 messages: [
                     {

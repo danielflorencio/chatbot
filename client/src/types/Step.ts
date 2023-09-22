@@ -2,6 +2,7 @@ import { Message } from "./message"
 
 export type Step = {
     id: string, 
+    conditionType: string, 
     lastStepId?: string,
     options?: Option[],
     messages: Message[], 

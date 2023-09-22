@@ -24,7 +24,7 @@ export default function StepNode(
             cursor: 'pointer',
             placeItems: 'center'}}>
             
-            <Typography variant='body1'>{props.data.messages[0].content}</Typography>
+            <Typography variant='body1'>{props.data.nodeTitle}</Typography>
 
             {props.data.options &&
                 props.data.options.map((option: any, index: number) => (
