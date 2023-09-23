@@ -5,7 +5,7 @@ import "reactflow/dist/style.css";
 import { Box } from "@mui/material";
 import StepNode from "./Nodes/StepNode";
 import StepMenu from "./StepMenu"; 
-import { Step } from "../../types/Step";
+import { Option, Step } from "../../types/Step";
 import OptionNode from "./Nodes/OptionNode";
 import { generateUUID } from "../../helpers/uuidGenerator";
 
@@ -27,7 +27,7 @@ let newInitialNodes: Node[] = [newFirstNode];
 
 export default function ChatFlow(){
   
-  const [selectedStep, setSelectedStep] = useState<Step | null>(null);
+  const [selectedStep, setSelectedStep] = useState<Step | null | undefined>(null);
 
   useEffect(() => {
     const fetchFlowData = async () => {
@@ -60,6 +60,7 @@ export default function ChatFlow(){
               id: nodes[0].id, 
               conditionType: 'choice',
               messages: [],
+              options: !!nodes[0].data.options ? nodes[0].data.options.map((option: Option) => {return {optionCTA: option.optionCTA, referenceNextStepId: option.referenceNextStepId}}) : [],
               NodeXPosition: nodes[0].position.x,
               NodeYPosition: nodes[0].position.y
             }
@@ -80,6 +81,10 @@ export default function ChatFlow(){
   }
 
   SelectionChangeLogger();
+
+  useEffect(() => {
+
+  }, [nodes])
 
   const addNewStep = (currentSelectedParentNodeId: string) => {
     const selectedParentNode: Node<any, string | undefined> | undefined = nodes.find((node) => node.id === currentSelectedParentNodeId);
@@ -128,18 +133,22 @@ export default function ChatFlow(){
     
       const selectedParentNodeIndex: number = newNodesState.findIndex((node) => node.id === selectedParentNode.id)
 
-      console.log('SelectedParentNode: ', selectedParentNode);
-      console.log('SelectedParentNode ID: ', selectedParentNodeIndex);
-
       newNodesState[selectedParentNodeIndex] = {
         ...newNodesState[selectedParentNodeIndex],
         data: {
           ...newNodesState[selectedParentNodeIndex].data, 
-
-          // Each time a new step is created, a new Option object is passed down to the parent node (the current selected one).
+          // Each time a new step is created, a new Option object is passed down to the parent node (the current selected one).    
           options: [...newNodesState[selectedParentNodeIndex].data.options, {optionCTA: 'New Option CTA', referenceNextStepId: newNode.id}],
           heightMultiplier: selectedParentNode.data.options.length + 1
         }
+      }
+
+      if(selectedStep){
+        const newSelectedStepState: Step = {
+          ...selectedStep, 
+          options: [...newNodesState[selectedParentNodeIndex].data.options]
+        };
+        setSelectedStep(newSelectedStepState);
       }
 
       setEdges([...edges, newEdge])

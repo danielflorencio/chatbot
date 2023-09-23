@@ -19,8 +19,6 @@ export default function StepMenu(
     }
 ){
 
-    console.log('Selected step: ', selectedStep);
-
     const [choiceInputs, setChoiceInputs] = useState<string[]>([]);
 
     const [options, setOptions] = useState<Option[]>([]);
@@ -98,8 +96,8 @@ export default function StepMenu(
                                             </>
                                         ))
                                     }
-                                    {
-                                        options.length <= 4 ? <Button onClick={() => addNewStep(selectedStep.id)}>Add New Step</Button> : null
+                                    {   selectedStep.options &&
+                                        selectedStep.options.length <= 3 ? <Button onClick={() => addNewStep(selectedStep.id)}>Add New Step</Button> : null
                                     }
                                     </Box>
                                 </Box>
