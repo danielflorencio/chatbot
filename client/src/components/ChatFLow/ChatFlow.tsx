@@ -35,7 +35,8 @@ const newFirstNode: Node = {
     lastStepId: null, 
     nodeTitle: 'Hey',
     messages: [...FlowsData[0].steps[0].messages],
-    options: FlowsData[0].steps[0].options !== undefined ? [...FlowsData[0].steps[0].options] : null
+    // options: FlowsData[0].steps[0].options !== undefined ? [...FlowsData[0].steps[0].options] : []
+    options: []
   },
   position: {x: FlowsData[0].steps[0].NodeXPosition, y: FlowsData[0].steps[0].NodeYPosition}
 }
@@ -98,9 +99,9 @@ export default function ChatFlow(){
 
   SelectionChangeLogger();
 
-  const addNewStep = (lastStepId: string) => {
-    const lastNode: Node<any, string | undefined> | undefined = nodes.find((node) => node.id === lastStepId);
-    if(lastNode){
+  const addNewStep = (currentSelectedParentNodeId: string) => {
+    const selectedParentNode: Node<any, string | undefined> | undefined = nodes.find((node) => node.id === currentSelectedParentNodeId);
+    if(selectedParentNode){
 
       const newNodeId = generateUUID();
 
@@ -114,17 +115,17 @@ export default function ChatFlow(){
           referenceNextStepId: newNodeId
         },
         extent: 'parent',
-        parentNode: lastNode.id
+        parentNode: selectedParentNode.id
       }
 
       const newNode: Node = {
         id: newNodeId,
-        position: {x: lastNode.position.x + 300, y: lastNode.position.y},
+        position: {x: selectedParentNode.position.x + 300, y: selectedParentNode.position.y},
         type: 'step',
         data: {
           label: 'node',
           nodeTitle: 'node 2',
-          lastStepId: lastStepId,
+          lastStepId: currentSelectedParentNodeId,
           messages: [],
           options: [],
         }
@@ -139,11 +140,19 @@ export default function ChatFlow(){
 
       let newNodesState: Node[] = [...nodes];
     
-      newNodesState[nodes.length - 1] = {
-        ...newNodesState[nodes.length - 1],
+      const selectedParentNodeIndex: number = newNodesState.findIndex((node) => node.id === selectedParentNode.id)
+
+      console.log('SelectedParentNode: ', selectedParentNode);
+      console.log('SelectedParentNode ID: ', selectedParentNodeIndex);
+
+      newNodesState[selectedParentNodeIndex] = {
+        ...newNodesState[selectedParentNodeIndex],
         data: {
-          ...newNodesState[nodes.length - 1].data, 
-          height: lastNode.data.options.length
+          ...newNodesState[selectedParentNodeIndex].data, 
+
+          // Each time a new step is created, a new Option object is passed down to the parent node (the current selected one).
+          options: [...newNodesState[selectedParentNodeIndex].data.options, {optionCTA: 'New Option CTA', referenceNextStepId: newNode.id}],
+          heightMultiplier: selectedParentNode.data.options.length + 1
         }
       }
 
