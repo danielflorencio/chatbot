@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import NextStepConfig from "./NextStepConfig";
 import AddResponseButton from "./AddResponseButton";
 import BotAnswer from "./BotAnswer";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function StepMenu(
     {
@@ -87,13 +88,13 @@ export default function StepMenu(
                                         <MenuItem value={'multiple-choice'}>Multiple Choice</MenuItem>
                                     </TextField>
 
-                                    <Box sx={{display: 'flex', justifyContent: 'space-around', flexDirection: 'row', gap: 1}}>
-                                    {
-                                        options.map((option: Option, index: number) => (
-                                            <>
+                                    <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1}}>
+                                    {   selectedStep.options &&
+                                        selectedStep.options.map((option: Option, index: number) => (
+                                            <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
                                             <TextField value={option.optionCTA} type='text' label={`Choice ${index + 1} CTA`} size="small" />
-                                            {/* {index % 2 === 0 ? <Box></Box> : null} */}
-                                            </>
+                                            <DeleteIcon/>
+                                            </Box>
                                         ))
                                     }
                                     {   selectedStep.options &&
