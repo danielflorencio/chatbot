@@ -14,16 +14,17 @@ export default function StepNode(
         return(
         <Box sx={{
             minHeight: '80px',
-            height: `${!!props.data.heightMultiplier ? `${props.data.heightMultiplier*80}px` : '80px'}`, 
+            height: `${!!props.data.heightMultiplier ? `${(props.data.heightMultiplier + 1)*60}px` : '60px'}`, 
             minWidth: '200px', 
             paddingX: 3,
             paddingY: 1,
             border: `${props.selected ? '1px solid blue' : '1px solid #000'}`, 
             backgroundColor: '#fff', 
             borderRadius: 8, 
-            display: 'grid', 
+            display: 'flex', 
             cursor: 'pointer',
-            placeItems: 'center'}}>
+            justifyContent: 'center'
+            }}>
             
             <Typography variant='body1'>{props.data.nodeTitle}</Typography>
 

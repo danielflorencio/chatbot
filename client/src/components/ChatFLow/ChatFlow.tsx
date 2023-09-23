@@ -1,19 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import ReactFlow, {
-  Node,
-  addEdge,
-  Background,
-  Edge,
-  Connection,
-  useNodesState,
-  useEdgesState,
-  Controls,
-  ConnectionMode,
-  useReactFlow,
-  useOnSelectionChange,
-} from "reactflow";
+import ReactFlow, { Node, addEdge, Background, Edge, Connection, useNodesState, useEdgesState, Controls, ConnectionMode, useOnSelectionChange } from "reactflow";
 import { FlowsData } from "../../data/flows";
-
 import "reactflow/dist/style.css";
 import { Box } from "@mui/material";
 import StepNode from "./Nodes/StepNode";
@@ -21,11 +8,6 @@ import StepMenu from "./StepMenu";
 import { Step } from "../../types/Step";
 import OptionNode from "./Nodes/OptionNode";
 import { generateUUID } from "../../helpers/uuidGenerator";
-
-// With the getNode() function I can possibly get the node I have currently selected... 
-// For the functionality I'm trying to build right now... 
-// I should probably build something using the getNode() function together with the Toolbar Component from the library.
-// https://reactflow.dev/docs/api/react-flow-instance/#nodes-and-edges
 
 const newFirstNode: Node = {
   id: '0',
@@ -107,7 +89,10 @@ export default function ChatFlow(){
 
       const newChildNode: Node = {
         id: generateUUID(),
-        position: {x: 0, y: 20},
+        position: {
+          x: !!selectedParentNode.width ? (selectedParentNode.width / 4) : 0,
+          y: (selectedParentNode.data.options.length + 1)*60
+        },
         type: 'option',
         data: {
           label: 'node',
@@ -115,12 +100,13 @@ export default function ChatFlow(){
           referenceNextStepId: newNodeId
         },
         extent: 'parent',
-        parentNode: selectedParentNode.id
+        parentNode: selectedParentNode.id,
+        selectable: false
       }
 
       const newNode: Node = {
         id: newNodeId,
-        position: {x: selectedParentNode.position.x + 300, y: selectedParentNode.position.y},
+        position: {x: selectedParentNode.position.x + 300, y: (selectedParentNode.position.y + newChildNode.position.y)},
         type: 'step',
         data: {
           label: 'node',
