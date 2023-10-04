@@ -22,10 +22,6 @@ export default function StepMenu(
     }
 ){
 
-    // console.log('Selected Step on StepMenu: ', selectedStep.messages)
-
-    const [newAnswersState, setNewAnswersState] = useState<string[]>(selectedStep.messages);
-    const [newAnswersMode, setNewAnswersMode] = useState<'view' | 'edit'>('view');
 
     const [choiceInputs, setChoiceInputs] = useState<string[]>([]);
 
@@ -33,13 +29,6 @@ export default function StepMenu(
 
     const [triggerConditionType, setTriggerConditionType] = useState<string>('includes');
     const [conditionMessage, setConditionMessage] = useState<string>('');
-    // const [botAnswer, setBotAnswer] = useState<string[]>([...selectedStep.messages]);
-
-    // useEffect(() => {
-
-    // }, [selectedStep.messages])
-
-    // console.log('BotAnswer array value: ', botAnswer)
 
     // const handleBotAnswerChange = (newBotAnswer: string, index: number) => {
         // let newBotAnswerState = botAnswer;
@@ -89,7 +78,6 @@ export default function StepMenu(
                                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
                                 {   
                                     selectedStep.messages.map((message: string, index: number) => (
-                                        // <TextField disabled={newAnswersMode === 'view' ? true : false} fullWidth type='text' label={`Response ${index + 1}`} size='small' value={message} />
                                         // <BotAnswer key={index} answer={message} index={index} handleBotAnswerChange={handleBotAnswerChange}/>
                                         <BotAnswer key={index} answer={message} index={index}/>
                                     ))
