@@ -11,14 +11,21 @@ export default function StepMenu(
     {
         open,
         selectedStep,
-        addNewStep
+        addNewStep,
+        addResponseToTheStep
     }:
     {
         open: boolean,
         selectedStep: Step,
-        addNewStep: (lastStepId: string) => void
+        addNewStep: (lastStepId: string) => void,
+        addResponseToTheStep: (newAnswer: string, nodeId: string) => void
     }
 ){
+
+    // console.log('Selected Step on StepMenu: ', selectedStep.messages)
+
+    const [newAnswersState, setNewAnswersState] = useState<string[]>(selectedStep.messages);
+    const [newAnswersMode, setNewAnswersMode] = useState<'view' | 'edit'>('view');
 
     const [choiceInputs, setChoiceInputs] = useState<string[]>([]);
 
@@ -26,29 +33,37 @@ export default function StepMenu(
 
     const [triggerConditionType, setTriggerConditionType] = useState<string>('includes');
     const [conditionMessage, setConditionMessage] = useState<string>('');
-    const [botAnswer, setBotAnswer] = useState<string[]>(['']);
+    // const [botAnswer, setBotAnswer] = useState<string[]>([...selectedStep.messages]);
 
-    const handleBotAnswerChange = (newBotAnswer: string, index: number) => {
-        let newBotAnswerState = botAnswer;
-        newBotAnswerState[index] = newBotAnswer;
-        setBotAnswer(newBotAnswerState);
-    }
+    // useEffect(() => {
 
-    useEffect(() => {
-        if(selectedStep){
-            if(selectedStep.options){
-                let newChoiceInputsState: string[] = [];
-                selectedStep.options.map((option) => newChoiceInputsState.push(option.optionCTA));
-                setChoiceInputs(newChoiceInputsState);
-            }
-        } else {
+    // }, [selectedStep.messages])
 
-        }
-    }, [selectedStep])
+    // console.log('BotAnswer array value: ', botAnswer)
+
+    // const handleBotAnswerChange = (newBotAnswer: string, index: number) => {
+        // let newBotAnswerState = botAnswer;
+        // newBotAnswerState[index] = newBotAnswer;
+        // setBotAnswer(newBotAnswerState);
+    // }
+
+    // useEffect(() => {
+    //     if(selectedStep){
+    //         if(selectedStep.options){
+    //             let newChoiceInputsState: string[] = [];
+    //             selectedStep.options.map((option) => newChoiceInputsState.push(option.optionCTA));
+    //             setChoiceInputs(newChoiceInputsState);
+    //         }
+    //     } else {
+
+    //     }
+    // }, [selectedStep])
 
     const handleAddNewResponse = (newAnswer: string) => {
-        const newBotAnswerState = [...botAnswer, newAnswer]
-        setBotAnswer(newBotAnswerState);
+        // const newBotAnswerState = [...botAnswer, newAnswer];
+        console.log('Selected Step Id on handleAddNewResponse: ', selectedStep.id)
+        addResponseToTheStep(newAnswer, selectedStep.id);
+        // setBotAnswer(newBotAnswerState);
     }
 
     // const handleBotAnswerChange = (newBotAnswer: string, index: number) => {
@@ -72,12 +87,14 @@ export default function StepMenu(
 
                                 <Typography variant='h6' sx={{marginBottom: 1}}>Response</Typography>
                                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
-                                {
-                                    botAnswer.map((answer, index) => (
-                                        <BotAnswer key={index} answer={answer} index={index} handleBotAnswerChange={handleBotAnswerChange}/>
+                                {   
+                                    selectedStep.messages.map((message: string, index: number) => (
+                                        // <TextField disabled={newAnswersMode === 'view' ? true : false} fullWidth type='text' label={`Response ${index + 1}`} size='small' value={message} />
+                                        // <BotAnswer key={index} answer={message} index={index} handleBotAnswerChange={handleBotAnswerChange}/>
+                                        <BotAnswer key={index} answer={message} index={index}/>
                                     ))
                                 }
-                                {botAnswer.length <= 4 ? <AddResponseButton handleAddNewResponse={handleAddNewResponse}/> : null}
+                                {selectedStep.messages.length <= 3 ? <AddResponseButton handleAddNewResponse={handleAddNewResponse}/> : null}
                                 </Box>
                                 <Divider sx={{marginTop: 1}}/>
 

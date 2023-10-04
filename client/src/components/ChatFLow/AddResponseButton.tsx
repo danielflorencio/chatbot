@@ -25,6 +25,7 @@ export default function AddResponseButton(
         e.preventDefault();
         handleAddNewResponse(newResponse);
         setNewResponse('');
+        setOpen(false);
     }
 
     return(

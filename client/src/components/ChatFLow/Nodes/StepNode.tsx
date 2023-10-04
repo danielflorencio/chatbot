@@ -26,7 +26,7 @@ export default function StepNode(
             justifyContent: 'center'
             }}>
             
-            <Typography variant='body1'>{props.data.nodeTitle}</Typography>
+            <Typography variant='body1'>Node id {props.id}</Typography>
 
             {/* {props.data.options &&
                 props.data.options.map((option: any, index: number) => (

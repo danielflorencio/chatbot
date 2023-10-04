@@ -5,7 +5,7 @@ export type Step = {
     conditionType: string, 
     lastStepId?: string,
     options?: Option[],
-    messages: Message[], 
+    messages: string[], 
     NodeXPosition: number, 
     NodeYPosition: number,
 }
